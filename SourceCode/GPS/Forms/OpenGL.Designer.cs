@@ -268,7 +268,7 @@ namespace AgOpenGPS
 
                         for (int j = 0; j < triStrip.Count; j++)
                         {
-                            if (triStrip[j].isDrawing)
+                            if (triStrip[j].isDrawing && triStrip[j].patchList.Count > 0)
                             {
                                 if (tool.isMultiColoredSections)
                                 {
