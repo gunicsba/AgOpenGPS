@@ -7,6 +7,7 @@ using System.Globalization;
 using System.IO.Ports;
 using System.Collections.Generic;
 using System.Linq;
+using System.IO;
 
 // Declare the delegate prototype to send data back to the form
 delegate void UpdateRTCM_Data(byte[] data);
@@ -20,6 +21,7 @@ namespace AgIO
 
         private Socket clientSocket;                      // Server connection
         private byte[] casterRecBuffer = new byte[2800];    // Recieved data buffer
+        private SocketError clientSocketErrorCode; //To store the socket error code if any
 
         //Send GGA back timer
         Timer tmr;
@@ -588,7 +590,7 @@ namespace AgIO
             try
             {
                 if (clientSocket.Connected)
-                    clientSocket.BeginReceive(casterRecBuffer, 0, casterRecBuffer.Length, SocketFlags.None, new AsyncCallback(OnRecievedData), null);
+                    clientSocket.BeginReceive(casterRecBuffer, 0, casterRecBuffer.Length, SocketFlags.None, out clientSocketErrorCode, new AsyncCallback(OnRecievedData), null);
             }
             catch (Exception)
             {
@@ -602,13 +604,17 @@ namespace AgIO
             try
             {
                 int nBytesRec = clientSocket.EndReceive(ar);
-                if (nBytesRec > 0)
+                using (StreamWriter writer = new StreamWriter("zAgIO_NTRIPlog_" + DateTime.Now.ToString("yyyyMMdd") + ".txt", true))
+                {
+                    writer.WriteLine("{0} - Client {1}, socketErrorcode: {2}, bytes: {3}", DateTime.Now.ToString("hh:mm:ss tt"), clientSocket.RemoteEndPoint, clientSocketErrorCode, nBytesRec);
+                }
+                if (nBytesRec > 0 && clientSocketErrorCode == SocketError.Success)
                 {
                     byte[] localMsg = new byte[nBytesRec];
                     Array.Copy(casterRecBuffer, localMsg, nBytesRec);
 
                     BeginInvoke((MethodInvoker)(() => OnAddMessage(localMsg)));
-                    clientSocket.BeginReceive(casterRecBuffer, 0, casterRecBuffer.Length, SocketFlags.None, new AsyncCallback(OnRecievedData), null);
+                    clientSocket.BeginReceive(casterRecBuffer, 0, casterRecBuffer.Length, SocketFlags.None, out clientSocketErrorCode, new AsyncCallback(OnRecievedData), null);
                 }
                 else
                 {
