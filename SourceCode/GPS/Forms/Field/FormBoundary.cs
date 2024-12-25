@@ -1,5 +1,6 @@
 using AgOpenGPS.Culture;
 using AgOpenGPS.Helpers;
+using AgOpenGPS.Logging;
 using System;
 using System.Drawing;
 using System.Globalization;
@@ -295,7 +296,7 @@ namespace AgOpenGPS
             if (mf.tool.width < 0.2)
             {
                 mf.TimedMessageBox(2000, "Tool Error", "Your tool is too small");
-                Log.EventWriter("Boundary, Tool is too narrow");
+                Log.System.Write("Boundary, Tool is too narrow");
 
                 return;
             }
@@ -400,7 +401,7 @@ namespace AgOpenGPS
                                 else
                                 {
                                     mf.TimedMessageBox(2000, gStr.gsErrorreadingKML, gStr.gsChooseBuildDifferentone);
-                                    Log.EventWriter("KML Read Error to make new field");
+                                    Log.System.Write("KML Read Error to make new field");
 
                                 }
                                 if (button.Name == "btnLoadBoundaryFromGE")
@@ -416,7 +417,7 @@ namespace AgOpenGPS
                     }
                     catch (Exception ed)
                     {
-                        Log.EventWriter("Load Boundary from GE " + ed.ToString());
+                        Log.System.Write("Load Boundary from GE " + ed.ToString());
                         return;
                     }
                 }

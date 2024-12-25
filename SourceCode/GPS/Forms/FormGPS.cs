@@ -1,9 +1,8 @@
 ﻿//Please, if you use this, share the improvements
 
-using AgOpenGPS;
 using AgOpenGPS.Culture;
+using AgOpenGPS.Logging;
 using AgOpenGPS.Properties;
-using Microsoft.Win32;
 using OpenTK;
 using OpenTK.Graphics.OpenGL;
 using System;
@@ -14,12 +13,10 @@ using System.Drawing.Imaging;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Media;
 using System.Net.Sockets;
 using System.Reflection;
 using System.Resources;
 using System.Text;
-using System.Threading;
 using System.Windows.Forms;
 
 namespace AgOpenGPS
@@ -253,7 +250,7 @@ namespace AgOpenGPS
             {
                 PowerLineStatus powerLineStatus = SystemInformation.PowerStatus.PowerLineStatus;
 
-                Log.EventWriter($"Power Line Status Change to: {powerLineStatus}");
+                Log.System.Write($"Power Line Status Change to: {powerLineStatus}");
 
                 if (powerLineStatus == PowerLineStatus.Online)
                 {
@@ -288,7 +285,7 @@ namespace AgOpenGPS
 
             if (!Settings.Default.Load())
             {
-                Log.EventWriter("Error loading settings XML: " + RegistrySettings.VehicleFileName);
+                Log.System.Write("Error loading settings XML: " + RegistrySettings.VehicleFileName);
                 YesMessageBox("Error loading settings XML Deleting it now");
 
                 var path = Path.Combine(baseDirectory, "Vehicles", RegistrySettings.VehicleFileName + ".XML");
@@ -389,11 +386,11 @@ namespace AgOpenGPS
         {
             this.MouseWheel += ZoomByMouseWheel;
 
-            Log.sbEvent.Append("\r");
-            Log.sbEvent.Append("Program Started: " + DateTime.Now.ToString("f", CultureInfo.CreateSpecificCulture(RegistrySettings.culture)) + "\r");
-            Log.sbEvent.Append("AOG Version: ");
-            Log.sbEvent.Append(Application.ProductVersion.ToString(CultureInfo.InvariantCulture));
-            Log.sbEvent.Append("\r");
+            Log.System.WriteRaw("\r");
+            Log.System.WriteRaw("Program Started: " + DateTime.Now.ToString("f", CultureInfo.CreateSpecificCulture(RegistrySettings.culture)) + "\r");
+            Log.System.WriteRaw("AOG Version: ");
+            Log.System.WriteRaw(Application.ProductVersion.ToString(CultureInfo.InvariantCulture));
+            Log.System.WriteRaw("\r");
 
             //The way we subscribe to the System Event to check when Power Mode has changed.
             Microsoft.Win32.SystemEvents.PowerModeChanged += SystemEvents_PowerModeChanged;
@@ -418,71 +415,38 @@ namespace AgOpenGPS
 
             //get the fields directory, if not exist, create
             fieldsDirectory = Path.Combine(baseDirectory, "Fields");
-            if (!string.IsNullOrEmpty(fieldsDirectory) && !Directory.Exists(fieldsDirectory)) { Directory.CreateDirectory(fieldsDirectory);
-                Log.sbEvent.Append("Fields Dir Created\r");
+            if (!string.IsNullOrEmpty(fieldsDirectory) && !Directory.Exists(fieldsDirectory))
+            {
+                Directory.CreateDirectory(fieldsDirectory);
+                Log.System.WriteRaw("Fields Dir Created\r");
             }
 
             //get the fields directory, if not exist, create
             vehiclesDirectory = Path.Combine(baseDirectory, "Vehicles");
-            if (!string.IsNullOrEmpty(vehiclesDirectory) && !Directory.Exists(vehiclesDirectory)) { Directory.CreateDirectory(vehiclesDirectory);
-                Log.sbEvent.Append("Vehicles Dir Created\r");
+            if (!string.IsNullOrEmpty(vehiclesDirectory) && !Directory.Exists(vehiclesDirectory))
+            {
+                Directory.CreateDirectory(vehiclesDirectory);
+                Log.System.WriteRaw("Vehicles Dir Created\r");
             }
 
             //get the fields directory, if not exist, create
             logsDirectory = Path.Combine(baseDirectory, "Logs");
-            if (!string.IsNullOrEmpty(logsDirectory) && !Directory.Exists(logsDirectory)) { Directory.CreateDirectory(logsDirectory);
-                Log.sbEvent.Append("Logs Dir Created\r");
+            if (!string.IsNullOrEmpty(logsDirectory) && !Directory.Exists(logsDirectory))
+            {
+                Directory.CreateDirectory(logsDirectory);
+                Log.System.WriteRaw("Logs Dir Created\r");
             }
 
             //system event log file
-            FileInfo txtfile = new FileInfo(Path.Combine(logsDirectory, "AgOpenGPS_Events_Log.txt"));
-            if (txtfile.Exists)
-            {
-                if (txtfile.Length > (500000))       // ## NOTE: 0.5MB max file size
-                {
-                    Log.sbEvent.Append("Log File Reduced by 100Kb\r");
-                    StringBuilder sbF = new StringBuilder();
-                    long lines = txtfile.Length - 450000;
-
-                    //create some extra space
-                    lines /= 30;
-
-                    using (StreamReader reader = new StreamReader(Path.Combine(logsDirectory, "AgOpenGPS_Events_Log.txt")))
-                    {
-                        try
-                        {
-                            //Date time line
-                            for (long i = 0; i < lines; i++)
-                            {
-                                reader.ReadLine();
-                            }
-
-                            while (!reader.EndOfStream)
-                            {
-                                sbF.AppendLine(reader.ReadLine());
-                            }
-                        }
-                        catch { }
-                    }
-
-                    using (StreamWriter writer = new StreamWriter(Path.Combine(logsDirectory, "AgOpenGPS_Events_Log.txt")))
-                    {
-                        writer.WriteLine(sbF);
-                    }
-                }
-            }
-            else
-            {
-                Log.sbEvent.Append("Events Log File Created\r");
-            }
+            Log.System.Initialize(logsDirectory, "AgOpenGPS_Events_Log.txt");
 
             //system event log file
-            txtfile = new FileInfo(Path.Combine(logsDirectory, "Missed_NMEA.txt"));
+            FileInfo txtfile = new FileInfo(Path.Combine(logsDirectory, "Missed_NMEA.txt"));
             if (txtfile.Exists)
             {
                 if (txtfile.Length > (100000))       // ## NOTE: 0.1MB max file size
                 {
-                    Log.sbEvent.Append("Missed Log File Reduced to 50Kb\r");
+                    Log.System.WriteRaw("Missed Log File Reduced to 50Kb\r");
                     StringBuilder sbF = new StringBuilder();
                     long lines = txtfile.Length - 50000;
 
@@ -515,7 +479,7 @@ namespace AgOpenGPS
             }
             else
             {
-                Log.sbEvent.Append("NMEA Missed Log File Created\r");
+                Log.System.WriteRaw("NMEA Missed Log File Created\r");
             }
 
 
@@ -525,7 +489,7 @@ namespace AgOpenGPS
             {
                 if (txtfile.Length > (200000))       // ## NOTE: 0.2MB max file size
                 {
-                    Log.sbEvent.Append("NMEA Log File Reduced to 50Kb\r");
+                    Log.System.WriteRaw("NMEA Log File Reduced to 50Kb\r");
                     StringBuilder sbF = new StringBuilder();
                     long lines = txtfile.Length - 100000;
 
@@ -558,7 +522,7 @@ namespace AgOpenGPS
             }
             else
             {
-                Log.sbEvent.Append("NMEA Log File Created\r");
+                Log.System.WriteRaw("NMEA Log File Created\r");
             }
 
             //make sure current field directory exists, null if not
@@ -572,13 +536,12 @@ namespace AgOpenGPS
                     currentFieldDirectory = "";
                     Settings.Default.setF_CurrentDir = "";
                     Settings.Default.Save();
-                    Log.sbEvent.Append("Field Directory is Empty or Missing\r");
+                    Log.System.WriteRaw("Field Directory is Empty or Missing\r");
                 }
             }
 
-
-            Log.sbEvent.Append("Program Directory: " + (Application.StartupPath) + "\r");
-            Log.sbEvent.Append("Fields Directory: " + (fieldsDirectory) + "\r");
+            Log.System.WriteRaw("Program Directory: " + (Application.StartupPath) + "\r");
+            Log.System.WriteRaw("Fields Directory: " + (fieldsDirectory) + "\r");
 
             if (isBrightnessOn)
             {
@@ -640,8 +603,7 @@ namespace AgOpenGPS
                     catch
                     {
                         TimedMessageBox(2000, "No File Found", "Can't Find AgIO");
-                        Log.EventWriter("Can't Find AgIO");
-
+                        Log.System.Write("Can't Find AgIO");
                     }
                 }
             }
@@ -708,7 +670,7 @@ namespace AgOpenGPS
 
             if (vehicleFileName == "Default Vehicle")
             {
-                Log.EventWriter("Using Default Vehicle At Start Warning");
+                Log.System.Write("Using Default Vehicle At Start Warning");
 
                 YesMessageBox("Using Default Vehicle" + "\r\n\r\n" + "Load Existing Vehicle or Save As a New One !!!"
                     + "\r\n\r\n" + "Changes will NOT be Saved for Default Vehicle");
@@ -787,10 +749,10 @@ namespace AgOpenGPS
 
             SaveFormGPSWindowSettings();
 
-            Log.sbEvent.Append("Program Exit: " + DateTime.Now.ToString("f", CultureInfo.CreateSpecificCulture(RegistrySettings.culture)) + "\r");
+            Log.System.WriteRaw("Program Exit: " + DateTime.Now.ToString("f", CultureInfo.CreateSpecificCulture(RegistrySettings.culture)) + "\r");
 
             //write the log file
-            FileSaveSystemEvents();
+            Log.System.SaveLogs();
 
             //save current vehicle
             Properties.Settings.Default.Save();

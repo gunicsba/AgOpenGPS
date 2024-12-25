@@ -1,4 +1,5 @@
 ﻿using AgOpenGPS.Culture;
+using AgOpenGPS.Logging;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -104,7 +105,7 @@ namespace AgOpenGPS.Forms.Pickers
                         catch (Exception ex)
                         {
                             mf.TimedMessageBox(2000, gStr.gsRecordedPathFileIsCorrupt, gStr.gsButFieldIsLoaded);
-                            Log.EventWriter("Load Recorded Path" + ex.ToString());
+                            Log.System.Write("Load Recorded Path" + ex.ToString());
                         }
                     }
                 }

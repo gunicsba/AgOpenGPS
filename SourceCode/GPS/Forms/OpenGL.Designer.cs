@@ -3,7 +3,7 @@ using OpenTK;
 using OpenTK.Graphics.OpenGL;
 using System.Windows.Forms;
 using System.Text;
-using System.Drawing;
+using AgOpenGPS.Logging;
 
 namespace AgOpenGPS
 {
@@ -496,10 +496,10 @@ namespace AgOpenGPS
                                 {
                                     btnAutoSteer.PerformClick();
                                     TimedMessageBox(2000, "Autosteer Turned Off", "RTK Fix Alarm");
-                                    Log.EventWriter("Autosteer Off, RTK Fix Alarm");
+                                    Log.System.Write("Autosteer Off, RTK Fix Alarm");
                                 }
 
-                                Log.EventWriter("RTK Alarm Fix is Lost");
+                                Log.System.Write("RTK Alarm Fix is Lost");
                                 sounds.sndRTKAlarm.Play();
                             }
                             sounds.isRTKAlarming = true;

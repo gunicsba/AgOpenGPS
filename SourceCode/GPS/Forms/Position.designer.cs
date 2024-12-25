@@ -1,13 +1,10 @@
 ﻿//Please, if you use this, share the improvements
 
-using AgOpenGPS.Culture;
+using AgOpenGPS.Logging;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Globalization;
 using System.Text;
-using System.Windows.Forms;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.TrackBar;
 
 namespace AgOpenGPS
 {
@@ -274,7 +271,7 @@ namespace AgOpenGPS
 
                                 isFirstHeadingSet = true;
                                 TimedMessageBox(2000, "Direction Reset", "Forward is Set");
-                                Log.EventWriter("Forward Is Set");
+                                Log.System.Write("Forward Is Set");
 
                                 lastGPS = pn.fix;
 
@@ -778,13 +775,13 @@ namespace AgOpenGPS
 
             //if (isFirstHeadingSet && jumpDistanceAlarm > 0 && jumpDistance > jumpDistanceAlarm)
             //{
-            //    Log.EventWriter(": " + jumpDistance.ToString("N0") + " cm");
+            //    Log.System.Write(": " + jumpDistance.ToString("N0") + " cm");
 
             //    if (isBtnAutoSteerOn)
             //    {
             //        btnAutoSteer.PerformClick();
             //        TimedMessageBox(3000, gStr.gsAutoSteer, "Big Jump in GPS position:" + jumpDistance.ToString("N0") + " cm");
-            //        Log.EventWriter("Autosteer Off, Jump in GPS position: " + jumpDistance.ToString("N0") + " cm");
+            //        Log.System.Write("Autosteer Off, Jump in GPS position: " + jumpDistance.ToString("N0") + " cm");
             //    }
 
             //}
@@ -917,7 +914,7 @@ namespace AgOpenGPS
                             else
                                 TimedMessageBox(3000, "AutoSteer Disabled", "Below Minimum Safe Steering Speed: " + (vehicle.minSteerSpeed * 0.621371).ToString("N1") + " MPH");
                             
-                            Log.EventWriter("Steer Off, Below Min Steering Speed");
+                            Log.System.Write("Steer Off, Below Min Steering Speed");
                         }
                     }
                     else
@@ -1058,7 +1055,7 @@ namespace AgOpenGPS
                                 if (sounds.isTurnSoundOn)
                                 {
                                     sounds.sndUTurnTooClose.Play();
-                                    Log.EventWriter("U Turn Creation Failure");
+                                    Log.System.Write("U Turn Creation Failure");
                                 }
                             }
                         }
@@ -1202,7 +1199,7 @@ namespace AgOpenGPS
             //    {
             //       btnAutoSteer.PerformClick();
             //        TimedMessageBox(2000, gStr.gsGuidanceStopped, "Panic Stop");
-            //        Log.EventWriter("Steer Off, Panic Stop Exceeded");
+            //        Log.System.Write("Steer Off, Panic Stop Exceeded");
             //    }
             //}
 

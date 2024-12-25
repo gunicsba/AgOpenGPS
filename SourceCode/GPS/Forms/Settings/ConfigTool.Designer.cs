@@ -1,14 +1,6 @@
 ﻿using AgOpenGPS.Culture;
-using AgOpenGPS.Properties;
+using AgOpenGPS.Logging;
 using System;
-using System.Collections.Generic;
-using System.Diagnostics.Eventing.Reader;
-using System.Drawing;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 
 namespace AgOpenGPS
 {
@@ -1152,7 +1144,7 @@ namespace AgOpenGPS
                     {
                         wide = 99;
                         mf.TimedMessageBox(3000, "Too Wide", "Max 50 Meters");
-                        Log.EventWriter("Sections, Tool Set Too Wide");
+                        Log.System.Write("Sections, Tool Set Too Wide");
 
                     }
                 }
@@ -1162,7 +1154,7 @@ namespace AgOpenGPS
                     {
                         wide = 19;
                         mf.TimedMessageBox(3000, "Too Wide", "Max 164 Feet");
-                        Log.EventWriter("Sections, Tool Set Too Wide");
+                        Log.System.Write("Sections, Tool Set Too Wide");
                     }
                 }
 
@@ -1249,7 +1241,7 @@ namespace AgOpenGPS
                                 if (toolWidth > 5000)
                                 {
                                     mf.TimedMessageBox(3000, "Too Wide", "Set to 99, Max 50 Meters");
-                                    Log.EventWriter("Sections, Tool Set Too Wide");
+                                    Log.System.Write("Sections, Tool Set Too Wide");
                                     toolWidth = 0;
                                     nudSection01.Value =  99;
                                     nudSection02.Value =  99;
@@ -1274,7 +1266,7 @@ namespace AgOpenGPS
                                 if (toolWidth > 1900)
                                 {
                                     mf.TimedMessageBox(3000, "Too Wide", "Set to 99, Max 164 Feet");
-                                    Log.EventWriter("Sections, Tool Set Too Wide");
+                                    Log.System.Write("Sections, Tool Set Too Wide");
                                     toolWidth = 0;
                                     nudSection01.Value = 99;
                                     nudSection02.Value = 99;

@@ -1,5 +1,6 @@
 ﻿using AgOpenGPS.Culture;
 using AgOpenGPS.Helpers;
+using AgOpenGPS.Logging;
 using System;
 using System.Windows.Forms;
 
@@ -139,7 +140,7 @@ namespace AgOpenGPS
                     //mf.hd.BuildSingleSpaceHeadLines();
                     mf.btnABDraw.Visible = true;
 
-                    Log.EventWriter("Driven Boundary Created, Area: " + lblArea.Text);
+                    Log.System.Write("Driven Boundary Created, Area: " + lblArea.Text);
                 }
 
                 //stop it all for adding

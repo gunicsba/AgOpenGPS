@@ -5,8 +5,8 @@ using System.Windows.Forms;
 using System.Drawing;
 using System.Globalization;
 using System.Diagnostics;
-using System.Xml.Linq;
 using AgOpenGPS.Culture;
+using AgOpenGPS.Logging;
 
 namespace AgOpenGPS
 {
@@ -268,7 +268,7 @@ namespace AgOpenGPS
                                 lblHardwareMessage.Visible = true;
                                 hardwareLineCounter = data[5] * 10;
 
-                                Log.EventWriter(lblHardwareMessage.Text);
+                                Log.System.Write(lblHardwareMessage.Text);
 
                                 //color based on byte 6
                                 if (data[6] == 0) lblHardwareMessage.BackColor = Color.Salmon;
@@ -335,7 +335,7 @@ namespace AgOpenGPS
             catch (Exception ex)
             {
                 MessageBox.Show("Load Error: " + ex.Message, "UDP Server", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                Log.EventWriter("Load UDP Server Error: " + ex.ToString());
+                Log.System.Write("Load UDP Server Error: " + ex.ToString());
             }
         }
 
@@ -393,7 +393,7 @@ namespace AgOpenGPS
                 }
                 catch (Exception)
                 {
-                    //Log.EventWriter("Sending UDP Message" + e.ToString());
+                    //Log.System.Write("Sending UDP Message" + e.ToString());
                     //MessageBox.Show("Send Error: " + e.Message, "UDP Client", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }

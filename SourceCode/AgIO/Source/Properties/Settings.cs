@@ -1,4 +1,5 @@
-﻿using Microsoft.Win32;
+﻿using AgIO.Logging;
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -53,14 +54,14 @@ namespace AgIO.Properties
                     }
                     catch (Exception e)
                     {
-                        Log.EventWriter("Registry Keys Settings Load Error: " + e.ToString());
+                        Log.System.Write("Registry Keys Settings Load Error: " + e.ToString());
                     }
                     regKey.Close();
                 }
             }
             catch (Exception e)
             {
-                Log.EventWriter("Registry Key Creation Error: " + e.ToString());
+                Log.System.Write("Registry Key Creation Error: " + e.ToString());
             }
         }
 
@@ -83,7 +84,7 @@ namespace AgIO.Properties
             }
             catch (Exception e)
             {
-                Log.EventWriter("Registry Settings Save Error: " + e.ToString());
+                Log.System.Write("Registry Settings Save Error: " + e.ToString());
 
             }
         }
@@ -103,7 +104,7 @@ namespace AgIO.Properties
             }
             catch (Exception e)
             {
-                Log.EventWriter("Registry Settings Reset Error: " + e.ToString());
+                Log.System.Write("Registry Settings Reset Error: " + e.ToString());
             }
         }
     }
@@ -199,12 +200,12 @@ namespace AgIO.Properties
             if (!LoadXMLFile(path, this))
             {
                 RegistrySettings.Save("ProfileFileName", "");
-                Log.EventWriter("Profile Not Found, Loading Default");
+                Log.System.Write("Profile Not Found, Loading Default");
                 return false;
             }
             else
             {
-                Log.EventWriter(RegistrySettings.ProfileFileName + ".XML" + " Loaded");
+                Log.System.Write(RegistrySettings.ProfileFileName + ".XML" + " Loaded");
             }
             return true;
         }
@@ -341,7 +342,7 @@ namespace AgIO.Properties
                                                 }
                                                 catch (Exception e)
                                                 {
-                                                    Log.EventWriter("Registry Settings Type Not Found " + e.ToString());
+                                                    Log.System.Write("Registry Settings Type Not Found " + e.ToString());
 
                                                     Errors = true;
                                                     continue;
@@ -366,7 +367,7 @@ namespace AgIO.Properties
             }
             catch (Exception ex)
             {
-                Log.EventWriter("Registry Settings LoadXML Error: " + ex.ToString());
+                Log.System.Write("Registry Settings LoadXML Error: " + ex.ToString());
             }
             return false;
         }
@@ -460,7 +461,7 @@ namespace AgIO.Properties
             }
             catch (Exception ex)
             {
-                Log.EventWriter("Registry Settings SaveXML Error: " + ex.ToString());
+                Log.System.Write("Registry Settings SaveXML Error: " + ex.ToString());
             }
         }
     }

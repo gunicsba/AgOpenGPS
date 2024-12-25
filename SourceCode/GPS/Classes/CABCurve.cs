@@ -1,4 +1,5 @@
 ﻿using AgOpenGPS.Culture;
+using AgOpenGPS.Logging;
 using OpenTK.Graphics.OpenGL;
 using System;
 using System.Collections.Generic;
@@ -472,7 +473,7 @@ namespace AgOpenGPS
             }
             catch (Exception e)
             {
-                Log.EventWriter("Exception Build new offset curve" + e.ToString());
+                Log.System.Write("Exception Build new offset curve" + e.ToString());
             }
 
             return newCurList;
@@ -726,7 +727,7 @@ namespace AgOpenGPS
                                 {
                                     mf.btnAutoSteer.PerformClick();
                                     mf.TimedMessageBox(2000, gStr.gsGuidanceStopped, gStr.gsPastEndOfCurve);
-                                    Log.EventWriter("Autosteer Stop, Past End of Curve");
+                                    Log.System.Write("Autosteer Stop, Past End of Curve");
 
                                 }
                             }
@@ -736,7 +737,7 @@ namespace AgOpenGPS
                                 {
                                     mf.btnAutoSteer.PerformClick();
                                     mf.TimedMessageBox(2000, gStr.gsGuidanceStopped, gStr.gsPastEndOfCurve);
-                                    Log.EventWriter("Autosteer Stop, Past End of Curve");
+                                    Log.System.Write("Autosteer Stop, Past End of Curve");
                                 }
                             }
                         }

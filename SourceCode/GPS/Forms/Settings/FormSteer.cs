@@ -1,10 +1,9 @@
 ﻿using AgOpenGPS.Culture;
 using AgOpenGPS.Helpers;
+using AgOpenGPS.Logging;
 using AgOpenGPS.Properties;
 using System;
-using System.Diagnostics.Eventing.Reader;
 using System.Drawing;
-using System.IO;
 using System.Windows.Forms;
 
 namespace AgOpenGPS
@@ -552,12 +551,12 @@ namespace AgOpenGPS
             if (mf.isStanleyUsed)
             {
                 btnStanleyPure.Image = Resources.ModeStanley;
-                Log.EventWriter("Stanley Steer Mode Selectede");
+                Log.System.Write("Stanley Steer Mode Selectede");
             }
             else
             {
                 btnStanleyPure.Image = Resources.ModePurePursuit;
-                Log.EventWriter("Pure Pursuit Steer Mode Selected");
+                Log.System.Write("Pure Pursuit Steer Mode Selected");
             }
 
             tabControl1.TabPages.Remove(tabPP);
@@ -820,7 +819,7 @@ namespace AgOpenGPS
             if (Math.Abs(offset) > 3900)
             {
                 mf.TimedMessageBox(2000, "Exceeded Range", "Excessive Steer Angle - Cannot Zero");
-                Log.EventWriter("Excessive Steer Angle, No Zero " + offset);
+                Log.System.Write("Excessive Steer Angle, No Zero " + offset);
             }
             else
             {
@@ -994,7 +993,7 @@ namespace AgOpenGPS
             SaveSettings();
             mf.SendPgnToLoop(mf.p_251.pgn);
             pboxSendSteer.Visible = false;
-            Log.EventWriter("Steer Form, Send and Save Pressed");
+            Log.System.Write("Steer Form, Send and Save Pressed");
 
             mf.TimedMessageBox(2000, gStr.gsAutoSteerPort, "Settings Sent To Steer Module");
         }
@@ -1129,7 +1128,7 @@ namespace AgOpenGPS
                 MessageBoxDefaultButton.Button2);
             if (result3 == DialogResult.Yes)
             {
-                Log.EventWriter("Steer Form - Steer Settings Set to Default");
+                Log.System.Write("Steer Form - Steer Settings Set to Default");
 
                 mf.TimedMessageBox(2000, "Reset To Default", "Values Set to Inital Default");
                 Properties.Settings.Default.setVehicle_maxSteerAngle = mf.vehicle.maxSteerAngle

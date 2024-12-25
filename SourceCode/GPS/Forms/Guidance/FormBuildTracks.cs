@@ -1,5 +1,6 @@
 ﻿using AgOpenGPS.Culture;
 using AgOpenGPS.Helpers;
+using AgOpenGPS.Logging;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -202,7 +203,7 @@ namespace AgOpenGPS
                     {
                         mf.btnAutoSteer.PerformClick();
                         mf.TimedMessageBox(2000, gStr.gsGuidanceStopped, gStr.gsNoGuidanceLines);
-                        Log.EventWriter("Autosteer Stop, No Tracks Available");
+                        Log.System.Write("Autosteer Stop, No Tracks Available");
 
                     }
                     Close();
@@ -1135,7 +1136,7 @@ namespace AgOpenGPS
             }
             catch (Exception ed)
             {
-                Log.EventWriter("Tracks from KML " + ed.ToString());
+                Log.System.Write("Tracks from KML " + ed.ToString());
                 return;
             }
 
