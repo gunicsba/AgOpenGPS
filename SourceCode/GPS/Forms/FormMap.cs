@@ -1,4 +1,5 @@
 ﻿using AgOpenGPS.Culture;
+using AgOpenGPS.Helpers;
 using OpenTK.Graphics.OpenGL;
 using System;
 using System.Drawing;
@@ -65,7 +66,7 @@ namespace AgOpenGPS
             if (mf.worldGrid.isGeoMap) cboxDrawMap.Image = Properties.Resources.MappingOn;
             else cboxDrawMap.Image = Properties.Resources.MappingOff;
 
-            if (!mf.IsOnScreen(Location, Size, 1))
+            if (!ScreenHelper.IsOnScreen(Bounds))
             {
                 Top = 0;
                 Left = 0;

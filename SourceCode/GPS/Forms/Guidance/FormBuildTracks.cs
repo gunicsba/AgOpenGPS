@@ -1,4 +1,5 @@
 ﻿using AgOpenGPS.Culture;
+using AgOpenGPS.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -98,7 +99,7 @@ namespace AgOpenGPS
 
             UpdateTable();
 
-            if (!mf.IsOnScreen(Location, Size, 1))
+            if (!ScreenHelper.IsOnScreen(Bounds))
             {
                 Top = 0;
                 Left = 0;
