@@ -16,41 +16,48 @@ namespace AgOpenGPS.Properties
 
         public static void Load()
         {
-            //opening the subkey
-            RegistryKey regKey = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\AgOpenGPS");
-
-            ////create default keys if not existing
-            if (regKey == null)
+            try
             {
-                RegistryKey Key = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\AgOpenGPS");
+                //opening the subkey
+                RegistryKey regKey = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\AgOpenGPS");
 
-                //storing the values
-                Key.SetValue("Language", "en");
-                Key.SetValue("WorkingDirectory", "Default");
-                Key.SetValue("VehicleFileName", "Default Vehicle");
+                ////create default keys if not existing
+                if (regKey == null)
+                {
+                    RegistryKey Key = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\AgOpenGPS");
 
-                Key.Close();
+                    //storing the values
+                    Key.SetValue("Language", "en");
+                    Key.SetValue("WorkingDirectory", "Default");
+                    Key.SetValue("VehicleFileName", "Default Vehicle");
+
+                    Key.Close();
+                }
+                else
+                {
+                    //check for corrupt settings file
+                    try
+                    {
+                        object dir = regKey.GetValue("WorkingDirectory");
+                        if (dir != null && dir.ToString() != "Default")
+                            WorkingDirectory = dir.ToString();
+
+                        object name = regKey.GetValue("VehicleFileName");
+                        if (name != null)
+                            VehicleFileName = name.ToString();
+
+                        var lang = regKey.GetValue("Language");
+                        if (lang != null)
+                            culture = lang.ToString();
+                    }
+                    catch (Exception)
+                    {
+                    }
+                    regKey.Close();
+                }
             }
-            else
+            catch (Exception)
             {
-                //check for corrupt settings file
-                try
-                {
-                    object dir = regKey.GetValue("WorkingDirectory");
-                    if (dir != null && dir.ToString() != "Default")
-                        WorkingDirectory = dir.ToString();
-
-                    object name = regKey.GetValue("VehicleFileName");
-                    if (name != null)
-                        VehicleFileName = name.ToString();
-
-
-                    culture = regKey.GetValue("Language").ToString();
-                }
-                catch (Exception)
-                {
-                }
-                regKey.Close();
             }
         }
 
@@ -394,6 +401,7 @@ namespace AgOpenGPS.Properties
 
         public static bool LoadXMLFile(string filePath, object obj)
         {
+            bool Errors = false;
             try
             {
                 if (File.Exists(filePath))
@@ -508,12 +516,14 @@ namespace AgOpenGPS.Properties
                                                     }
                                                     else
                                                     {
+                                                        Errors = true;
                                                         continue;
                                                         throw new ArgumentException("type not found");
                                                     }
                                                 }
                                                 catch (Exception e)
                                                 {
+                                                    Errors = true;
                                                     continue;
                                                 }
                                             }
@@ -531,7 +541,7 @@ namespace AgOpenGPS.Properties
                         }
                         reader.Close();
                     }
-                    return true;
+                    return !Errors;
                 }
             }
             catch (Exception e)

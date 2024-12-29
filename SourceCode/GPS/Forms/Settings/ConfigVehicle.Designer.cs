@@ -65,8 +65,10 @@ namespace AgOpenGPS
 
                 if (lvVehicles.SelectedItems.Count > 0)
                 {
+                    var newname = lvVehicles.SelectedItems[0].SubItems[0].Text;
+
                     DialogResult result3 = MessageBox.Show(
-                        "Load: " + lvVehicles.SelectedItems[0].SubItems[0].Text + ".XML",
+                        "Load: " + newname + ".XML",
                         gStr.gsSaveAndReturn,
                         MessageBoxButtons.YesNo,
                         MessageBoxIcon.Question,
@@ -74,9 +76,21 @@ namespace AgOpenGPS
 
                     if (result3 == DialogResult.Yes)
                     {
-                        RegistrySettings.Save("VehicleFileName", lvVehicles.SelectedItems[0].SubItems[0].Text);
+                        RegistrySettings.Save("VehicleFileName", newname);
 
-                        if (!Properties.Settings.Default.Load()) return;
+                        if (!Properties.Settings.Default.Load())
+                        {
+                            mf.LogEventWriter("Error loading settings XML: " + newname);
+                            mf.YesMessageBox("Error loading settings XML Deleting it now");
+
+                            var path = Path.Combine(mf.vehiclesDirectory, newname + ".XML");
+
+                            if (File.Exists(path))
+                                File.Delete(path);
+
+                            UpdateVehicleListView();
+                            return;
+                        }
 
                         mf.vehicleFileName = lvVehicles.SelectedItems[0].SubItems[0].Text;
 

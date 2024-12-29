@@ -286,7 +286,16 @@ namespace AgOpenGPS
 
             baseDirectory = Path.Combine(RegistrySettings.WorkingDirectory, "AgOpenGPS");
 
-            Settings.Default.Load();
+            if (!Settings.Default.Load())
+            {
+                LogEventWriter("Error loading settings XML: " + RegistrySettings.VehicleFileName);
+                YesMessageBox("Error loading settings XML Deleting it now");
+
+                var path = Path.Combine(baseDirectory, "Vehicles", RegistrySettings.VehicleFileName + ".XML");
+
+                if (File.Exists(path))
+                    File.Delete(path);
+            }
 
             //time keeper
             secondsSinceStart = (DateTime.Now - Process.GetCurrentProcess().StartTime).TotalSeconds;
