@@ -245,8 +245,7 @@ namespace AgIO
             {
                 form.ShowDialog(this);
             }
-            this.Text = "AgIO  Profile: " + profileFileName;
-
+            this.Text = "AgIO  Profile: " + RegistrySettings.ProfileFileName;
         }
 
         private void toolStripMenuItem2_Click(object sender, EventArgs e)
@@ -262,7 +261,7 @@ namespace AgIO
                 }
             }
 
-            this.Text = "AgIO  Profile: " + profileFileName;
+            this.Text = "AgIO  Profile: " + RegistrySettings.ProfileFileName;
         }
 
         private void modSimToolStrip_Click(object sender, EventArgs e)

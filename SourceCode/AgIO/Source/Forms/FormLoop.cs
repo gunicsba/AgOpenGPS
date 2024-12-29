@@ -70,11 +70,8 @@ namespace AgIO
 
         public int focusSkipCounter = 310;
 
-        //The base directory where Drive will be stored and fields and vehicles branch from
-        public string baseDirectory;
-
         //current directory of Comm storage
-        public string profileDirectory, profileFileName;
+        public static string profileDirectory;
 
         public FormLoop()
         {
@@ -84,59 +81,14 @@ namespace AgIO
         //First run
         private void FormLoop_Load(object sender, EventArgs e)
         {
-            string workingDirectory = Settings.Default.setF_workingDirectory == "Default"
-                ? Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)
-                : Settings.Default.setF_workingDirectory;
-
-            baseDirectory = Path.Combine(workingDirectory, "AgOpenGPS");
-
             //get the fields directory, if not exist, create
-            profileDirectory = Path.Combine(baseDirectory, "AgIO");
+            profileDirectory = Path.Combine(RegistrySettings.WorkingDirectory, "AgOpenGPS", "AgIO");
+
             DirectoryInfo profileDirectoryInfo = new DirectoryInfo(profileDirectory);
             if (!profileDirectoryInfo.Exists)
                 profileDirectoryInfo.Create();
 
-            FileInfo[] profileFiles = profileDirectoryInfo.GetFiles("*.xml");
-
-            if (profileFiles.Length == 0)
-            {
-                SettingsIO.ExportSettings(Path.Combine(profileDirectory, "Default Profile.xml"));
-
-                //get list of files again, because it just changed by exporting the default profile
-                profileFiles = profileDirectoryInfo.GetFiles("*.xml");
-            }
-
-            bool isDefault = false;
-            bool isProfileExist = false;
-
-            profileFileName = Settings.Default.setConfig_profileName;
-
-            foreach (FileInfo file in profileFiles)
-            {
-                string temp = Path.GetFileNameWithoutExtension(file.Name).Trim();
-                if (temp == "Default Profile")
-                {
-                    isDefault = true;
-                }
-
-                if (temp == profileFileName)
-                {
-                    isProfileExist = true;
-                }
-            }
-
-            if (!isDefault)
-                SettingsIO.ExportSettings(Path.Combine(profileDirectory, "Default Profile.xml"));
-
-            if (!isProfileExist)
-            {
-                profileFileName = "Default Profile";
-                Settings.Default.setConfig_profileName = profileFileName;
-                Settings.Default.Save();
-            }
-
-            //grab the current vehicle filename - make sure it exists
-
+            Settings.Default.Load();
 
             if (Settings.Default.setUDP_isOn)
             {
@@ -249,8 +201,6 @@ namespace AgIO
             isConnectedSteer = cboxIsSteerModule.Checked = Properties.Settings.Default.setMod_isSteerConnected;
             isConnectedMachine = cboxIsMachineModule.Checked = Properties.Settings.Default.setMod_isMachineConnected;
 
-            SetModulesOnOff();
-
             oneSecondLoopTimer.Enabled = true;
             pictureBox1.Visible = true;
             pictureBox1.BringToFront();
@@ -261,7 +211,7 @@ namespace AgIO
             //pictureBox1.Dock = DockStyle.Fill;:
 
             //On or off the module rows
-            SetModulesOnOff();
+            SetModulesOnOff(false);
 
             //update Caster IP from URL, just use the old one if can't find
             if (isNTRIP_RequiredOn)
@@ -316,14 +266,14 @@ namespace AgIO
             cboxAutoRunGPS_Out.Checked = Properties.Settings.Default.setDisplay_isAutoRunGPS_Out;
             if (Properties.Settings.Default.setDisplay_isAutoRunGPS_Out) StartGPS_Out();
 
-            this.Text = "AgIO  Profile: " + profileFileName;
+            this.Text = "AgIO  Profile: " + RegistrySettings.ProfileFileName;
 
-            if (profileFileName == "Default Profile")
+            if (RegistrySettings.ProfileFileName == "")
                 YesMessageBox("Using Default Profile" + "\r\n\r\n" + "Load Existing Profile or Save a New One !!!"
                     + "\r\n\r\n" + "Changes will NOT be Saved");
         }
 
-        public void SetModulesOnOff()
+        public void SetModulesOnOff(bool save = true)
         {
             if (isConnectedIMU)
             {
@@ -363,12 +313,14 @@ namespace AgIO
                 lblMod1Comm.Visible = false;
                 cboxIsSteerModule.BackgroundImage = Properties.Resources.AddNew;
             }
+            if (save)
+            {
+                Properties.Settings.Default.setMod_isIMUConnected = isConnectedIMU;
+                Properties.Settings.Default.setMod_isSteerConnected = isConnectedSteer;
+                Properties.Settings.Default.setMod_isMachineConnected = isConnectedMachine;
 
-            Properties.Settings.Default.setMod_isIMUConnected = isConnectedIMU;
-            Properties.Settings.Default.setMod_isSteerConnected = isConnectedSteer;
-            Properties.Settings.Default.setMod_isMachineConnected = isConnectedMachine;
-
-            Properties.Settings.Default.Save();
+                Properties.Settings.Default.Save();
+            }
         }
 
         private void FormLoop_FormClosing(object sender, FormClosingEventArgs e)
@@ -380,12 +332,6 @@ namespace AgIO
             Settings.Default.setPort_wasRtcmConnected = wasRtcmConnectedLastRun;
 
             Settings.Default.Save();
-
-            //if (profileFileName != "Default Profile")
-                SettingsIO.ExportSettings(Path.Combine(profileDirectory, profileFileName + ".xml"));
-            //else
-                //YesMessageBox("Using Default Profile" + "\r\n\r\n" + "Changes will NOT be Saved");
-
 
             if (loopBackSocket != null)
             {

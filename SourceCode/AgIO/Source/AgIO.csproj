@@ -27,7 +27,8 @@
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
-    <WriteVersionInfoToBuildLog>false</WriteVersionInfoToBuildLog> <!-- Only write to build log in one project (AgOpenGPS), otherwise GitVersion will fail -->
+    <WriteVersionInfoToBuildLog>false</WriteVersionInfoToBuildLog>
+    <!-- Only write to build log in one project (AgOpenGPS), otherwise GitVersion will fail -->
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -72,7 +73,6 @@
     <Compile Include="Classes\CGLM.cs" />
     <Compile Include="Classes\ListViewColumnSorterExt.cs" />
     <Compile Include="Classes\CRadioChannel.cs" />
-    <Compile Include="Classes\CSettings.cs" />
     <Compile Include="Forms\FormCommPicker.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -271,10 +271,6 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <None Include="packages.config" />
-    <None Include="Properties\Settings.settings">
-      <Generator>SettingsSingleFileGenerator</Generator>
-      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
-    </None>
     <Compile Include="Forms\SerialComm.Designer.cs">
       <SubType>Form</SubType>
       <DependentUpon>FormLoop.cs</DependentUpon>
@@ -296,14 +292,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="Properties\Settings.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Settings.settings</DependentUpon>
-      <DesignTimeSharedInput>True</DesignTimeSharedInput>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="App.config" />
+    <Compile Include="Properties\Settings.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="btnImages\ArrowLeft.png" />
@@ -347,9 +336,7 @@
     <None Include="btnImages\back-button.png" />
     <None Include="btnImages\SubnetSend.png" />
     <None Include="btnImages\Nmea.png" />
-    <None Include="btnImages\ConS_ImplementAntenna.png" />
     <None Include="btnImages\ScanNetwork.png" />
-    <None Include="btnImages\ToolAcceptChange.png" />
     <None Include="btnImages\TestRelays.png" />
     <None Include="btnImages\NTRIP_Client.png" />
     <None Include="btnImages\NTRIP_Serial.png" />
@@ -362,8 +349,6 @@
     <None Include="btnImages\ArrowGrnRight.png" />
     <None Include="btnImages\ArrowGrnLeft.png" />
     <None Include="btnImages\WindowsShutDown.png" />
-    <None Include="btnImages\Check_OK.png" />
-    <None Include="btnImages\Check_Error.png" />
     <None Include="btnImages\AgIO_First.gif" />
     <None Include="btnImages\Trash.png" />
     <None Include="btnImages\AddNew.png" />
@@ -374,7 +359,6 @@
     <None Include="btnImages\B_IMU.png" />
     <None Include="btnImages\B_GPS.png" />
     <None Include="btnImages\B_Autosteer.png" />
-    <None Include="btnImages\InOut.png" />
     <None Include="btnImages\satellite.png" />
     <None Include="btnImages\Com_Module2.png" />
     <None Include="btnImages\Com_IMUModule.png" />

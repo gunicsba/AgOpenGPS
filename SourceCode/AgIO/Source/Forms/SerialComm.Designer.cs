@@ -127,7 +127,6 @@ namespace AgIO
 
 
                 Properties.Settings.Default.setPort_wasIMUConnected = false;
-                Properties.Settings.Default.Save();
                 wasIMUConnectedLastRun = false;
             }
 
@@ -141,10 +140,10 @@ namespace AgIO
 
                 Properties.Settings.Default.setPort_portNameIMU = portNameIMU;
                 Properties.Settings.Default.setPort_wasIMUConnected = true;
-                Properties.Settings.Default.Save();
                 wasIMUConnectedLastRun = true;
                 lblIMUComm.Text = portNameIMU;
             }
+            Properties.Settings.Default.Save();
         }
 
         //close the machine port
@@ -352,7 +351,6 @@ namespace AgIO
 
 
                 Properties.Settings.Default.setPort_wasSteerModuleConnected = false;
-                Properties.Settings.Default.Save();
             }
 
             if (spSteerModule.IsOpen)
@@ -362,11 +360,11 @@ namespace AgIO
 
                 Properties.Settings.Default.setPort_portNameSteer = portNameSteerModule;
                 Properties.Settings.Default.setPort_wasSteerModuleConnected = true;
-                Properties.Settings.Default.Save();
 
                 wasSteerModuleConnectedLastRun = true;
                 lblMod1Comm.Text = portNameSteerModule;
             }
+            Properties.Settings.Default.Save();
         }
 
         //close the machine port
@@ -561,9 +559,7 @@ namespace AgIO
 
                 MessageBox.Show(e.Message + "\n\r" + "\n\r" + "Go to Settings -> COM Ports to Fix", "No Arduino Port Active");
 
-
                 Properties.Settings.Default.setPort_wasMachineModuleConnected = false;
-                Properties.Settings.Default.Save();
             }
 
             if (spMachineModule.IsOpen)
@@ -573,11 +569,11 @@ namespace AgIO
 
                 Properties.Settings.Default.setPort_portNameMachine = portNameMachineModule;
                 Properties.Settings.Default.setPort_wasMachineModuleConnected = true;
-                Properties.Settings.Default.Save();
 
                 wasMachineModuleConnectedLastRun = true;
                 lblMod2Comm.Text = portNameMachineModule;
             }
+            Properties.Settings.Default.Save();
         }
 
         //close the machine port
