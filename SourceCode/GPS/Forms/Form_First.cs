@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Globalization;
 using System.Windows.Forms;
 
 namespace AgOpenGPS
@@ -49,23 +48,19 @@ namespace AgOpenGPS
 
         private void button1_Click(object sender, EventArgs e)
         {
-            mf.isTermsAccepted = true;
-            Close();
+            DialogResult = DialogResult.OK;
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
-            Properties.Settings.Default.setDisplay_isTermsAccepted = false;
-            Properties.Settings.Default.Save();
-            //Close();
-            Environment.Exit(0);
+            DialogResult = DialogResult.No;
         }
 
         private void button3_Click(object sender, EventArgs e)
         {
             Properties.Settings.Default.setDisplay_isTermsAccepted = true;
             Properties.Settings.Default.Save();
-            mf.isTermsAccepted = true;
+            DialogResult = DialogResult.OK;
         }
     }
 }

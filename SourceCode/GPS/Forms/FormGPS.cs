@@ -114,7 +114,7 @@ namespace AgOpenGPS
         /// <summary>
         /// create the scene camera
         /// </summary>
-        public CCamera camera = new CCamera();
+        public CCamera camera;
 
         /// <summary>
         /// create world grid
@@ -284,12 +284,14 @@ namespace AgOpenGPS
             //winform initialization
             InitializeComponent();
 
-            CheckSettingsNotNull();
+            baseDirectory = Path.Combine(RegistrySettings.WorkingDirectory, "AgOpenGPS");
 
-            CheckNozzleSettingsNotNull();
+            Settings.Default.Load();
 
             //time keeper
             secondsSinceStart = (DateTime.Now - Process.GetCurrentProcess().StartTime).TotalSeconds;
+
+            camera = new CCamera();
 
             //create the world grid
             worldGrid = new CWorldGrid(this);
@@ -376,11 +378,10 @@ namespace AgOpenGPS
 
         private void FormGPS_Load(object sender, EventArgs e)
         {
-
             this.MouseWheel += ZoomByMouseWheel;
 
             sbSystemEvents.Append("\r");
-            sbSystemEvents.Append("Program Started: " + DateTime.Now.ToString("f", CultureInfo.CreateSpecificCulture(Settings.Default.setF_culture)) + "\r");
+            sbSystemEvents.Append("Program Started: " + DateTime.Now.ToString("f", CultureInfo.CreateSpecificCulture(RegistrySettings.culture)) + "\r");
             sbSystemEvents.Append("AOG Version: ");
             sbSystemEvents.Append(Application.ProductVersion.ToString(CultureInfo.InvariantCulture));
             sbSystemEvents.Append("\r");
@@ -404,13 +405,7 @@ namespace AgOpenGPS
             panelSim.Top = Height - 60;
 
             //set the language to last used
-            SetLanguage(Settings.Default.setF_culture, false);
-
-            string workingDirectory = Settings.Default.setF_workingDirectory == "Default"
-                ? Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)
-                : Settings.Default.setF_workingDirectory;
-
-            baseDirectory = Path.Combine(workingDirectory, "AgOpenGPS");
+            SetLanguage(RegistrySettings.culture, false);
 
             //get the fields directory, if not exist, create
             fieldsDirectory = Path.Combine(baseDirectory, "Fields");
@@ -605,16 +600,14 @@ namespace AgOpenGPS
 
             hotkeys = Properties.Settings.Default.setKey_hotkeys.ToCharArray();
 
-            if (!isTermsAccepted)
+            if (!Properties.Settings.Default.setDisplay_isTermsAccepted)
             {
-                if (!Properties.Settings.Default.setDisplay_isTermsAccepted)
+                using (var form = new Form_First(this))
                 {
-                    using (var form = new Form_First(this))
+                    if (form.ShowDialog(this) != DialogResult.OK)
                     {
-                        if (form.ShowDialog(this) != DialogResult.OK)
-                        {
-                            Close();
-                        }
+                        //Close();
+                        Environment.Exit(0);
                     }
                 }
             }
@@ -625,12 +618,8 @@ namespace AgOpenGPS
 
                 YesMessageBox("Using Default Vehicle" + "\r\n\r\n" + "Load Existing Vehicle or Save As a New One !!!"
                     + "\r\n\r\n" + "Changes will NOT be Saved for Default Vehicle");
-            
-                SettingsIO.ExportAll(Path.Combine(vehiclesDirectory, "Default Vehicle.xml"));
 
-                RegistryKey key = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\AgOpenGPS");
-                key.SetValue("VehicleFileName", Properties.Settings.Default.setVehicle_vehicleName);
-                key.Close();
+                Properties.Settings.Default.Save();
 
                 using (FormConfig form = new FormConfig(this))
                 {
@@ -704,18 +693,13 @@ namespace AgOpenGPS
 
             SaveFormGPSWindowSettings();
 
-            sbSystemEvents.Append("Program Exit: " + DateTime.Now.ToString("f", CultureInfo.CreateSpecificCulture(Settings.Default.setF_culture)) + "\r");
+            sbSystemEvents.Append("Program Exit: " + DateTime.Now.ToString("f", CultureInfo.CreateSpecificCulture(RegistrySettings.culture)) + "\r");
 
             //write the log file
             FileSaveSystemEvents();
 
             //save current vehicle
-            SettingsIO.ExportAll(Path.Combine(vehiclesDirectory, vehicleFileName + ".XML"));
-
-            RegistryKey key = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\AgOpenGPS");
-            key.SetValue("VehicleFileName", Properties.Settings.Default.setVehicle_vehicleName);
-            key.SetValue("WorkingDirectory", Properties.Settings.Default.setF_workingDirectory);
-            key.Close();
+            Properties.Settings.Default.Save();
 
             if (displayBrightness.isWmiMonitor)
                 displayBrightness.SetBrightness(Settings.Default.setDisplay_brightnessSystem);
@@ -835,22 +819,6 @@ namespace AgOpenGPS
             {
                 f.Top = this.Top + 75;
                 f.Left = this.Left + this.Width - 380;
-            }
-        }
-
-        public void CheckSettingsNotNull()
-        {
-            if (Settings.Default.setFeatures == null)
-            {
-                Settings.Default.setFeatures = new CFeatureSettings();
-            }
-        }
-
-        public void CheckNozzleSettingsNotNull()
-        {
-            if (Settings.Default.setNozzleSettings == null)
-            {
-                Settings.Default.setNozzleSettings = new CNozzleSettings();
             }
         }
 

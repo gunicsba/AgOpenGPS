@@ -1,10 +1,8 @@
 ﻿//Please, if you use this, share the improvements
 
 using AgOpenGPS.Culture;
-using Microsoft.Win32;
 using System;
 using System.Drawing;
-using System.IO;
 using System.Windows.Forms;
 
 namespace AgOpenGPS
@@ -137,7 +135,7 @@ namespace AgOpenGPS
             mf.LoadSettings();
 
             //save current vehicle
-            SettingsIO.ExportAll(Path.Combine(mf.vehiclesDirectory, mf.vehicleFileName + ".XML"));
+            Properties.Settings.Default.Save();
         }
 
         private void FixMinMaxSpinners()
@@ -227,7 +225,7 @@ namespace AgOpenGPS
         private void tabSummary_Enter(object sender, EventArgs e)
         {
             SectionFeetInchesTotalWidthLabelUpdate();
-            lblSummaryVehicleName.Text = Properties.Settings.Default.setVehicle_vehicleName;
+            lblSummaryVehicleName.Text = mf.vehicleFileName;
             UpdateSummary();
         }
 
