@@ -7,8 +7,6 @@ using System.Windows.Forms;
 using AgOpenGPS.Properties;
 using System.Globalization;
 using System.IO;
-using System.Media;
-using System.Reflection;
 using System.Collections.Generic;
 using AgOpenGPS.Culture;
 using System.Text;
@@ -56,7 +54,7 @@ namespace AgOpenGPS
         public bool isPureDisplayOn = true, isSkyOn = true, isRollMeterOn = false, isTextureOn = true;
         public bool isDay = true, isDayTime = true, isBrightnessOn = true;
         public bool isLogElevation = false, isDirectionMarkers;
-        public bool isKeyboardOn = true, isAutoStartAgIO = true, isSvennArrowOn = true, isTermsAccepted = false;
+        public bool isKeyboardOn = true, isAutoStartAgIO = true, isSvennArrowOn = true;
         public bool isSectionlinesOn = true, isLineSmooth = true;
 
         public bool isLightBarNotSteerBar = false;
@@ -321,7 +319,12 @@ namespace AgOpenGPS
                 //hide the Nav panel in 6  secs
                 if (panelNavigation.Visible)
                 {
-                    if (navPanelCounter-- <= 0) panelNavigation.Visible = false;
+                    if (navPanelCounter-- <= 0)
+                    {
+                        Settings.Default.Save();
+
+                        panelNavigation.Visible = false;
+                    }
                     lblHz.Text = gpsHz.ToString("N1") + " ~ " + (frameTime.ToString("N1")) + " " + FixQuality;
                 }
 
@@ -510,9 +513,7 @@ namespace AgOpenGPS
         }//wait till timer fires again.         
 
         public void LoadSettings()
-        {            
-            CheckSettingsNotNull();
-
+        {
             //metric settings
             isMetric = Settings.Default.setMenu_isMetric;
 
@@ -584,8 +585,6 @@ namespace AgOpenGPS
             //Nozzz
             //Nozzle Spray Controller
 
-            CheckNozzleSettingsNotNull();
-
             isNozzleApp = Properties.Settings.Default.setApp_isNozzleApp;
             nozzleAppToolStripMenuItem.Checked = isNozzleApp;
             tlpNozzle.Visible = isNozzleApp;
@@ -643,12 +642,15 @@ namespace AgOpenGPS
             fieldColorDay = Properties.Settings.Default.setDisplay_colorFieldDay.CheckColorFor255();
             fieldColorNight = Properties.Settings.Default.setDisplay_colorFieldNight.CheckColorFor255();
 
+            /*
+            //unnecessary saving to file
             Properties.Settings.Default.setDisplay_colorDayFrame = frameDayColor;
             Properties.Settings.Default.setDisplay_colorNightFrame = frameNightColor;
             Properties.Settings.Default.setDisplay_colorSectionsDay = sectionColorDay;
             Properties.Settings.Default.setDisplay_colorFieldDay = fieldColorDay;
             Properties.Settings.Default.setDisplay_colorFieldNight = fieldColorNight;
             Properties.Settings.Default.Save();
+            */
 
             //load up colors
             textColorDay = Settings.Default.setDisplay_colorTextDay.CheckColorFor255();
@@ -665,13 +667,15 @@ namespace AgOpenGPS
                 customColorsList[i] = iCol;
             }
 
+            /*
+            //unnecessary saving to file
             Properties.Settings.Default.setDisplay_customColors = "";
             for (int i = 0; i < 15; i++)
                 Properties.Settings.Default.setDisplay_customColors += customColorsList[i].ToString() + ",";
             Properties.Settings.Default.setDisplay_customColors += customColorsList[15].ToString();
 
             Properties.Settings.Default.Save();
-
+            */
 
             isTextureOn = Settings.Default.setDisplay_isTextureOn;
             isLogElevation = Settings.Default.setDisplay_isLogElevation;
@@ -702,7 +706,7 @@ namespace AgOpenGPS
             string directoryName = Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location);
 
             //grab the current vehicle filename - make sure it exists
-            vehicleFileName = Settings.Default.setVehicle_vehicleName;
+            vehicleFileName = RegistrySettings.VehicleFileName;
 
             simulatorOnToolStripMenuItem.Checked = Settings.Default.setMenu_isSimulatorOn;
             if (simulatorOnToolStripMenuItem.Checked)
@@ -845,9 +849,9 @@ namespace AgOpenGPS
             tool.contourWidth = (tool.width - tool.overlap) / 3.0;
 
             //load the lightbar resolution
-        lightbarCmPerPixel = Properties.Settings.Default.setDisplay_lightbarCmPerPixel;
+            lightbarCmPerPixel = Properties.Settings.Default.setDisplay_lightbarCmPerPixel;
 
-        isStanleyUsed = Properties.Settings.Default.setVehicle_isStanleyUsed;
+            isStanleyUsed = Properties.Settings.Default.setVehicle_isStanleyUsed;
 
             //main window first
             if (!isKioskMode)
@@ -1293,9 +1297,11 @@ namespace AgOpenGPS
             {
                 LineUpAllZoneButtons();
             }
-
-            Properties.Settings.Default.setDisplay_isDayMode = isDay;
-            Properties.Settings.Default.Save();
+            if (Properties.Settings.Default.setDisplay_isDayMode != isDay)
+            {
+                Properties.Settings.Default.setDisplay_isDayMode = isDay;
+                Properties.Settings.Default.Save();
+            }
         }
 
         public void SaveFormGPSWindowSettings()

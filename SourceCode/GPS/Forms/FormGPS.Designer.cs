@@ -842,7 +842,6 @@
             // 
             // timerSim
             // 
-            this.timerSim.Enabled = true;
             this.timerSim.Interval = 93;
             this.timerSim.Tick += new System.EventHandler(this.timerSim_Tick);
             // 

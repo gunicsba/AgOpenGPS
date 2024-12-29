@@ -1,16 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using AgOpenGPS.Culture;
 using AgOpenGPS.Properties;
-using Microsoft.Win32;
 using OpenTK.Graphics.OpenGL;
 
 namespace AgOpenGPS
@@ -31,21 +26,18 @@ namespace AgOpenGPS
             btnVehicleSaveAs.BackColor = Color.Transparent;
             btnVehicleSaveAs.Enabled = false;
 
-            tboxVehicleNameSave.Text = SanitizeFileName(tboxVehicleNameSave.Text.Trim());
+            var newVehiclename = SanitizeFileName(tboxVehicleNameSave.Text.Trim()).Trim();
+            tboxVehicleNameSave.Text = "";
 
-            if (tboxVehicleNameSave.Text.Trim().Length > 0)
+            if (newVehiclename.Length > 0)
             {
-                SettingsIO.ExportAll(Path.Combine(mf.vehiclesDirectory, tboxVehicleNameSave.Text.Trim() + ".XML"));
+                //do we realy need to save the old xml? should be saved when changed anyway
+                //Properties.Settings.Default.Save();
 
-                mf.vehicleFileName = tboxVehicleNameSave.Text.Trim();
-                Properties.Settings.Default.setVehicle_vehicleName = mf.vehicleFileName;
+                mf.vehicleFileName = newVehiclename;
+                Properties.RegistrySettings.Save("VehicleFileName", newVehiclename);
+
                 Properties.Settings.Default.Save();
-
-                RegistryKey key = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\AgOpenGPS");
-                key.SetValue("VehicleFileName", Properties.Settings.Default.setVehicle_vehicleName);
-                key.Close();
-
-                tboxVehicleNameSave.Text = "";
 
                 LoadBrandImage();
 
@@ -68,12 +60,15 @@ namespace AgOpenGPS
             if (!mf.isJobStarted)
             {
                 //save current vehicle
-                SettingsIO.ExportAll(Path.Combine(mf.vehiclesDirectory, mf.vehicleFileName + ".XML"));
+                //do we realy need to save the old xml? should be saved when changed anyway
+                //Properties.Settings.Default.Save();
 
                 if (lvVehicles.SelectedItems.Count > 0)
                 {
+                    var newname = lvVehicles.SelectedItems[0].SubItems[0].Text;
+
                     DialogResult result3 = MessageBox.Show(
-                        "Load: " + lvVehicles.SelectedItems[0].SubItems[0].Text + ".XML",
+                        "Load: " + newname + ".XML",
                         gStr.gsSaveAndReturn,
                         MessageBoxButtons.YesNo,
                         MessageBoxIcon.Question,
@@ -81,16 +76,23 @@ namespace AgOpenGPS
 
                     if (result3 == DialogResult.Yes)
                     {
-                        bool success = SettingsIO.ImportAll(Path.Combine(mf.vehiclesDirectory, lvVehicles.SelectedItems[0].SubItems[0].Text + ".XML"));
-                        if (!success) return;
+                        RegistrySettings.Save("VehicleFileName", newname);
+
+                        if (!Properties.Settings.Default.Load())
+                        {
+                            mf.LogEventWriter("Error loading settings XML: " + newname);
+                            mf.YesMessageBox("Error loading settings XML Deleting it now");
+
+                            var path = Path.Combine(mf.vehiclesDirectory, newname + ".XML");
+
+                            if (File.Exists(path))
+                                File.Delete(path);
+
+                            UpdateVehicleListView();
+                            return;
+                        }
 
                         mf.vehicleFileName = lvVehicles.SelectedItems[0].SubItems[0].Text;
-                        Properties.Settings.Default.setVehicle_vehicleName = mf.vehicleFileName;
-                        Properties.Settings.Default.Save();
-
-                        RegistryKey key = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\AgOpenGPS");
-                        key.SetValue("VehicleFileName", Properties.Settings.Default.setVehicle_vehicleName);
-                        key.Close();
 
                         LoadBrandImage();
 
@@ -296,21 +298,20 @@ namespace AgOpenGPS
             btnVehicleNewSave.BackColor = Color.Transparent;
             btnVehicleNewSave.Enabled = false;
 
-            tboxCreateNewVehicle.Text = SanitizeFileName(tboxCreateNewVehicle.Text.Trim());
+            var newVehiclename = SanitizeFileName(tboxCreateNewVehicle.Text.Trim()).Trim();
 
-            if (tboxCreateNewVehicle.Text.Trim().Length > 0)
+            tboxCreateNewVehicle.Text = "";
+
+            if (newVehiclename.Length > 0)
             {
-                SettingsIO.ExportAll(Path.Combine(mf.vehiclesDirectory, mf.vehicleFileName + ".XML"));
+                //do we realy need to save the old xml? should be saved when changed anyway
+                //Properties.Settings.Default.Save();
+
+                lblCurrentVehicle.Text = mf.vehicleFileName = newVehiclename;
+                RegistrySettings.Save("VehicleFileName", newVehiclename);
 
                 Settings.Default.Reset();
                 Settings.Default.Save();
-
-                Properties.Settings.Default.setVehicle_vehicleName = tboxCreateNewVehicle.Text.Trim();
-
-                Properties.Settings.Default.Save();
-
-                lblCurrentVehicle.Text = mf.vehicleFileName = Properties.Settings.Default.setVehicle_vehicleName;
-                tboxCreateNewVehicle.Text = "";
 
                 LoadBrandImage();
 
@@ -375,11 +376,8 @@ namespace AgOpenGPS
 
                 mf.LogEventWriter("New Vehicle Loaded: " + mf.vehicleFileName + ".XML");
 
-                SettingsIO.ExportAll(Path.Combine(mf.vehiclesDirectory, mf.vehicleFileName + ".XML"));
-
-                RegistryKey key = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\AgOpenGPS");
-                key.SetValue("VehicleFileName", Properties.Settings.Default.setVehicle_vehicleName);
-                key.Close();
+                //we are loading the setting not saving??
+                //Properties.Settings.Default.Save();
             }
 
             UpdateVehicleListView();
@@ -399,7 +397,7 @@ namespace AgOpenGPS
 
             //deselect everything
             lvVehicles.SelectedItems.Clear();
-            lblSummaryVehicleName.Text = Properties.Settings.Default.setVehicle_vehicleName;
+            lblSummaryVehicleName.Text = mf.vehicleFileName;
 
             //tboxCreateNewVehicle.Text = "";
             //tboxVehicleNameSave.Text = "";

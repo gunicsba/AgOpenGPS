@@ -728,7 +728,6 @@ namespace AgOpenGPS
 
                 mf.tram.IsTramOuterOrInner();
 
-                Properties.Settings.Default.Save();
 
                 mf.SectionCalcMulti();
 

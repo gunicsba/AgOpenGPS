@@ -3,8 +3,6 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Diagnostics.Eventing.Reader;
-using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -13,7 +11,6 @@ using AgOpenGPS.Culture;
 using AgOpenGPS.Forms;
 using AgOpenGPS.Forms.Pickers;
 using AgOpenGPS.Properties;
-using Microsoft.Win32;
 
 namespace AgOpenGPS
 {
@@ -730,7 +727,7 @@ namespace AgOpenGPS
                     }
 
                     LogEventWriter(" *Opened* " + currentFieldDirectory);
-                    LogEventWriter(DateTime.Now.ToString("f", CultureInfo.CreateSpecificCulture(Settings.Default.setF_culture)));
+                    LogEventWriter(DateTime.Now.ToString("f", CultureInfo.CreateSpecificCulture(RegistrySettings.culture)));
                 }
             }
 
@@ -779,7 +776,7 @@ namespace AgOpenGPS
             ExportFieldAs_ISOXMLv4();
 
             LogEventWriter(currentFieldDirectory + " ** Closed **");
-            LogEventWriter(DateTime.Now.ToString("f", CultureInfo.CreateSpecificCulture(Settings.Default.setF_culture)));
+            LogEventWriter(DateTime.Now.ToString("f", CultureInfo.CreateSpecificCulture(RegistrySettings.culture)));
 
             Settings.Default.setF_CurrentDir = currentFieldDirectory;
             Settings.Default.Save();
@@ -1108,6 +1105,7 @@ namespace AgOpenGPS
             if (panelNavigation.Visible)
             {
                 panelNavigation.Visible = false;
+                Settings.Default.Save();
             }
             else
             {
@@ -1421,26 +1419,14 @@ namespace AgOpenGPS
 
             FolderBrowserDialog fbd = new FolderBrowserDialog();
             fbd.ShowNewFolderButton = true;
-            fbd.Description = "Currently: " + Settings.Default.setF_workingDirectory;
+            bool DefaultDir = RegistrySettings.WorkingDirectory == Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
 
-            if (Settings.Default.setF_workingDirectory == "Default") fbd.SelectedPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-            else fbd.SelectedPath = Settings.Default.setF_workingDirectory;
+            fbd.Description = "Currently: " + (DefaultDir ? "Default" : RegistrySettings.WorkingDirectory);
+            fbd.SelectedPath = RegistrySettings.WorkingDirectory;
 
             if (fbd.ShowDialog(this) == DialogResult.OK)
             {
-                if (fbd.SelectedPath != Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments))
-                {
-                    Settings.Default.setF_workingDirectory = fbd.SelectedPath;
-                }
-                else
-                {
-                    Settings.Default.setF_workingDirectory = "Default";
-                }
-                Settings.Default.Save();
-
-                RegistryKey key = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\AgOpenGPS");
-                key.SetValue("WorkingDirectory", Settings.Default.setF_workingDirectory);
-                key.Close();
+                RegistrySettings.Save("WorkingDirectory", fbd.SelectedPath);
 
                 //restart program
                 MessageBox.Show(gStr.gsProgramWillExitPleaseRestart);
@@ -1538,33 +1524,7 @@ namespace AgOpenGPS
 
                 if (result2 == DialogResult.Yes)
                 {
-                    ////opening the subkey
-                    RegistryKey regKey = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\AgOpenGPS");
-
-                    if (regKey == null)
-                    {
-                        RegistryKey Key = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\AgOpenGPS");
-
-                        //storing the values
-                        Key.SetValue("Language", "en");
-                        Key.Close();
-                    }
-                    else
-                    {
-                        //adding or editing "Language" subkey to the "SOFTWARE" subkey  
-                        RegistryKey key = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\AgOpenGPS");
-
-                        //storing the values  
-                        key.SetValue("Language", "en");
-                        key.Close();
-                    }
-
-                    Settings.Default.Reset();
-                    Settings.Default.Save();
-
-                    Settings.Default.setF_culture = "en";
-                    Settings.Default.setF_workingDirectory = "Default";
-                    Settings.Default.Save();
+                    RegistrySettings.Reset();
 
                     //save event
                     LogEventWriter("Reset ALL event occured" );
@@ -1601,35 +1561,18 @@ namespace AgOpenGPS
                 simulatorOnToolStripMenuItem.Checked = true;
                 panelSim.Visible = true;
                 timerSim.Enabled = true;
-                //DialogResult result3 = MessageBox.Show(gStr.gsAgOpenGPSWillExitPlzRestart, gStr.gsTurningOnSimulator, MessageBoxButtons.OK);
-                Settings.Default.setMenu_isSimulatorOn = simulatorOnToolStripMenuItem.Checked;
-                Settings.Default.Save();
-
-                isFirstFixPositionSet = false;
-                isFirstHeadingSet = false;
-                isGPSPositionInitialized = false;
-                startCounter = 0;
-
-                //System.Environment.Exit(1);
             }
             else
             {
                 panelSim.Visible = false;
                 timerSim.Enabled = false;
                 simulatorOnToolStripMenuItem.Checked = false;
-                //TimedMessageBox(3000, "Simulator Turning Off", "Application will Exit");
-                //DialogResult result3 = MessageBox.Show(gStr.gsAgOpenGPSWillExitPlzRestart, gStr.gsTurningOffSimulator, MessageBoxButtons.OK);
-                Settings.Default.setMenu_isSimulatorOn = simulatorOnToolStripMenuItem.Checked;
-                Settings.Default.Save();
-
-                //worldGrid.CreateWorldGrid(0, 0);
-                isFirstFixPositionSet = false;
-                isGPSPositionInitialized = false;
-                isFirstHeadingSet = false;
-                startCounter = 0;
-
-                //System.Environment.Exit(1);
             }
+
+            isFirstFixPositionSet = false;
+            isFirstHeadingSet = false;
+            isGPSPositionInitialized = false;
+            startCounter = 0;
 
             Settings.Default.setMenu_isSimulatorOn = simulatorOnToolStripMenuItem.Checked;
             Settings.Default.Save();
@@ -1640,7 +1583,7 @@ namespace AgOpenGPS
             {
                 form.ShowDialog(this);
             }
-            SettingsIO.ExportAll(Path.Combine(vehiclesDirectory, vehicleFileName + ".XML"));
+            Properties.Settings.Default.Save();
         }
         private void colorsSectionToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -1650,7 +1593,7 @@ namespace AgOpenGPS
                 {
                     form.ShowDialog(this);
                 }
-                SettingsIO.ExportAll(Path.Combine(vehiclesDirectory, vehicleFileName + ".XML"));
+                Properties.Settings.Default.Save();
             }
             else
             {
@@ -1851,18 +1794,10 @@ namespace AgOpenGPS
                     break;
             }
 
-            Settings.Default.setF_culture = lang;
-            Settings.Default.Save();
-
-            //adding or editing "Language" subkey to the "SOFTWARE" subkey  
-            RegistryKey key = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\AgOpenGPS");
-
-            //storing the values  
-            key.SetValue("Language", lang);
-            key.Close();
-
             if (Restart)
             {
+                RegistrySettings.Save("Language", lang);
+
                 MessageBox.Show(gStr.gsProgramWillExitPleaseRestart);
                 System.Environment.Exit(1);
             }
@@ -2002,8 +1937,11 @@ namespace AgOpenGPS
             yt.rowSkipsWidth = cboxpRowWidth.SelectedIndex + 1;
             yt.Set_Alternate_skips();
             if (!yt.isYouTurnTriggered) yt.ResetCreatedYouTurn();
-            Properties.Settings.Default.set_youSkipWidth = yt.rowSkipsWidth;
-            Properties.Settings.Default.Save();
+            if (Properties.Settings.Default.set_youSkipWidth != yt.rowSkipsWidth)
+            {
+                Properties.Settings.Default.set_youSkipWidth = yt.rowSkipsWidth;
+                Properties.Settings.Default.Save();
+            }
         }
         private void btnHeadlandOnOff_Click(object sender, EventArgs e)
         {
@@ -2319,7 +2257,6 @@ namespace AgOpenGPS
                 displayBrightness.BrightnessIncrease();
                 btnBrightnessDn.Text = displayBrightness.GetBrightness().ToString() + "%";
                 Settings.Default.setDisplay_brightness = displayBrightness.GetBrightness();
-                Settings.Default.Save();
             }
             navPanelCounter = 3;
         }
@@ -2330,7 +2267,6 @@ namespace AgOpenGPS
                 displayBrightness.BrightnessDecrease();
                 btnBrightnessDn.Text = displayBrightness.GetBrightness().ToString() + "%";
                 Settings.Default.setDisplay_brightness = displayBrightness.GetBrightness();
-                Settings.Default.Save();
             }
             navPanelCounter = 3;
         }

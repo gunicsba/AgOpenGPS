@@ -58,7 +58,7 @@ namespace AgOpenGPS
             label56.Text = Properties.Settings.Default.setDisplay_isAutoStartAgIO.ToString();
             label58.Text = Properties.Settings.Default.setDisplay_isAutoOffAgIO.ToString();
 
-            label60.Text = Properties.Settings.Default.setF_culture;
+            label60.Text = RegistrySettings.culture;
             label62.Text = Properties.Settings.Default.setF_CurrentDir;
             label64.Text = Properties.Settings.Default.setF_isRemoteWorkSystemOn.ToString();
             label66.Text = Properties.Settings.Default.setF_isSteerWorkSwitchEnabled.ToString(); 
@@ -67,7 +67,7 @@ namespace AgOpenGPS
             label72.Text = Properties.Settings.Default.setF_isWorkSwitchEnabled.ToString();
             label74.Text = Properties.Settings.Default.setF_isWorkSwitchManualSections.ToString();
             label76.Text = Properties.Settings.Default.setF_minHeadingStepDistance.ToString();
-            label78.Text = Properties.Settings.Default.setF_workingDirectory.ToString();
+            label78.Text = RegistrySettings.WorkingDirectory;
             label80.Text = Properties.Settings.Default.setGPS_ageAlarm.ToString();
             label82.Text = Properties.Settings.Default.setGPS_dualHeadingOffset.ToString();
             label84.Text = Properties.Settings.Default.setGPS_dualReverseDetectionDistance.ToString();
@@ -107,7 +107,7 @@ namespace AgOpenGPS
             label154.Text = Properties.Settings.Default.setVehicle_toolOffset.ToString();
             label156.Text = Properties.Settings.Default.setVehicle_toolOverlap.ToString();
             label158.Text = Properties.Settings.Default.setVehicle_toolWidth.ToString();
-            label160.Text = Properties.Settings.Default.setVehicle_vehicleName;
+            label160.Text = mf.vehicleFileName;
             label162.Text = Properties.Settings.Default.setVehicle_vehicleType.ToString();
             label164.Text = Properties.Settings.Default.setAS_isSteerInReverse.ToString();
 
