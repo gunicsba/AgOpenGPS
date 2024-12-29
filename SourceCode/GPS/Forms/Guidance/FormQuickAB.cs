@@ -14,12 +14,10 @@ namespace AgOpenGPS
         private double aveLineHeading;
         public List<CTrk> gTemp = new List<CTrk>();
 
-        private bool isRefRightSide = true, isMakingOnlyAB = false; //left side 0 middle 1 right 2
+        private bool isRefRightSide = true; //left side 0 middle 1 right 2
 
         //used throughout to acces the master Track list
         private int idx;
-
-        private vec3 clickA, clickB;
 
         public FormQuickAB(Form _mf)
         {

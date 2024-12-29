@@ -35,7 +35,6 @@ namespace AgOpenGPS
         {
             tboxFieldName.Text = "";
             btnBuildFields.Enabled = false;
-            string newFieldDir;
 
             label1.Text = gStr.gsEditFieldName;
 

@@ -329,7 +329,7 @@ namespace AgIO.Properties
                                                         throw new ArgumentException("type not found");
                                                     }
                                                 }
-                                                catch (Exception e)
+                                                catch (Exception)
                                                 {
                                                     Errors = true;
                                                     continue;
@@ -352,7 +352,7 @@ namespace AgIO.Properties
                     return !Errors;
                 }
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 //glm.WriteErrorLog(ex);
             }
@@ -446,7 +446,7 @@ namespace AgIO.Properties
                 if (File.Exists(filePath + ".tmp"))
                     File.Move(filePath + ".tmp", filePath);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 //glm.WriteErrorLog(ex);
             }
