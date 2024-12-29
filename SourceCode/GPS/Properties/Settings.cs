@@ -521,7 +521,7 @@ namespace AgOpenGPS.Properties
                                                         throw new ArgumentException("type not found");
                                                     }
                                                 }
-                                                catch (Exception e)
+                                                catch (Exception)
                                                 {
                                                     Errors = true;
                                                     continue;
@@ -544,7 +544,7 @@ namespace AgOpenGPS.Properties
                     return !Errors;
                 }
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 //glm.WriteErrorLog(ex);
             }
@@ -635,7 +635,7 @@ namespace AgOpenGPS.Properties
                 if (File.Exists(filePath + ".tmp"))
                     File.Move(filePath + ".tmp", filePath);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 //glm.WriteErrorLog(ex);
             }
