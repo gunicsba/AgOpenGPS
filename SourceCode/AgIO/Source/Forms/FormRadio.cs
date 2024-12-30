@@ -148,6 +148,7 @@ namespace AgIO
             catch (Exception ex)
             {
                 mf.TimedMessageBox(3000, "Error opening port", ex.Message);
+                Log.EventWriter("Radio Port Exception: " + ex.ToString());
             }
 
             SetButtonState();

@@ -987,7 +987,7 @@ namespace AgIO
             }
             catch (Exception)
             {
-                //mf.WriteErrorLog("Validate Checksum" + e);
+                Log.EventWriter("Validate NMEA Checksum Exception ");
                 return false;
             }
         }

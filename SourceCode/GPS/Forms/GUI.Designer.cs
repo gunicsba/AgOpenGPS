@@ -85,7 +85,7 @@ namespace AgOpenGPS
         private int currentFieldTextCounter = 0;
 
         //For field saving in background
-        private int fileSaveCounter = 1;
+        private int fileSaveCounter = 1, fileMissedCounter = 1;
         private int fourSecondCounter = 0;
         public int twoSecondCounter = 0;
         private int oneSecondCounter = 0;
@@ -93,23 +93,11 @@ namespace AgOpenGPS
 
         public List<int> buttonOrder = new List<int>();
 
-        public StringBuilder sbSystemEvents = new StringBuilder();
-
-        //Timer triggers at 125 msec
-
-        public void LogEventWriter(string message)
-        {
-            sbSystemEvents.Append(DateTime.Now.ToString("T"));
-            sbSystemEvents.Append("-> ");
-            sbSystemEvents.Append(message);
-            sbSystemEvents.Append("\r");
-        }
-
         private void tmrWatchdog_tick(object sender, EventArgs e)
         {
             if (sentenceCounter == 19)
             {
-                LogEventWriter("No GPS Warning - Lost GPS");
+                Log.EventWriter("No GPS Warning - Lost GPS");
             }
 
             //Check for a newline char, if none then just return
@@ -140,63 +128,6 @@ namespace AgOpenGPS
 
                 //reset the counter
                 fourSecondCounter = 0;
-
-                /*
-                //if (isJobStarted)
-                //{
-                //    if (isMetric)
-                //    {
-                //        if (bnd.bndList.Count > 0)
-                //        {
-                //            fieldData =
-                //                 fd.WorkedAreaRemainPercentage + "  "
-                //                + fd.AreaBoundaryLessInnersHectares + " - "
-                //                + fd.WorkedHectares + " = "
-                //                + fd.WorkedAreaRemainHectares + " | "
-
-                //                + fd.ActualAreaWorkedHectares + " = "
-                //                + fd.ActualRemainHectares + "  "
-                //                + fd.ActualOverlapPercent + " | "
-
-                //                + fd.TimeTillFinished + "  "
-                //                + fd.WorkRateHectares;
-                //        }
-                //        else
-                //            fieldData = "Applied: "
-                //                + fd.WorkedHectares + "  Actual: "
-                //                + fd.ActualAreaWorkedHectares + "  "
-                //                + fd.ActualOverlapPercent + "   "
-                //                + fd.WorkRateHectares;
-
-                //    }
-                //    else //imperial
-                //    {
-                //        if (bnd.bndList.Count > 0)
-                //            fieldData =
-                //                 fd.WorkedAreaRemainPercentage + "  "
-                //                + fd.AreaBoundaryLessInnersAcres + " - "
-                //                + fd.WorkedAcres + " = "
-                //                + fd.WorkedAreaRemainAcres +  " | "
-
-                //                + fd.ActualAreaWorkedAcres + " = "
-                //                + fd.ActualRemainAcres + "  "
-                //                + fd.ActualOverlapPercent + " | "
-
-                //                + fd.TimeTillFinished + "  "
-                //                + fd.WorkRateAcres;
-                //        else
-                //            fieldData = "Applied: "
-                //                + fd.WorkedAcres + "  Actual: "
-                //                + fd.ActualAreaWorkedAcres + " *"
-                //                + fd.ActualOverlapPercent + "   "
-                //                + fd.WorkRateAcres;
-                //    }
-                //}
-                //else
-                //{
-                //    fieldData = string.Empty;
-                //}
-                */
 
                 if (isJobStarted)
                 {
@@ -307,6 +238,15 @@ namespace AgOpenGPS
 
                 //fix
                 if (timerSim.Enabled && pn.fixQuality++ > 5) pn.fixQuality = 2;
+
+                if (fileMissedCounter++ > 10)
+                {
+                    FileSaveMissedNMEA();
+                    fileMissedCounter = 0;
+
+                    //save nmea log file
+                    if (isLogNMEA) FileSaveNMEA();
+                }
             }
 
             /////////////////////////////////////////////////////////   2 second  ////////////////////////////////////////
@@ -327,10 +267,6 @@ namespace AgOpenGPS
                     }
                     lblHz.Text = gpsHz.ToString("N1") + " ~ " + (frameTime.ToString("N1")) + " " + FixQuality;
                 }
-
-                //save nmea log file
-                if (isLogNMEA) FileSaveNMEA();
-
             }//end every 2 seconds
 
             //every second update all status ///////////////////////////   1 1 1 1 1 1 ////////////////////////////
@@ -418,7 +354,7 @@ namespace AgOpenGPS
                 {
                     btnAutoSteer.PerformClick();
                     TimedMessageBox(2000, gStr.gsGuidanceStopped, gStr.gsNoGuidanceLines);
-                    LogEventWriter("Steer Safe Off, No Tracks, Idx -1");
+                    Log.EventWriter("Steer Safe Off, No Tracks, Idx -1");
                 }
 
 
@@ -967,7 +903,7 @@ namespace AgOpenGPS
                     {
                         btnAutoSteer.PerformClick();
                         TimedMessageBox(2000, gStr.gsGuidanceStopped, gStr.gsNoGuidanceLines);
-                        LogEventWriter("Steer Safe Off, No Tracks, Idx -1");
+                        Log.EventWriter("Steer Safe Off, No Tracks, Idx -1");
                     }
                     btnAutoSteer.Enabled = false;
                 }
@@ -1594,7 +1530,7 @@ namespace AgOpenGPS
                     isFirstHeadingSet = false;
                     isReverse = false;
                     TimedMessageBox(2000, "Reset Direction", "Drive Forward > 1.5 kmh");
-                    LogEventWriter("Direction Reset, Drive Forward");
+                    Log.EventWriter("Direction Reset, Drive Forward");
 
                     return;
                 }
@@ -1626,7 +1562,7 @@ namespace AgOpenGPS
                     + (vehicle.functionSpeedLimit * 0.621371).ToString("N1") + " " + gStr.gsMPH);
             }
 
-            LogEventWriter("UTurn or Lateral Speed exceeded");
+            Log.EventWriter("UTurn or Lateral Speed exceeded");
 
         }
 

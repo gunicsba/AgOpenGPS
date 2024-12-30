@@ -1,9 +1,11 @@
 ﻿using AgIO.Properties;
+using Microsoft.Win32;
 using System;
 using System.Diagnostics;
 using System.IO;
 using System.Net;
 using System.Net.Sockets;
+using System.Text;
 using System.Windows.Forms;
 
 namespace AgIO
@@ -14,6 +16,7 @@ namespace AgIO
         {
             var form = new FormTimedMessage(timeout, title, message);
             form.Show();
+            this.Activate();
         }
 
         public void YesMessageBox(string s1)
@@ -282,6 +285,7 @@ namespace AgIO
                 catch
                 {
                     TimedMessageBox(2000, "No File Found", "Can't Find Simulator");
+                    Log.EventWriter("No File Found, Can't Find Simulator");
                 }
             }
             else
@@ -317,6 +321,18 @@ namespace AgIO
         }
 
         #endregion
+
+        private void toolStripLogViewer_Click(object sender, EventArgs e)
+        {
+            FileSaveSystemEvents();
+            Log.sbEvent.Clear();
+
+            FileInfo txtfile = new FileInfo(Path.Combine(logsDirectory, "AgIO_Events_Log.txt"));
+            if (txtfile.Exists)
+            {
+                Process.Start("notepad.exe", txtfile.FullName);
+            }
+        }
 
         public void ShowUDPMonitor()
         {
@@ -430,6 +446,7 @@ namespace AgIO
                 catch
                 {
                     TimedMessageBox(2000, "No File Found", "Can't Find AgOpenGPS");
+                    Log.EventWriter("No File Found, Can't Find AgOpenGPS");
                 }
             }
             else
@@ -458,6 +475,7 @@ namespace AgIO
                 catch
                 {
                     TimedMessageBox(2000, "No File Found", "Can't Find GPS_Out");
+                    Log.EventWriter("No File Found, Can't Find GPS_Out");
                 }
             }
             else

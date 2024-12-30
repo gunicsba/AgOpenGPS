@@ -51,14 +51,16 @@ namespace AgIO.Properties
                         if (lang != null)
                             culture = lang.ToString();
                     }
-                    catch (Exception)
+                    catch (Exception e)
                     {
+                        Log.EventWriter("Registry Keys Settings Load Error: " + e.ToString());
                     }
                     regKey.Close();
                 }
             }
-            catch (Exception)
+            catch (Exception e)
             {
+                Log.EventWriter("Registry Key Creation Error: " + e.ToString());
             }
         }
 
@@ -79,8 +81,10 @@ namespace AgIO.Properties
 
                 key.Close();
             }
-            catch (Exception)
+            catch (Exception e)
             {
+                Log.EventWriter("Registry Settings Save Error: " + e.ToString());
+
             }
         }
 
@@ -97,8 +101,9 @@ namespace AgIO.Properties
 
                 regKey.Close();
             }
-            catch (Exception)
+            catch (Exception e)
             {
+                Log.EventWriter("Registry Settings Reset Error: " + e.ToString());
             }
         }
     }
@@ -194,7 +199,12 @@ namespace AgIO.Properties
             if (!LoadXMLFile(path, this))
             {
                 RegistrySettings.Save("ProfileFileName", "");
+                Log.EventWriter("Profile Not Found, Loading Default");
                 return false;
+            }
+            else
+            {
+                Log.EventWriter(RegistrySettings.ProfileFileName + ".XML" + " Loaded");
             }
             return true;
         }
@@ -329,8 +339,10 @@ namespace AgIO.Properties
                                                         throw new ArgumentException("type not found");
                                                     }
                                                 }
-                                                catch (Exception)
+                                                catch (Exception e)
                                                 {
+                                                    Log.EventWriter("Registry Settings Type Not Found " + e.ToString());
+
                                                     Errors = true;
                                                     continue;
                                                 }
@@ -352,9 +364,9 @@ namespace AgIO.Properties
                     return !Errors;
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                //glm.WriteErrorLog(ex);
+                Log.EventWriter("Registry Settings LoadXML Error: " + ex.ToString());
             }
             return false;
         }
@@ -446,11 +458,10 @@ namespace AgIO.Properties
                 if (File.Exists(filePath + ".tmp"))
                     File.Move(filePath + ".tmp", filePath);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                //glm.WriteErrorLog(ex);
+                Log.EventWriter("Registry Settings SaveXML Error: " + ex.ToString());
             }
         }
-
     }
 }

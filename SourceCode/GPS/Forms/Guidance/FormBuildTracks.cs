@@ -201,7 +201,7 @@ namespace AgOpenGPS
                     {
                         mf.btnAutoSteer.PerformClick();
                         mf.TimedMessageBox(2000, gStr.gsGuidanceStopped, gStr.gsNoGuidanceLines);
-                        mf.LogEventWriter("Autosteer Stop, No Tracks Available");
+                        Log.EventWriter("Autosteer Stop, No Tracks Available");
 
                     }
                     Close();
@@ -1134,7 +1134,7 @@ namespace AgOpenGPS
             }
             catch (Exception ed)
             {
-                mf.LogEventWriter("Tracks from KML " + ed.ToString());
+                Log.EventWriter("Tracks from KML " + ed.ToString());
                 return;
             }
 

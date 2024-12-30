@@ -55,8 +55,10 @@ namespace AgIO
             }
 
             try { sp.Open(); }
-            catch (Exception)
+            catch (Exception ex)
             {
+                Log.EventWriter("Port Exception: " + ex.ToString());
+
                 //WriteErrorLog("Opening Machine Port" + e.ToString());
 
                 //MessageBox.Show(e.Message + "\n\r" + "\n\r" + "Go to Settings -> COM Ports to Fix", "No Arduino Port Active");
@@ -90,6 +92,7 @@ namespace AgIO
                 {
                     //WriteErrorLog("Closing Machine Serial Port" + e.ToString());
                     MessageBox.Show(e.Message, "Connection already terminated??");
+                    Log.EventWriter("Port Exception: " + e.ToString());
                 }
 
                 sp.Dispose();

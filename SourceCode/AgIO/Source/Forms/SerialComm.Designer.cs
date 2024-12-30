@@ -119,11 +119,11 @@ namespace AgIO
             }
 
             try { spIMU.Open(); }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                //WriteErrorLog("Opening Machine Port" + e.ToString());
+                Log.EventWriter("No Arduino Port, IMU Port Exc: " + ex.ToString());
 
-                MessageBox.Show(e.Message + "\n\r" + "\n\r" + "Go to Settings -> COM Ports to Fix", "No Arduino Port Active");
+                MessageBox.Show(ex.Message + "\n\r" + "\n\r" + "Go to Settings -> COM Ports to Fix", "No Arduino Port Active");
 
 
                 Properties.Settings.Default.setPort_wasIMUConnected = false;
@@ -163,7 +163,7 @@ namespace AgIO
 
                 catch (Exception e)
                 {
-                    //WriteErrorLog("Closing Machine Serial Port" + e.ToString());
+                    Log.EventWriter("Connection already terminated?? : " + e.ToString());
                     MessageBox.Show(e.Message, "Connection already terminated??");
                 }
 
@@ -317,9 +317,11 @@ namespace AgIO
                 {
                     spSteerModule.Write(items, 0, numItems);
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
+                    Log.EventWriter("Steer Port Exception: " + ex.ToString());
                     CloseSteerModulePort();
+
                 }
             }
         }
@@ -345,7 +347,7 @@ namespace AgIO
             }
             catch (Exception e)
             {
-                //WriteErrorLog("Opening Machine Port" + e.ToString());
+                Log.EventWriter("Opening Machine Port" + e.ToString());
 
                 MessageBox.Show(e.Message + "\n\r" + "\n\r" + "Go to Settings -> COM Ports to Fix", "No Arduino Port Active");
 
@@ -376,7 +378,7 @@ namespace AgIO
                 try { spSteerModule.Close(); }
                 catch (Exception e)
                 {
-                    //WriteErrorLog("Closing Machine Serial Port" + e.ToString());
+                    Log.EventWriter("Closing Machine Serial Port" + e.ToString());
                     MessageBox.Show(e.Message, "Connection already terminated??");
                 }
 
@@ -514,7 +516,10 @@ namespace AgIO
                 SendToLoopBackMessageAOG(Data);
                 traffic.helloFromMachine = 0;
             }
-            catch { }
+            catch (Exception e) 
+            {
+                Log.EventWriter("Machine Module Send Exc: " + e.ToString());
+            }
 
         }
 
@@ -527,8 +532,9 @@ namespace AgIO
                 {
                     spMachineModule.Write(items, 0, numItems);
                 }
-                catch (Exception)
+                catch (Exception e)
                 {
+                    Log.EventWriter("Machine Module Send Exc: " + e.ToString());
                     CloseMachineModulePort();
                 }
             }
@@ -555,7 +561,7 @@ namespace AgIO
             }
             catch (Exception e)
             {
-                //WriteErrorLog("Opening Machine Port" + e.ToString());
+                Log.EventWriter("Opening Machine Port: " + e.ToString());
 
                 MessageBox.Show(e.Message + "\n\r" + "\n\r" + "Go to Settings -> COM Ports to Fix", "No Arduino Port Active");
 
@@ -585,7 +591,7 @@ namespace AgIO
                 try { spMachineModule.Close(); }
                 catch (Exception e)
                 {
-                    //WriteErrorLog("Closing Machine Serial Port" + e.ToString());
+                    Log.EventWriter("Closing Machine Serial Port: " + e.ToString());
                     MessageBox.Show(e.Message, "Connection already terminated??");
                 }
 
@@ -939,8 +945,9 @@ namespace AgIO
                     spGPS.Write(data, 0, data.Length);
                 }
             }
-            catch (Exception)
+            catch (Exception e)
             {
+                Log.EventWriter("Opening RTCM Port: " + e.ToString());
             }
 
         }
@@ -964,8 +971,9 @@ namespace AgIO
             }
 
             try { spGPS.Open(); }
-            catch (Exception)
+            catch (Exception e)
             {
+                Log.EventWriter("Opening GPS Port: " + e.ToString());
             }
 
             if (spGPS.IsOpen)
@@ -990,7 +998,7 @@ namespace AgIO
                 try { spGPS.Close(); }
                 catch (Exception e)
                 {
-                    //WriteErrorLog("Closing GPS Port" + e.ToString());
+                    Log.EventWriter("Closing GPS Port" + e.ToString());
                     MessageBox.Show(e.Message, "Connection already terminated?");
                 }
 
@@ -1149,8 +1157,10 @@ namespace AgIO
             }
 
             try { spRtcm.Open(); }
-            catch (Exception)
+            catch (Exception e)
             {
+                Log.EventWriter("Opening RTCM Port: " + e.ToString());
+
             }
 
             if (spRtcm.IsOpen)
@@ -1174,7 +1184,7 @@ namespace AgIO
                 try { spRtcm.Close(); }
                 catch (Exception e)
                 {
-                    //WriteErrorLog("Closing GPS Port" + e.ToString());
+                    Log.EventWriter("Closing RTCM Port" + e.ToString());
                     MessageBox.Show(e.Message, "Connection already terminated?");
                 }
             }

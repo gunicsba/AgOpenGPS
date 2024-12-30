@@ -33,6 +33,7 @@ namespace AgOpenGPS
         public int satellitesTracked;
 
         public StringBuilder logNMEASentence = new StringBuilder();
+        public StringBuilder logMissedSentence = new StringBuilder();
 
         private readonly FormGPS mf;
 

@@ -153,9 +153,10 @@ namespace AgIO
                     mf.YesMessageBox("Can't Find: " + actualIP);
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 mf.YesMessageBox("Can't Find: " + actualIP);
+                Log.EventWriter(ex.ToString());
             }
         }
 
@@ -323,16 +324,18 @@ namespace AgIO
                     }
                 }
             }
-            catch (SocketException)
+            catch (SocketException ex)
             {
                 mf.TimedMessageBox(2000, "Socket Exception", "Invalid IP:Port");
                 btnGetSourceTable.Enabled = true;
+                Log.EventWriter("Socket Exception: " + ex.ToString());
                 return;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 mf.TimedMessageBox(2000, "Exception", "Get Source Table Error");
                 btnGetSourceTable.Enabled = true;
+                Log.EventWriter("Socket Exception: " + ex.ToString());
                 return;
             }
 
