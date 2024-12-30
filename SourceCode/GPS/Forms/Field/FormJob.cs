@@ -1,7 +1,7 @@
 ﻿using AgOpenGPS.Culture;
 using AgOpenGPS.Helpers;
+using AgOpenGPS.Logging;
 using System;
-using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.Windows.Forms;
@@ -91,7 +91,7 @@ namespace AgOpenGPS
             //open the Resume.txt and continue from last exit
             mf.FileOpenField("Resume");
 
-            Log.EventWriter("Job Form, Field Resume");
+            Log.System.Write("Job Form, Field Resume");
 
             //back to FormGPS
             DialogResult = DialogResult.OK;

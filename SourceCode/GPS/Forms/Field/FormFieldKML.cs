@@ -1,5 +1,6 @@
 ﻿using AgOpenGPS.Culture;
 using AgOpenGPS.Helpers;
+using AgOpenGPS.Logging;
 using System;
 using System.Globalization;
 using System.IO;
@@ -188,7 +189,7 @@ namespace AgOpenGPS
                             else
                             {
                                 mf.TimedMessageBox(2000, gStr.gsErrorreadingKML, gStr.gsChooseBuildDifferentone);
-                                Log.EventWriter("New Field, Error Reading KML");
+                                Log.System.Write("New Field, Error Reading KML");
                             }
                             break;
                         }
@@ -206,7 +207,7 @@ namespace AgOpenGPS
                     btnSave.Enabled = false;
                     btnLoadKML.Enabled = false;
                     mf.TimedMessageBox(2000, gStr.gsErrorreadingKML, gStr.gsChooseBuildDifferentone);
-                    Log.EventWriter("New Field, Error Reading KML" + ee.ToString());
+                    Log.System.Write("New Field, Error Reading KML" + ee.ToString());
                     return;
                 }
             }
@@ -281,7 +282,7 @@ namespace AgOpenGPS
                             else
                             {
                                 mf.TimedMessageBox(2000, gStr.gsErrorreadingKML, gStr.gsChooseBuildDifferentone);
-                                Log.EventWriter("New Field, Error Reading KML ");
+                                Log.System.Write("New Field, Error Reading KML ");
 
                             }
                             //if (button.Name == "btnLoadBoundaryFromGE")
@@ -294,7 +295,7 @@ namespace AgOpenGPS
                 catch (Exception et)
                 {
                     mf.TimedMessageBox(2000, "Exception", "Error Finding Lat Lon");
-                    Log.EventWriter("Lat Lon Exception Reading KML " + et.ToString());
+                    Log.System.Write("Lat Lon Exception Reading KML " + et.ToString());
                     return;
                 }
             }
@@ -401,7 +402,7 @@ namespace AgOpenGPS
             }
             catch (Exception ex)
             {
-                Log.EventWriter("Creating new kml field " + ex.ToString());
+                Log.System.Write("Creating new kml field " + ex.ToString());
 
                 MessageBox.Show(gStr.gsError, ex.ToString());
                 mf.currentFieldDirectory = "";

@@ -5,6 +5,7 @@ using System.IO;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using AgOpenGPS.Culture;
+using AgOpenGPS.Logging;
 using AgOpenGPS.Properties;
 using OpenTK.Graphics.OpenGL;
 
@@ -80,7 +81,7 @@ namespace AgOpenGPS
 
                         if (!Properties.Settings.Default.Load())
                         {
-                            Log.EventWriter("Error loading settings XML: " + newname);
+                            Log.System.Write("Error loading settings XML: " + newname);
                             mf.YesMessageBox("Error loading settings XML Deleting it now");
 
                             var path = Path.Combine(mf.vehiclesDirectory, newname + ".XML");
@@ -155,7 +156,7 @@ namespace AgOpenGPS
                         ///Remind the user
                         mf.TimedMessageBox(2500, "Steer and Machine Settings Sent", "Were Modules Connected?");
 
-                        Log.EventWriter("Vehicle Loaded: " + mf.vehicleFileName + ".XML");
+                        Log.System.Write("Vehicle Loaded: " + mf.vehicleFileName + ".XML");
                     }
 
                     UpdateVehicleListView();
@@ -199,7 +200,7 @@ namespace AgOpenGPS
                     }
                     else
                     {
-                        Log.EventWriter("Attempted to Delete Default Vehicle, Denied");
+                        Log.System.Write("Attempted to Delete Default Vehicle, Denied");
                         mf.TimedMessageBox(2500, "Default Vehicle Delete Denied", "Choose Another Vehicle");
                     }
 
@@ -374,7 +375,7 @@ namespace AgOpenGPS
                 ///Remind the user
                 mf.TimedMessageBox(2500, "Steer and Machine Settings Sent", "Were Modules Connected?");
 
-                Log.EventWriter("New Vehicle Loaded: " + mf.vehicleFileName + ".XML");
+                Log.System.Write("New Vehicle Loaded: " + mf.vehicleFileName + ".XML");
 
                 //we are loading the setting not saving??
                 //Properties.Settings.Default.Save();

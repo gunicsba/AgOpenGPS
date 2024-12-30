@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Windows.Forms;
+using AgOpenGPS.Logging;
 
 namespace AgOpenGPS
 {
@@ -264,7 +265,7 @@ namespace AgOpenGPS
                 mf.ahrs.imuRoll += mf.ahrs.rollZero;
                 mf.ahrs.rollZero = mf.ahrs.imuRoll;
                 lblRollZeroOffset.Text = (mf.ahrs.rollZero).ToString("N2");
-                Log.EventWriter("Roll Zeroed with " + mf.ahrs.rollZero.ToString());
+                Log.System.Write("Roll Zeroed with " + mf.ahrs.rollZero.ToString());
             }
             else
             {
@@ -276,7 +277,7 @@ namespace AgOpenGPS
         {
             mf.ahrs.rollZero = 0;
             lblRollZeroOffset.Text = "0.00";
-            Log.EventWriter("Roll Zero Offset Removed");
+            Log.System.Write("Roll Zero Offset Removed");
         }
 
         private void btnResetIMU_Click(object sender, EventArgs e)

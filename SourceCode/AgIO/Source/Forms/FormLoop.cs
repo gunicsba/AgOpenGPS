@@ -1,5 +1,5 @@
-﻿using AgIO.Properties;
-using Microsoft.Win32;
+﻿using AgIO.Logging;
+using AgIO.Properties;
 using System;
 using System.Diagnostics;
 using System.Drawing;
@@ -83,11 +83,11 @@ namespace AgIO
         //First run
         private void FormLoop_Load(object sender, EventArgs e)
         {
-            Log.sbEvent.Append("\r");
-            Log.sbEvent.Append("Program Started: " + DateTime.Now.ToString("f", CultureInfo.CreateSpecificCulture(RegistrySettings.culture)) + "\r");
-            Log.sbEvent.Append("AgIO Version: ");
-            Log.sbEvent.Append(Application.ProductVersion.ToString(CultureInfo.InvariantCulture));
-            Log.sbEvent.Append("\r");
+            Log.System.WriteRaw("\r");
+            Log.System.WriteRaw("Program Started: " + DateTime.Now.ToString("f", CultureInfo.CreateSpecificCulture(RegistrySettings.culture)) + "\r");
+            Log.System.WriteRaw("AgIO Version: ");
+            Log.System.WriteRaw(Application.ProductVersion.ToString(CultureInfo.InvariantCulture));
+            Log.System.WriteRaw("\r");
 
             //get the fields directory, if not exist, create
             profileDirectory = Path.Combine(RegistrySettings.WorkingDirectory, "AgOpenGPS", "AgIO");
@@ -96,7 +96,7 @@ namespace AgIO
             if (!profileDirectoryInfo.Exists)
             {
                 profileDirectoryInfo.Create();
-                Log.sbEvent.Append("Profile AgIO Dir Created\r");
+                Log.System.WriteRaw("Profile AgIO Dir Created\r");
             }
 
             //get the fields directory, if not exist, create
@@ -104,57 +104,18 @@ namespace AgIO
             if (!string.IsNullOrEmpty(logsDirectory) && !Directory.Exists(logsDirectory))
             {
                 Directory.CreateDirectory(logsDirectory);
-                Log.sbEvent.Append("Logs Dir Created\r");
+                Log.System.WriteRaw("Logs Dir Created\r");
             }
 
             //system event log file
-            FileInfo txtfile = new FileInfo(Path.Combine(logsDirectory, "AgIO_Events_Log.txt"));
-            if (txtfile.Exists)
-            {
-                if (txtfile.Length > (500000))       // ## NOTE: 0.5MB max file size
-                {
-                    Log.sbEvent.Append("Log File Reduced by 100Kb\r");
-                    StringBuilder sbF = new StringBuilder();
-                    long lines = txtfile.Length - 450000;
-
-                    //create some extra space
-                    lines /= 30;
-
-                    using (StreamReader reader = new StreamReader(Path.Combine(logsDirectory, "AgIO_Events_Log.txt")))
-                    {
-                        try
-                        {
-                            //Date time line
-                            for (long i = 0; i < lines; i++)
-                            {
-                                reader.ReadLine();
-                            }
-
-                            while (!reader.EndOfStream)
-                            {
-                                sbF.AppendLine(reader.ReadLine());
-                            }
-                        }
-                        catch { }
-                    }
-
-                    using (StreamWriter writer = new StreamWriter(Path.Combine(logsDirectory, "AgIO_Events_Log.txt")))
-                    {
-                        writer.WriteLine(sbF);
-                    }
-                }
-            }
-            else
-            {
-                Log.sbEvent.Append("Events Log File Created\r");
-            }
+            Log.System.Initialize(logsDirectory, "AgIO_Events_Log.txt");
 
             Settings.Default.Load();
 
             if (Settings.Default.setUDP_isOn)
             {
                 LoadUDPNetwork();
-                Log.EventWriter("UDP Network Loaded");
+                Log.System.Write("UDP Network Loaded");
             }
             else
             {
@@ -300,7 +261,7 @@ namespace AgIO
                 }
                 catch (Exception ex)
                 {
-                    Log.EventWriter(ex.ToString());
+                    Log.System.Write(ex.ToString());
                     TimedMessageBox(1500, "URL Not Located, Network Down?", "Cannot Find: " + Properties.Settings.Default.setNTRIP_casterURL);
                     //if we had a timer already, kill it
                     tmr?.Dispose();
@@ -330,7 +291,7 @@ namespace AgIO
             if (Properties.Settings.Default.setDisplay_isAutoRunGPS_Out)
             {
                 StartGPS_Out();
-                Log.EventWriter("Run GPS_Out");
+                Log.System.Write("Run GPS_Out");
             }
 
             this.Text = "AgIO v" + GitVersionInformation.MajorMinorPatch + " Profile: " + RegistrySettings.ProfileFileName;
@@ -424,19 +385,11 @@ namespace AgIO
                 processName[0].CloseMainWindow();
             }
 
-            Log.sbEvent.Append("Program Exit: " + 
+            Log.System.WriteRaw("Program Exit: " + 
                 DateTime.Now.ToString("f", CultureInfo.CreateSpecificCulture(RegistrySettings.culture)) + "\r");
 
 
-            FileSaveSystemEvents();
-        }
-
-        public void FileSaveSystemEvents()
-        {
-            using (StreamWriter writer = new StreamWriter(Path.Combine(logsDirectory, "AgIO_Events_Log.txt"), true))
-            {
-                writer.Write(Log.sbEvent);
-            }
+            Log.System.SaveLogs();
         }
 
         private void oneSecondLoopTimer_Tick(object sender, EventArgs e)

@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Diagnostics;
-using System.Globalization;
 using System.IO;
 using System.Windows.Forms;
 using AgOpenGPS.Helpers;
+using AgOpenGPS.Logging;
 
 namespace AgOpenGPS
 {
@@ -159,7 +159,7 @@ namespace AgOpenGPS
             if (mf.buttonOrder.Count < 2)
             {
                 mf.TimedMessageBox(2000, "Button Error", "Not Enough Buttons Added");
-                Log.EventWriter("Button Picker, Not Enough Buttons");
+                Log.System.Write("Button Picker, Not Enough Buttons");
                 return;
             }
             else

@@ -1,5 +1,6 @@
 ﻿using AgOpenGPS.Culture;
 using AgOpenGPS.Helpers;
+using AgOpenGPS.Logging;
 using System;
 using System.Globalization;
 using System.IO;
@@ -122,7 +123,7 @@ namespace AgOpenGPS
             }
             catch (Exception ex)
             {
-                Log.EventWriter("Creating new field " + ex);
+                Log.System.Write("Creating new field " + ex);
 
                 MessageBox.Show(gStr.gsError, ex.ToString());
                 mf.currentFieldDirectory = "";

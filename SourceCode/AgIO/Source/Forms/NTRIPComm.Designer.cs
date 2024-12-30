@@ -6,7 +6,7 @@ using System.Windows.Forms;
 using System.Globalization;
 using System.IO.Ports;
 using System.Collections.Generic;
-using System.Linq;
+using AgIO.Logging;
 
 // Declare the delegate prototype to send data back to the form
 delegate void UpdateRTCM_Data(byte[] data);
@@ -249,7 +249,7 @@ namespace AgIO
                 }
                 catch (Exception)
                 {
-                    Log.EventWriter("NTRIP Reconnect Request");
+                    Log.System.Write("NTRIP Reconnect Request");
 
                     ReconnectRequest();
                     return;
@@ -288,7 +288,7 @@ namespace AgIO
                         isRadio_RequiredOn = false;
 
                         TimedMessageBox(2000, "Error connecting to radio", $"{ex.Message}");
-                        Log.EventWriter("Error connecting to radio " + ex.ToString());
+                        Log.System.Write("Error connecting to radio " + ex.ToString());
                     }
                 }
             }
@@ -327,7 +327,7 @@ namespace AgIO
                         isNTRIP_Connecting = false;
                         isNTRIP_Connected = false;
                         isSerialPass_RequiredOn = false;
-                        Log.EventWriter("Start Radio NTRIP: " + ex.ToString());
+                        Log.System.Write("Start Radio NTRIP: " + ex.ToString());
 
                         TimedMessageBox(2000, "Error connecting to Serial Pass", $"{ex.Message}");
                     }
@@ -411,7 +411,7 @@ namespace AgIO
             }
             catch (Exception ex)
             {
-                Log.EventWriter("NTRIP Authourization Error: " + ex.ToString());
+                Log.System.Write("NTRIP Authourization Error: " + ex.ToString());
                 ReconnectRequest();
             }
         }
@@ -567,7 +567,7 @@ namespace AgIO
             }
             catch (Exception ex)
             {
-                Log.EventWriter("NTRIP Send GGA Error: " + ex.ToString());
+                Log.System.Write("NTRIP Send GGA Error: " + ex.ToString());
 
                 ReconnectRequest();
             }

@@ -9,8 +9,8 @@ using System.Globalization;
 using System.IO;
 using System.Collections.Generic;
 using AgOpenGPS.Culture;
-using System.Text;
 using AgOpenGPS.Helpers;
+using AgOpenGPS.Logging;
 
 namespace AgOpenGPS
 {
@@ -98,7 +98,7 @@ namespace AgOpenGPS
         {
             if (sentenceCounter == 19)
             {
-                Log.EventWriter("No GPS Warning - Lost GPS");
+                Log.System.Write("No GPS Warning - Lost GPS");
             }
 
             //Check for a newline char, if none then just return
@@ -355,7 +355,7 @@ namespace AgOpenGPS
                 {
                     btnAutoSteer.PerformClick();
                     TimedMessageBox(2000, gStr.gsGuidanceStopped, gStr.gsNoGuidanceLines);
-                    Log.EventWriter("Steer Safe Off, No Tracks, Idx -1");
+                    Log.System.Write("Steer Safe Off, No Tracks, Idx -1");
                 }
 
 
@@ -904,7 +904,7 @@ namespace AgOpenGPS
                     {
                         btnAutoSteer.PerformClick();
                         TimedMessageBox(2000, gStr.gsGuidanceStopped, gStr.gsNoGuidanceLines);
-                        Log.EventWriter("Steer Safe Off, No Tracks, Idx -1");
+                        Log.System.Write("Steer Safe Off, No Tracks, Idx -1");
                     }
                     btnAutoSteer.Enabled = false;
                 }
@@ -1531,7 +1531,7 @@ namespace AgOpenGPS
                     isFirstHeadingSet = false;
                     isReverse = false;
                     TimedMessageBox(2000, "Reset Direction", "Drive Forward > 1.5 kmh");
-                    Log.EventWriter("Direction Reset, Drive Forward");
+                    Log.System.Write("Direction Reset, Drive Forward");
 
                     return;
                 }
@@ -1563,7 +1563,7 @@ namespace AgOpenGPS
                     + (vehicle.functionSpeedLimit * 0.621371).ToString("N1") + " " + gStr.gsMPH);
             }
 
-            Log.EventWriter("UTurn or Lateral Speed exceeded");
+            Log.System.Write("UTurn or Lateral Speed exceeded");
 
         }
 

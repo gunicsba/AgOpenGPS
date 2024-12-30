@@ -5,6 +5,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Windows.Forms;
+using AgIO.Logging;
 
 namespace AgIO
 {
@@ -113,7 +114,7 @@ namespace AgIO
             }
             catch (Exception e)
             {
-                Log.EventWriter("UDP Server Load Error: " + e.ToString());
+                Log.System.Write("UDP Server Load Error: " + e.ToString());
 
                 MessageBox.Show(e.Message, "Serious Network Connection Error",
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -134,7 +135,7 @@ namespace AgIO
             }
             catch (Exception ex)
             {
-                Log.EventWriter("UDP Loopback Load Error: " + ex.ToString());
+                Log.System.Write("UDP Loopback Load Error: " + ex.ToString());
                 MessageBox.Show("Load Error: " + ex.Message, "Loopback Server", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }

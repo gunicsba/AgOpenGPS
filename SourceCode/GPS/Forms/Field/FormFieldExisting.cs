@@ -1,5 +1,6 @@
 ﻿using AgOpenGPS.Culture;
 using AgOpenGPS.Helpers;
+using AgOpenGPS.Logging;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -44,7 +45,7 @@ namespace AgOpenGPS
             if (dirs == null || dirs.Length < 1)
             {
                 mf.TimedMessageBox(2000, gStr.gsCreateNewField, gStr.gsFileError);
-                Log.EventWriter("File Error Load Existing Field");
+                Log.System.Write("File Error Load Existing Field");
 
                 Close();
                 return;
@@ -101,7 +102,7 @@ namespace AgOpenGPS
                         {
                             MessageBox.Show(fieldDirectory + " is Damaged, Please Delete, Field.txt is Broken", gStr.gsFileError,
                             MessageBoxButtons.OK, MessageBoxIcon.Error);
-                            Log.EventWriter(fieldDirectory + " is Damaged, Please Delete,Field.txt is Broken" + ex.ToString());
+                            Log.System.Write(fieldDirectory + " is Damaged, Please Delete,Field.txt is Broken" + ex.ToString());
                             fileList.Add(fieldDirectory);
                             fileList.Add("Error");
                         }
@@ -182,13 +183,13 @@ namespace AgOpenGPS
                         catch (Exception ef)
                         {
                             area = 0;
-                            Log.EventWriter(fieldDirectory + " Boundary.Txt error " + ef.ToString());
+                            Log.System.Write(fieldDirectory + " Boundary.Txt error " + ef.ToString());
                         }
                     }
                     if (area == 0)
                     {
                         fileList.Add("No Bndry");
-                        Log.EventWriter("Boundary is Broken, no Area");
+                        Log.System.Write("Boundary is Broken, no Area");
                     }
                     else fileList.Add(Math.Round(area, 1).ToString("N1").PadLeft(10));
                 }
@@ -198,7 +199,7 @@ namespace AgOpenGPS
                     MessageBox.Show(fieldDirectory + " is Damaged, Missing Boundary.Txt " +
                         "               \r\n Delete Field or Fix ", gStr.gsFileError,
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    Log.EventWriter(fieldDirectory + " is Damaged, Missing Boundary.Txt ");
+                    Log.System.Write(fieldDirectory + " is Damaged, Missing Boundary.Txt ");
                 }
 
                 filename = Path.Combine(dir, "Field.txt");
@@ -207,7 +208,7 @@ namespace AgOpenGPS
             if (fileList == null || fileList.Count < 1)
             {
                 mf.TimedMessageBox(2000, gStr.gsNoFieldsFound, gStr.gsCreateNewField);
-                Log.EventWriter("Create New Field, No Fields Found");
+                Log.System.Write("Create New Field, No Fields Found");
 
                 Close();
                 return;
@@ -235,7 +236,7 @@ namespace AgOpenGPS
             else
             {
                 mf.TimedMessageBox(2000, gStr.gsNoFieldsFound, gStr.gsCreateNewField);
-                Log.EventWriter("Field Existing, No Fields to List");
+                Log.System.Write("Field Existing, No Fields to List");
 
                 Close();
                 return;
@@ -328,7 +329,7 @@ namespace AgOpenGPS
                 }
                 catch (Exception ex)
                 {
-                    Log.EventWriter("While Opening Field" + ex);
+                    Log.System.Write("While Opening Field" + ex);
 
                     mf.TimedMessageBox(2000, gStr.gsFieldFileIsCorrupt, gStr.gsChooseADifferentField);
                     mf.JobClose();

@@ -1,5 +1,6 @@
 ﻿using AgOpenGPS.Culture;
 using AgOpenGPS.Helpers;
+using AgOpenGPS.Logging;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -149,7 +150,7 @@ namespace AgOpenGPS
                 }
                 catch (Exception ex)
                 {
-                    Log.EventWriter("Creating new iso field " + ex.ToString());
+                    Log.System.Write("Creating new iso field " + ex.ToString());
                     MessageBox.Show(gStr.gsError, ex.ToString());
                     return;
                 }
@@ -263,7 +264,7 @@ namespace AgOpenGPS
             catch (Exception ei)
             {
                 mf.TimedMessageBox(2000, "Exception", "Catch Exception");
-                Log.EventWriter("ISOXML Exception Loading " + ei.ToString());
+                Log.System.Write("ISOXML Exception Loading " + ei.ToString());
 
                 return;
             }
@@ -356,7 +357,7 @@ namespace AgOpenGPS
             }
             catch (Exception ex)
             {
-                Log.EventWriter("Creating new iso field " + ex.ToString());
+                Log.System.Write("Creating new iso field " + ex.ToString());
 
                 MessageBox.Show(gStr.gsError, ex.ToString());
                 mf.currentFieldDirectory = "";
@@ -412,7 +413,7 @@ namespace AgOpenGPS
             }
             catch (Exception ew)
             {
-                Log.EventWriter("Creating new iso field " + ew.ToString());
+                Log.System.Write("Creating new iso field " + ew.ToString());
 
                 MessageBox.Show(gStr.gsError, ew.ToString());
             }
@@ -461,7 +462,7 @@ namespace AgOpenGPS
                 }
                 catch (Exception ed)
                 {
-                    Log.EventWriter("Creating new iso field " + ed.ToString());
+                    Log.System.Write("Creating new iso field " + ed.ToString());
 
                     MessageBox.Show(gStr.gsError, ed.ToString());
                 }
@@ -512,7 +513,7 @@ namespace AgOpenGPS
                 }
                 catch (Exception ex)
                 {
-                    Log.EventWriter("Creating new iso field " + ex.ToString());
+                    Log.System.Write("Creating new iso field " + ex.ToString());
                     MessageBox.Show(gStr.gsError, ex.ToString());
                 }
             }
@@ -679,7 +680,7 @@ namespace AgOpenGPS
             }
             catch (Exception ex)
             {
-                Log.EventWriter("Creating new iso field " + ex.ToString());
+                Log.System.Write("Creating new iso field " + ex.ToString());
                 MessageBox.Show(gStr.gsError, ex.ToString());
             }
 
@@ -825,7 +826,7 @@ namespace AgOpenGPS
             }
             catch (Exception ex)
             {
-                Log.EventWriter("Creating new iso field " + ex.ToString());
+                Log.System.Write("Creating new iso field " + ex.ToString());
                 MessageBox.Show(gStr.gsError, ex.ToString());
             }
 

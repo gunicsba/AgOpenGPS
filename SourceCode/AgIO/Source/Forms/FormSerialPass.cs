@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO.Ports;
 using System.Windows.Forms;
+using AgIO.Logging;
 
 namespace AgIO
 {
@@ -110,7 +111,7 @@ namespace AgIO
             catch (Exception ex)
             {
                 mf.TimedMessageBox(3000, "Error opening port", ex.Message);
-                Log.EventWriter("Port Opening Exception: " + e.ToString());
+                Log.System.Write("Port Opening Exception: " + e.ToString());
             }
         }
 

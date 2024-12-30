@@ -1,8 +1,8 @@
 ﻿using AgOpenGPS.Culture;
 using AgOpenGPS.Helpers;
+using AgOpenGPS.Logging;
 using System;
 using System.Drawing;
-using System.IO;
 using System.Windows.Forms;
 
 namespace AgOpenGPS
@@ -283,7 +283,7 @@ namespace AgOpenGPS
                     {
                         hsbarCountsPerDegree.Value = 100;
                         lblCPDError.Text = "Error, CPD set to 100";
-                        Log.EventWriter("Error, CPD set to 100" + ed.ToString());
+                        Log.System.Write("Error, CPD set to 100" + ed.ToString());
                     }
                 }
             }
@@ -318,7 +318,7 @@ namespace AgOpenGPS
                     {
                         hsbarAckerman.Value = 100;
                         lblAckermannError.Text = "Error, Ackermann set to 100";
-                        Log.EventWriter("Error, Ackermann set to 100"+ eh.ToString());
+                        Log.System.Write("Error, Ackermann set to 100"+ eh.ToString());
                     }
                 }
             }

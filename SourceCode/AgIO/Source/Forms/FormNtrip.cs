@@ -6,6 +6,7 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using System.Windows.Forms;
+using AgIO.Logging;
 
 namespace AgIO
 {
@@ -156,7 +157,7 @@ namespace AgIO
             catch (Exception ex)
             {
                 mf.YesMessageBox("Can't Find: " + actualIP);
-                Log.EventWriter(ex.ToString());
+                Log.System.Write(ex.ToString());
             }
         }
 
@@ -328,14 +329,14 @@ namespace AgIO
             {
                 mf.TimedMessageBox(2000, "Socket Exception", "Invalid IP:Port");
                 btnGetSourceTable.Enabled = true;
-                Log.EventWriter("Socket Exception: " + ex.ToString());
+                Log.System.Write("Socket Exception: " + ex.ToString());
                 return;
             }
             catch (Exception ex)
             {
                 mf.TimedMessageBox(2000, "Exception", "Get Source Table Error");
                 btnGetSourceTable.Enabled = true;
-                Log.EventWriter("Socket Exception: " + ex.ToString());
+                Log.System.Write("Socket Exception: " + ex.ToString());
                 return;
             }
 

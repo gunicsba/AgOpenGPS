@@ -1,5 +1,6 @@
 ﻿using AgOpenGPS.Culture;
 using AgOpenGPS.Helpers;
+using AgOpenGPS.Logging;
 using OpenTK.Graphics.OpenGL;
 using System;
 using System.Drawing;
@@ -445,7 +446,7 @@ namespace AgOpenGPS
             if (!mf.worldGrid.isGeoMap)
             {
                 mf.TimedMessageBox(2000, "Map Error", "Map Too Large");
-                Log.EventWriter("GeoMap, Map Too Large");
+                Log.System.Write("GeoMap, Map Too Large");
                 ResetMapGrid();
                 return;
             }
@@ -477,7 +478,7 @@ namespace AgOpenGPS
             catch
             {
                 mf.TimedMessageBox(2000, "File in Use", "Try loading again");
-                Log.EventWriter("GeoMap File in Use, Try Reload");
+                Log.System.Write("GeoMap File in Use, Try Reload");
                 return;
             }
 

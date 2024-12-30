@@ -10,6 +10,7 @@ using System.Globalization;
 using System.Xml;
 using System.Text;
 using AgOpenGPS.Culture;
+using AgOpenGPS.Logging;
 
 namespace AgOpenGPS
 {
@@ -213,7 +214,7 @@ namespace AgOpenGPS
             catch (Exception e)
             {
                 TimedMessageBox(2000, "ISOXML Exception ", e.ToString());
-                Log.EventWriter("Export field as ISOXML Exception" + e);
+                Log.System.Write("Export field as ISOXML Exception" + e);
             }
         }
 
@@ -450,7 +451,7 @@ namespace AgOpenGPS
         }
             catch (Exception e)
             {
-                Log.EventWriter("Export Field as ISOXML: " + e.Message);
+                Log.System.Write("Export Field as ISOXML: " + e.Message);
             }
 
     /*
@@ -522,7 +523,7 @@ namespace AgOpenGPS
                 }
                 catch (Exception er)
                 {
-                    Log.EventWriter("Saving Head Lines" + er.ToString());
+                    Log.System.Write("Saving Head Lines" + er.ToString());
 
                     return;
                 }
@@ -556,7 +557,7 @@ namespace AgOpenGPS
             if (!File.Exists(filename))
             {
                 TimedMessageBox(2000, gStr.gsFileError, "Missing Headlines File");
-                Log.EventWriter("Load Field, Missing Headlines File");
+                Log.System.Write("Load Field, Missing Headlines File");
             }
             else
             {
@@ -637,7 +638,7 @@ namespace AgOpenGPS
                             }
                             catch { }
                         }
-                        Log.EventWriter("Load Head Lines" + er.ToString());
+                        Log.System.Write("Load Head Lines" + er.ToString());
                     }
                 }
             }
@@ -708,7 +709,7 @@ namespace AgOpenGPS
                 }
                 catch (Exception er)
                 {
-                    Log.EventWriter("Saving Curve Line" + er.ToString());
+                    Log.System.Write("Saving Curve Line" + er.ToString());
 
                     return;
                 }
@@ -747,7 +748,7 @@ namespace AgOpenGPS
             if (!File.Exists(filename))
             {
                 TimedMessageBox(2000, gStr.gsFileError, "Missing Tracks File");
-                Log.EventWriter("Load Field, Missing Tracks File");
+                Log.System.Write("Load Field, Missing Tracks File");
             }
             else
             {
@@ -815,7 +816,7 @@ namespace AgOpenGPS
                     catch (Exception er)
                     {
                         TimedMessageBox(2000, gStr.gsCurveLineFileIsCorrupt, gStr.gsButFieldIsLoaded);
-                        Log.EventWriter("Load Curve Line" + er.ToString());
+                        Log.System.Write("Load Curve Line" + er.ToString());
                     }
                 }
             }
@@ -872,7 +873,7 @@ namespace AgOpenGPS
                 }
                 catch (Exception er)
                 {
-                    Log.EventWriter("Saving Curve Line" + er.ToString());
+                    Log.System.Write("Saving Curve Line" + er.ToString());
 
                     return;
                 }
@@ -904,7 +905,7 @@ namespace AgOpenGPS
             if (!File.Exists(filename))
             {
                 TimedMessageBox(2000, gStr.gsFileError, "Missing Curve File");
-                Log.EventWriter("Load Field, Missing Curve File");
+                Log.System.Write("Load Field, Missing Curve File");
             }
             else
             {
@@ -980,7 +981,7 @@ namespace AgOpenGPS
                     {
                         TimedMessageBox(2000, gStr.gsCurveLineFileIsCorrupt, gStr.gsButFieldIsLoaded);
                         
-                        Log.EventWriter("Load Curve Line" + er.ToString());
+                        Log.System.Write("Load Curve Line" + er.ToString());
                     }
                 }
             }
@@ -1080,7 +1081,7 @@ namespace AgOpenGPS
                     {
                         TimedMessageBox(2000, "AB Line Corrupt", "Please delete it!!!");
                         
-                        Log.EventWriter("FieldOpen, Loading ABLine, Corrupt ABLine File" + er);
+                        Log.System.Write("FieldOpen, Loading ABLine, Corrupt ABLine File" + er);
                     }
                 }
             }
@@ -1205,7 +1206,7 @@ namespace AgOpenGPS
 
                 catch (Exception e)
                 {
-                    Log.EventWriter("While Opening Field" + e.ToString());
+                    Log.System.Write("While Opening Field" + e.ToString());
 
                     TimedMessageBox(2000, gStr.gsFieldFileIsCorrupt, gStr.gsChooseADifferentField);
 
@@ -1286,7 +1287,7 @@ namespace AgOpenGPS
                     }
                     catch (Exception e)
                     {
-                        Log.EventWriter("Section file" + e.ToString());
+                        Log.System.Write("Section file" + e.ToString());
 
                         TimedMessageBox(2000, "Section File is Corrupt", gStr.gsButFieldIsLoaded);
                         
@@ -1349,7 +1350,7 @@ namespace AgOpenGPS
                     }
                     catch (Exception e)
                     {
-                        Log.EventWriter("Loading Contour file" + e.ToString());
+                        Log.System.Write("Loading Contour file" + e.ToString());
 
                         TimedMessageBox(2000, gStr.gsContourFileIsCorrupt, gStr.gsButFieldIsLoaded);
                         
@@ -1430,7 +1431,7 @@ namespace AgOpenGPS
                     {
                         TimedMessageBox(2000, gStr.gsFlagFileIsCorrupt, gStr.gsButFieldIsLoaded);
                         
-                        Log.EventWriter("FieldOpen, Loading Flags, Corrupt Flag File" + e.ToString());
+                        Log.System.Write("FieldOpen, Loading Flags, Corrupt Flag File" + e.ToString());
                     }
                 }
             }
@@ -1525,7 +1526,7 @@ namespace AgOpenGPS
                     {
                         TimedMessageBox(2000, gStr.gsBoundaryLineFilesAreCorrupt, gStr.gsButFieldIsLoaded);
                         
-                        Log.EventWriter("Load Boundary Line" + e.ToString());
+                        Log.System.Write("Load Boundary Line" + e.ToString());
                     }
                 }
             }
@@ -1576,7 +1577,7 @@ namespace AgOpenGPS
                     {
                         TimedMessageBox(2000, "Headland File is Corrupt", "But Field is Loaded");
                         
-                        Log.EventWriter("Load Headland Loop" + e.ToString());
+                        Log.System.Write("Load Headland Loop" + e.ToString());
                     }
                 }
             }
@@ -1691,7 +1692,7 @@ namespace AgOpenGPS
                     {
                         TimedMessageBox(2000, "Tram is corrupt", gStr.gsButFieldIsLoaded);
                         
-                        Log.EventWriter("Load Boundary Line" + e.ToString());
+                        Log.System.Write("Load Boundary Line" + e.ToString());
                     }
                 }
             }
@@ -1744,7 +1745,7 @@ namespace AgOpenGPS
                     {
                         TimedMessageBox(2000, gStr.gsRecordedPathFileIsCorrupt, gStr.gsButFieldIsLoaded);
                         
-                        Log.EventWriter("Load Recorded Path" + e.ToString());
+                        Log.System.Write("Load Recorded Path" + e.ToString());
                     }
                 }
             }
@@ -2294,7 +2295,7 @@ namespace AgOpenGPS
                     {
                         TimedMessageBox(2000, gStr.gsRecordedPathFileIsCorrupt, gStr.gsButFieldIsLoaded);
                         
-                        Log.EventWriter("Load Recorded Path" + e.ToString());
+                        Log.System.Write("Load Recorded Path" + e.ToString());
                     }
                 }
             }
@@ -2342,7 +2343,7 @@ namespace AgOpenGPS
                 catch (Exception e)
                 {
                     TimedMessageBox(2000, "Error",e.Message + "\n Cannot write to file.");
-                    Log.EventWriter("Saving Flags" + e.ToString());
+                    Log.System.Write("Saving Flags" + e.ToString());
                     return;
                 }
             }
@@ -2450,14 +2451,6 @@ namespace AgOpenGPS
                 writer.Write(pn.logMissedSentence.ToString());
             }
             pn.logMissedSentence.Clear();
-        }
-
-        public void FileSaveSystemEvents()
-        {
-            using (StreamWriter writer = new StreamWriter(Path.Combine(logsDirectory, "AgOpenGPS_Events_Log.txt"), true))
-            {
-                writer.Write(Log.sbEvent);
-            }
         }
 
         //save nmea sentences

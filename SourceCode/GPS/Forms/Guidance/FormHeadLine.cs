@@ -1,4 +1,5 @@
 ﻿using AgOpenGPS.Helpers;
+using AgOpenGPS.Logging;
 using OpenTK;
 using OpenTK.Graphics.OpenGL;
 using System;
@@ -145,7 +146,7 @@ namespace AgOpenGPS
             if (nudSetDistance.Value == 0 && rbtnCurve.Checked)
             {
                 mf.TimedMessageBox(3000, "Distance Error", "Distance Set to 0, Nothing to Move");
-                Log.EventWriter("Headland, Distance=0, Can't Move");
+                Log.System.Write("Headland, Distance=0, Can't Move");
                 return;
             }
             sliceArr?.Clear();
@@ -842,7 +843,7 @@ namespace AgOpenGPS
             if (isStart < 2)
             {
                 mf.TimedMessageBox(2000, "Error", "Crossings not Found");
-                Log.EventWriter("Headland, Crossings Not Found");
+                Log.System.Write("Headland, Crossings Not Found");
 
                 return;
             }

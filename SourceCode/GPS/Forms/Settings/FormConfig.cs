@@ -2,6 +2,7 @@
 
 using AgOpenGPS.Culture;
 using AgOpenGPS.Helpers;
+using AgOpenGPS.Logging;
 using System;
 using System.Drawing;
 using System.Windows.Forms;
@@ -281,7 +282,7 @@ namespace AgOpenGPS
         private void rbtnDisplayImperial_Click(object sender, EventArgs e)
         {
             mf.TimedMessageBox(2000, "Units Set", "Imperial");
-            Log.EventWriter("Units To Imperial");
+            Log.System.Write("Units To Imperial");
 
             mf.isMetric = false;
             Properties.Settings.Default.setMenu_isMetric = mf.isMetric;
@@ -293,7 +294,7 @@ namespace AgOpenGPS
         private void rbtnDisplayMetric_Click(object sender, EventArgs e)
         {
             mf.TimedMessageBox(2000, "Units Set", "Metric");
-            Log.EventWriter("Units to Metric");
+            Log.System.Write("Units to Metric");
 
             mf.isMetric = true;
             Properties.Settings.Default.setMenu_isMetric = mf.isMetric;
