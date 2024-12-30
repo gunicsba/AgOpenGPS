@@ -266,7 +266,7 @@ namespace AgIO
             cboxAutoRunGPS_Out.Checked = Properties.Settings.Default.setDisplay_isAutoRunGPS_Out;
             if (Properties.Settings.Default.setDisplay_isAutoRunGPS_Out) StartGPS_Out();
 
-            this.Text = "AgIO  Profile: " + RegistrySettings.ProfileFileName;
+            this.Text = "AgIO v" + GitVersionInformation.MajorMinorPatch + " Profile: " + RegistrySettings.ProfileFileName;
 
             if (RegistrySettings.ProfileFileName == "")
                 YesMessageBox("Using Default Profile" + "\r\n\r\n" + "Load Existing Profile or Save a New One !!!"
