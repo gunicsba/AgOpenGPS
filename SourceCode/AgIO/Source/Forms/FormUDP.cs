@@ -185,8 +185,7 @@ namespace AgIO
                                     }
                                     catch (Exception ex)
                                     {
-                                        Console.Write("Bind Error = ");
-                                        Console.WriteLine(ex.ToString());
+                                        Log.EventWriter("Socket Bind Exception: " + ex.ToString());
                                     }
 
                                     scanSocket.Dispose();
@@ -194,8 +193,7 @@ namespace AgIO
                             }
                             catch (Exception ex)
                             {
-                                Console.Write("nic Loop = ");
-                                Console.WriteLine(ex.ToString());
+                                Log.EventWriter("Scan Network Exception: " + ex.ToString());
                             }
                         }
                     }
@@ -251,8 +249,7 @@ namespace AgIO
                                         }
                                         catch (Exception ex)
                                         {
-                                            Console.Write("Bind Error = ");
-                                            Console.WriteLine(ex.ToString());
+                                            Log.EventWriter("Bind/Send Subnet Exception: " + ex.ToString());
                                         }
 
                                         scanSocket.Dispose();
@@ -260,8 +257,7 @@ namespace AgIO
                                 }
                                 catch (Exception ex)
                                 {
-                                    Console.Write("nic Loop = ");
-                                    Console.WriteLine(ex.ToString());
+                                    Log.EventWriter("Send Subnet Exception: " + ex.ToString());
                                 }
                             }
                         }
@@ -287,6 +283,8 @@ namespace AgIO
 
             pboxSendSteer.Visible = false;
             btnSerialCancel.Image = Properties.Resources.back_button;
+
+            Log.EventWriter("Subnet Uploaded: " + lblNetworkHelp.Text);
         }
 
         private void nudFirstIP_Click(object sender, EventArgs e)

@@ -742,7 +742,7 @@ namespace AgOpenGPS
                 if (nextLine == lineNum)
                 {
                     mf.TimedMessageBox(2000, "Create Error", "Is there maybe only 1 line?");
-                    mf.LogEventWriter("Headache, Only 1 Line");
+                    Log.EventWriter("Headache, Only 1 Line");
 
                     return;
                 }
@@ -782,7 +782,7 @@ namespace AgOpenGPS
             if (crossings.Count != mf.hdl.tracksArr.Count * 2)
             {
                 mf.TimedMessageBox(2000, "Crosings Error", "Make sure all ends cross and only once");
-                mf.LogEventWriter("Headache, All ends cross and only once");
+                Log.EventWriter("Headache, All ends cross and only once");
                 mf.bnd.bndList[0].hdLine?.Clear();
                 return;
             }

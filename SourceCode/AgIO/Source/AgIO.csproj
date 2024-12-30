@@ -71,6 +71,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Classes\CGLM.cs" />
+    <Compile Include="Classes\CLog.cs" />
     <Compile Include="Classes\ListViewColumnSorterExt.cs" />
     <Compile Include="Classes\CRadioChannel.cs" />
     <Compile Include="Forms\FormCommPicker.cs">
@@ -323,6 +324,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="AgIO_ico.ico" />
+    <None Include="btnImages\EventsLog.png" />
     <None Include="btnImages\ModuleSim2.png" />
     <None Include="btnImages\EthernetOff.png" />
     <None Include="btnImages\WindowMinimize.png" />

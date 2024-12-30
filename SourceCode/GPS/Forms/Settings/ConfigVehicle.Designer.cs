@@ -80,7 +80,7 @@ namespace AgOpenGPS
 
                         if (!Properties.Settings.Default.Load())
                         {
-                            mf.LogEventWriter("Error loading settings XML: " + newname);
+                            Log.EventWriter("Error loading settings XML: " + newname);
                             mf.YesMessageBox("Error loading settings XML Deleting it now");
 
                             var path = Path.Combine(mf.vehiclesDirectory, newname + ".XML");
@@ -155,7 +155,7 @@ namespace AgOpenGPS
                         ///Remind the user
                         mf.TimedMessageBox(2500, "Steer and Machine Settings Sent", "Were Modules Connected?");
 
-                        mf.LogEventWriter("Vehicle Loaded: " + mf.vehicleFileName + ".XML");
+                        Log.EventWriter("Vehicle Loaded: " + mf.vehicleFileName + ".XML");
                     }
 
                     UpdateVehicleListView();
@@ -199,7 +199,7 @@ namespace AgOpenGPS
                     }
                     else
                     {
-                        mf.LogEventWriter("Attempted to Delete Default Vehicle, Denied");
+                        Log.EventWriter("Attempted to Delete Default Vehicle, Denied");
                         mf.TimedMessageBox(2500, "Default Vehicle Delete Denied", "Choose Another Vehicle");
                     }
 
@@ -374,7 +374,7 @@ namespace AgOpenGPS
                 ///Remind the user
                 mf.TimedMessageBox(2500, "Steer and Machine Settings Sent", "Were Modules Connected?");
 
-                mf.LogEventWriter("New Vehicle Loaded: " + mf.vehicleFileName + ".XML");
+                Log.EventWriter("New Vehicle Loaded: " + mf.vehicleFileName + ".XML");
 
                 //we are loading the setting not saving??
                 //Properties.Settings.Default.Save();

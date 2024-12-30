@@ -249,6 +249,8 @@ namespace AgIO
                 }
                 catch (Exception)
                 {
+                    Log.EventWriter("NTRIP Reconnect Request");
+
                     ReconnectRequest();
                     return;
                 }
@@ -286,6 +288,7 @@ namespace AgIO
                         isRadio_RequiredOn = false;
 
                         TimedMessageBox(2000, "Error connecting to radio", $"{ex.Message}");
+                        Log.EventWriter("Error connecting to radio " + ex.ToString());
                     }
                 }
             }
@@ -324,6 +327,7 @@ namespace AgIO
                         isNTRIP_Connecting = false;
                         isNTRIP_Connected = false;
                         isSerialPass_RequiredOn = false;
+                        Log.EventWriter("Start Radio NTRIP: " + ex.ToString());
 
                         TimedMessageBox(2000, "Error connecting to Serial Pass", $"{ex.Message}");
                     }
@@ -405,8 +409,9 @@ namespace AgIO
                 isNTRIP_Starting = false;
                 isNTRIP_Connecting = false;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                Log.EventWriter("NTRIP Authourization Error: " + ex.ToString());
                 ReconnectRequest();
             }
         }
@@ -560,8 +565,10 @@ namespace AgIO
                 Byte[] byteDateLine = Encoding.ASCII.GetBytes(str.ToCharArray());
                 clientSocket.Send(byteDateLine, byteDateLine.Length, 0);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                Log.EventWriter("NTRIP Send GGA Error: " + ex.ToString());
+
                 ReconnectRequest();
             }
         }

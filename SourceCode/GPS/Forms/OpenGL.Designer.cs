@@ -496,10 +496,10 @@ namespace AgOpenGPS
                                 {
                                     btnAutoSteer.PerformClick();
                                     TimedMessageBox(2000, "Autosteer Turned Off", "RTK Fix Alarm");
-                                    LogEventWriter("Autosteer Off, RTK Fix Alarm");
+                                    Log.EventWriter("Autosteer Off, RTK Fix Alarm");
                                 }
 
-                                LogEventWriter("RTK Alarm Fix is Lost");
+                                Log.EventWriter("RTK Alarm Fix is Lost");
                                 sounds.sndRTKAlarm.Play();
                             }
                             sounds.isRTKAlarming = true;
