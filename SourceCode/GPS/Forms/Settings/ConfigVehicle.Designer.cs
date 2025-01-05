@@ -87,7 +87,7 @@ namespace AgOpenGPS
                             var path = Path.Combine(mf.vehiclesDirectory, newname + ".XML");
 
                             if (File.Exists(path))
-                                File.Delete(path);
+                                File.Move(path, path+".CORRUPT");
 
                             UpdateVehicleListView();
                             return;
