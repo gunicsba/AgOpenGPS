@@ -227,6 +227,11 @@ namespace AgOpenGPS
         /// </summary>
         public CWindowsSettingsBrightnessController displayBrightness;
 
+        /// <summary>
+        /// The ISOBUS communication class
+        /// </summary>
+        public CISOBUS isobus;
+
         #endregion // Class Props and instances
 
         //The method assigned to the PowerModeChanged event call
@@ -349,6 +354,8 @@ namespace AgOpenGPS
 
             //brightness object class
             displayBrightness = new CWindowsSettingsBrightnessController(Properties.Settings.Default.setDisplay_isBrightnessOn);
+
+            isobus = new CISOBUS();
         }
 
         private void FormGPS_Load(object sender, EventArgs e)
