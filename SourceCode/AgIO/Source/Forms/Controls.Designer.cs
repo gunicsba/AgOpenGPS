@@ -512,6 +512,7 @@ namespace AgIO
 
         private ToolStripDropDownButton toolStripDropDownButton1;
         private ToolStripMenuItem toolStripMenuProfiles;
+        private readonly FormISOBUS isobusForm = new FormISOBUS();
         private ToolStripMenuItem isobusToolStripMenuItem;
     }
 }
