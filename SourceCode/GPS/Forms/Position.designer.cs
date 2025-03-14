@@ -915,6 +915,15 @@ namespace AgOpenGPS
                 //mc.autoSteerData[7] = unchecked((byte)(guidanceLineDistanceOff >> 8));
                 //mc.autoSteerData[8] = unchecked((byte)(guidanceLineDistanceOff));
 
+                isobus.SetGuidanceLineDeviation(guidanceLineDistanceOff * 100);
+                int currentSpeed = (int)(avgSpeed * 1000 / 3.6);  // convert from km/h to mm/s
+                if (isReverse)
+                {
+                    currentSpeed = -currentSpeed;
+                }
+                isobus.SetActualSpeed(currentSpeed);
+                isobus.SetTotalDistance((int)(fd.distanceUser * 1000)); // convert from meter to mm
+
                 //convert to cm from mm and divide by 2 - lightbar
                 int distanceX2;
                 if (guidanceLineDistanceOff == 32020 || guidanceLineDistanceOff == 32000)
