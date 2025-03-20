@@ -916,7 +916,7 @@ namespace AgOpenGPS
                 //mc.autoSteerData[8] = unchecked((byte)(guidanceLineDistanceOff));
 
                 isobus.SetGuidanceLineDeviation(guidanceLineDistanceOff * 100);
-                int currentSpeed = (int)(avgSpeed * 1000 / 3.6);  // convert from km/h to mm/s
+                int currentSpeed = (int)Math.Round(avgSpeed * 1000 / 3.6);  // convert from km/h to mm/s
                 if (isReverse)
                 {
                     currentSpeed = -currentSpeed;
