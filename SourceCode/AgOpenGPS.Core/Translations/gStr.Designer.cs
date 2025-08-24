@@ -441,6 +441,15 @@ namespace AgOpenGPS.Core.Translations {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Calibration data reset.
+        /// </summary>
+        public static string gsCalibrationDataReset {
+            get {
+                return ResourceManager.GetString("gsCalibrationDataReset", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Camera Behavior.
         /// </summary>
         public static string gsCameraBehavior {
@@ -2493,6 +2502,15 @@ namespace AgOpenGPS.Core.Translations {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Values set to initial default.
+        /// </summary>
+        public static string gsResetToDefault {
+            get {
+                return ResourceManager.GetString("gsResetToDefault", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Resume.
         /// </summary>
         public static string gsResume {
@@ -2768,6 +2786,15 @@ namespace AgOpenGPS.Core.Translations {
         public static string gsSetPoint {
             get {
                 return ResourceManager.GetString("gsSetPoint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Settings sent to steer module.
+        /// </summary>
+        public static string gsSettingsSent {
+            get {
+                return ResourceManager.GetString("gsSettingsSent", resourceCulture);
             }
         }
         

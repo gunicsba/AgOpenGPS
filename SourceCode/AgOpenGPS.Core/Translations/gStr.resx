@@ -251,6 +251,9 @@ The order you push them will be the order they appear on the menu from bottom up
   <data name="gsCancel" xml:space="preserve">
     <value>Cancel</value>
   </data>
+  <data name="gsCalibrationDataReset" xml:space="preserve">
+    <value>Calibration data reset</value>
+  </data>
   <data name="gsCenter" xml:space="preserve">
     <value>Center</value>
   </data>
@@ -902,6 +905,9 @@ The order you push them will be the order they appear on the menu from bottom up
   <data name="gsResetAllForSure" xml:space="preserve">
     <value>Reset All For Sure?</value>
   </data>
+  <data name="gsResetToDefault" xml:space="preserve">
+    <value>Values set to initial default</value>
+  </data>
   <data name="gsResume" xml:space="preserve">
     <value>Resume</value>
   </data>
@@ -989,6 +995,9 @@ The order you push them will be the order they appear on the menu from bottom up
   <data name="gsSentToMachineModule" xml:space="preserve">
     <value>Sent To Machine Module</value>
   </data>
+  <data name="gsSettingsSent" xml:space="preserve">
+    <value>Settings sent to steer module</value>
+  </data>
   <data name="gsSetPoint" xml:space="preserve">
     <value>SetPoint</value>
   </data>
@@ -1073,7 +1082,6 @@ The order you push them will be the order they appear on the menu from bottom up
   <data name="gsConfidence" xml:space="preserve">
     <value>Confidence</value>
   </data>
-
   <data name="gsSort" xml:space="preserve">
     <value>Sort</value>
   </data>

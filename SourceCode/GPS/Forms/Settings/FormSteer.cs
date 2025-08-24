@@ -908,7 +908,7 @@ namespace AgOpenGPS
             int offset = (int)(hsbarCountsPerDegree.Value * -mf.mc.actualSteerAngleDegrees + hsbarWasOffset.Value);
             if (Math.Abs(offset) > 3900)
             {
-                mf.TimedMessageBox(2000, "Exceeded Range", "Excessive Steer Angle - Cannot Zero");
+                mf.TimedMessageBox(2000, gStr.gsExceededRange, gStr.gsExceededRangeMsg);
                 Log.EventWriter("Excessive Steer Angle, No Zero " + offset);
             }
             else
@@ -929,12 +929,12 @@ namespace AgOpenGPS
             {
                 if (mf.smartWASCalibration.SampleCount < 200)
                 {
-                    mf.TimedMessageBox(3000, gStr.gsInsufficientData, 
+                    mf.TimedMessageBox(3000, gStr.gsInsufficientData,
                         string.Format(gStr.gsInsufficientDataMsg, mf.smartWASCalibration.SampleCount));
                 }
                 else
                 {
-                    mf.TimedMessageBox(3000, gStr.gsLowConfidence, 
+                    mf.TimedMessageBox(3000, gStr.gsLowConfidence,
                         string.Format(gStr.gsLowConfidenceMsg, mf.smartWASCalibration.ConfidenceLevel.ToString("F1")));
                 }
                 return;
@@ -947,8 +947,9 @@ namespace AgOpenGPS
             // Check if the new offset is within acceptable range
             if (Math.Abs(newOffset) > 3900)
             {
-                mf.TimedMessageBox(3000, gStr.gsExceededRange, 
-                    string.Format(gStr.gsExceededRangeMsg, mf.smartWASCalibration.RecommendedWASZero.ToString("F2")));
+                mf.TimedMessageBox(3000, gStr.gsExceededRange,
+                    string.Format(gStr.gsExceededRangeMsg, mf.smartWASCalibration.RecommendedWASZero.ToString("F2"))
+                    );
                 Log.EventWriter($"Smart Zero exceeded range: {newOffset}");
                 return;
             }
@@ -957,13 +958,12 @@ namespace AgOpenGPS
             hsbarWasOffset.Value = newOffset;
 
             // Show success message with details
-            mf.TimedMessageBox(4000, gStr.gsSmartZeroApplied, 
-                string.Format(gStr.gsSmartZeroAppliedMsg, 
-                    mf.smartWASCalibration.SampleCount,
+            mf.TimedMessageBox(4000, gStr.gsSmartZeroApplied,
+                string.Format(gStr.gsSmartZeroAppliedMsg,
+                    mf.smartWASCalibration.SampleCount.ToString("F2"),
                     mf.smartWASCalibration.ConfidenceLevel.ToString("F1"),
                     mf.smartWASCalibration.RecommendedWASZero.ToString("F2"),
-                    recommendedOffsetAdjustment));
-
+                    recommendedOffsetAdjustment.ToString("F1")));
             Log.EventWriter($"Smart WAS Zero Applied - Samples: {mf.smartWASCalibration.SampleCount}, " +
                           $"Confidence: {mf.smartWASCalibration.ConfidenceLevel:F1}%, " +
                           $"Adjustment: {mf.smartWASCalibration.RecommendedWASZero:F2}°");
@@ -1133,7 +1133,7 @@ namespace AgOpenGPS
             btnClose.Enabled = true;
             Log.EventWriter("Steer Form, Send and Save Pressed");
 
-            mf.TimedMessageBox(2000, gStr.gsAutoSteerPort, "Settings Sent To Steer Module");
+            mf.TimedMessageBox(2000, gStr.gsAutoSteerPort, gStr.gsSettingsSent);
         }
 
         private void btnClose_Click(object sender, EventArgs e)
@@ -1273,7 +1273,7 @@ namespace AgOpenGPS
             {
                 Log.EventWriter("Steer Form - Steer Settings Set to Default");
 
-                mf.TimedMessageBox(2000, "Reset To Default", "Values Set to Inital Default");
+                mf.TimedMessageBox(2000, gStr.gsReset, gStr.gsResetToDefault);
                 Properties.Settings.Default.setVehicle_maxSteerAngle = mf.vehicle.maxSteerAngle
                     = 45;
 
@@ -1351,9 +1351,9 @@ namespace AgOpenGPS
             {
                 mf.smartWASCalibration.ResetData();
                 UpdateSmartCalibrationStatus();
-                
+
                 // Show brief confirmation message
-                mf.TimedMessageBox(1500, gStr.gsSmartWASCalibration, "Calibration data reset");
+                mf.TimedMessageBox(1500, gStr.gsSmartWASCalibration, gStr.gsCalibrationDataReset);
             }
         }
 
