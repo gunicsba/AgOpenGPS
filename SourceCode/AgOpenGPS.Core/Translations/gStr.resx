@@ -1025,6 +1025,55 @@ The order you push them will be the order they appear on the menu from bottom up
   <data name="gsSmoothABCurve" xml:space="preserve">
     <value>Smooth AB Curve</value>
   </data>
+  <data name="gsSmartWASCalibration" xml:space="preserve">
+    <value>Smart WAS Calibration</value>
+  </data>
+  <data name="gsSmartZero" xml:space="preserve">
+    <value>Smart Zero</value>
+  </data>
+  <data name="gsSmartZeroApplied" xml:space="preserve">
+    <value>Smart Zero Applied</value>
+  </data>
+  <data name="gsSmartZeroAppliedMsg" xml:space="preserve">
+    <value>Smart WAS Zero applied successfully using {0} samples with {1}% confidence. Recommended zero: {2}°, Applied adjustment: {3}</value>
+  </data>
+  <data name="gsSmartCalibrationError" xml:space="preserve">
+    <value>Smart Calibration Error</value>
+  </data>
+  <data name="gsSmartWASNotAvailable" xml:space="preserve">
+    <value>Smart WAS calibration not available</value>
+  </data>
+  <data name="gsInsufficientData" xml:space="preserve">
+    <value>Insufficient Data</value>
+  </data>
+  <data name="gsInsufficientDataMsg" xml:space="preserve">
+    <value>Need at least 200 samples for calibration. Current samples: {0}. Drive on guidance lines to collect more data.</value>
+  </data>
+  <data name="gsLowConfidence" xml:space="preserve">
+    <value>Low Confidence</value>
+  </data>
+  <data name="gsLowConfidenceMsg" xml:space="preserve">
+    <value>Calibration confidence is {0}%. Need at least 70% confidence. Drive more consistently on guidance lines.</value>
+  </data>
+  <data name="gsExceededRange" xml:space="preserve">
+    <value>Exceeded Range</value>
+  </data>
+  <data name="gsExceededRangeMsg" xml:space="preserve">
+    <value>Recommended adjustment {0} exceeds safe range (±50). Please check WAS sensor alignment.</value>
+  </data>
+  <data name="gsCollectingData" xml:space="preserve">
+    <value>Collecting Data</value>
+  </data>
+  <data name="gsReadyForCalibration" xml:space="preserve">
+    <value>Ready for Calibration</value>
+  </data>
+  <data name="gsSamples" xml:space="preserve">
+    <value>Samples</value>
+  </data>
+  <data name="gsConfidence" xml:space="preserve">
+    <value>Confidence</value>
+  </data>
+
   <data name="gsSort" xml:space="preserve">
     <value>Sort</value>
   </data>
