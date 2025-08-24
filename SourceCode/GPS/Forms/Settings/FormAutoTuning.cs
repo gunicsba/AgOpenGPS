@@ -18,18 +18,15 @@ namespace AgOpenGPS
             mf = mainForm;
             InitializeComponent();
             
-            // Initialize timer for real-time updates
             updateTimer = new Timer();
-            updateTimer.Interval = 500; // Update every 500ms
+            updateTimer.Interval = 500; 
             updateTimer.Tick += UpdateTimer_Tick;
             
-            // Set initial values
             LoadCurrentSettings();
         }
 
         private void FormAutoTuning_Load(object sender, EventArgs e)
         {
-            // Set window position and size
             this.Size = new Size(500, 650);
             this.Text = "Auto-Tuning Settings";
             this.StartPosition = FormStartPosition.CenterParent;
@@ -48,7 +45,6 @@ namespace AgOpenGPS
         {
             updateTimer.Stop();
             
-            // Save settings
             Properties.Settings.Default.Save();
         }
 
@@ -56,10 +52,8 @@ namespace AgOpenGPS
         {
             if (mf.autoTuner != null)
             {
-                // Load current auto-tuning settings
                 chkAutoTuningEnabled.Checked = mf.autoTuner.IsAutoTuningEnabled;
                 
-                // Load configuration values
                 if (mf.autoTuner.Config != null)
                 {
                     nudLearningRate.Value = (decimal)(mf.autoTuner.Config.LearningRate * 100);
@@ -95,7 +89,6 @@ namespace AgOpenGPS
                 lblOvershoot.Text = (mf.autoTuner.GetOvershootLevel() * 100).ToString("F1") + "%";
                 lblPerformanceScore.Text = mf.autoTuner.GetCurrentPerformanceScore().ToString("F2");
                 
-                // Update progress bar for performance
                 double score = mf.autoTuner.GetCurrentPerformanceScore();
                 progressPerformance.Value = Math.Min(100, (int)(score * 10));
             }
@@ -132,7 +125,6 @@ namespace AgOpenGPS
                     btnStartLearning.Text = "Stop Learning";
                     btnStartLearning.BackColor = Color.Orange;
                     
-                    // Show message
                     mf.TimedMessageBox(3000, "Auto-Tuning Activated", 
                         "The system will automatically tune steering parameters.");
                 }
