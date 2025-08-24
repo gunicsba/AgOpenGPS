@@ -1,4 +1,4 @@
-﻿using System;
+﻿﻿using System;
 using OpenTK;
 using OpenTK.Graphics.OpenGL;
 using System.Windows.Forms;
@@ -93,6 +93,12 @@ namespace AgOpenGPS
 
                     //position the camera
                     camera.SetWorldCam(pivotAxlePos.easting, pivotAxlePos.northing, camHeading);
+
+                    //update auto-tuner if enabled
+                    if (autoTuner != null && autoTuner.IsAutoTuningEnabled)
+                    {
+                        autoTuner.Update();
+                    }
 
                     //the bounding box of the camera for cullling.
                     CalcFrustum();

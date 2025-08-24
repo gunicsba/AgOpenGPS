@@ -152,6 +152,7 @@ namespace AgOpenGPS
             this.toolStripDropDownButton1 = new System.Windows.Forms.ToolStripDropDownButton();
             this.toolStripConfig = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSteerSettings = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripAutoTuning = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripAllSettings = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripWorkingDirectories = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripGPSData = new System.Windows.Forms.ToolStripMenuItem();
@@ -1860,6 +1861,7 @@ namespace AgOpenGPS
             this.toolStripDropDownButton1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripConfig,
             this.toolStripSteerSettings,
+            this.toolStripAutoTuning,
             this.toolStripAllSettings,
             this.toolStripWorkingDirectories,
             this.toolStripGPSData,
@@ -1891,6 +1893,14 @@ namespace AgOpenGPS
             this.toolStripSteerSettings.Size = new System.Drawing.Size(463, 66);
             this.toolStripSteerSettings.Text = "Auto Steer";
             this.toolStripSteerSettings.Click += new System.EventHandler(this.btnAutoSteerConfig_Click);
+            // 
+            // toolStripAutoTuning
+            // 
+            this.toolStripAutoTuning.Image = global::AgOpenGPS.Properties.Resources.AutoSteerOn;
+            this.toolStripAutoTuning.Name = "toolStripAutoTuning";
+            this.toolStripAutoTuning.Size = new System.Drawing.Size(463, 66);
+            this.toolStripAutoTuning.Text = "Auto-Tuning";
+            this.toolStripAutoTuning.Click += new System.EventHandler(this.toolStripAutoTuning_Click);
             // 
             // toolStripAllSettings
             // 
@@ -3279,6 +3289,7 @@ namespace AgOpenGPS
         private System.Windows.Forms.ToolStripDropDownButton toolStripDropDownButton1;
         private System.Windows.Forms.ToolStripMenuItem toolStripConfig;
         private System.Windows.Forms.ToolStripMenuItem toolStripSteerSettings;
+        private System.Windows.Forms.ToolStripMenuItem toolStripAutoTuning;
         private System.Windows.Forms.ToolStripMenuItem toolStripAllSettings;
         private System.Windows.Forms.ToolStripMenuItem toolStripWorkingDirectories;
         private System.Windows.Forms.ToolStripMenuItem toolStripGPSData;

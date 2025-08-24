@@ -1,4 +1,4 @@
-﻿//Please, if you use this, share the improvements
+﻿﻿﻿//Please, if you use this, share the improvements
 
 using AgLibrary.Logging;
 using AgOpenGPS;
@@ -227,6 +227,11 @@ namespace AgOpenGPS
         /// </summary>
         public CWindowsSettingsBrightnessController displayBrightness;
 
+        /// <summary>
+        /// Auto-tuning system for steering parameters
+        /// </summary>
+        public CAutoTuner autoTuner;
+
         #endregion // Class Props and instances
 
         //The method assigned to the PowerModeChanged event call
@@ -349,6 +354,9 @@ namespace AgOpenGPS
 
             //brightness object class
             displayBrightness = new CWindowsSettingsBrightnessController(Properties.Settings.Default.setDisplay_isBrightnessOn);
+            
+            //auto-tuning system initialization
+            autoTuner = new CAutoTuner(this);
         }
 
         private void FormGPS_Load(object sender, EventArgs e)

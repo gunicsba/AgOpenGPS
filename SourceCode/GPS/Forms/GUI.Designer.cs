@@ -1,4 +1,4 @@
-﻿//Please, if you use this, share the improvements
+﻿﻿//Please, if you use this, share the improvements
 
 using AgLibrary.Logging;
 using AgOpenGPS.Culture;
@@ -384,6 +384,7 @@ namespace AgOpenGPS
             toolStripSectionColors.Text = "Section " + gStr.gsColors;
             toolStripConfig.Text = gStr.gsConfiguration;
             toolStripSteerSettings.Text = gStr.gsAutoSteer;
+            toolStripAutoTuning.Text = "Auto-Tuning";
             toolStripWorkingDirectories.Text = gStr.gsDirectories;
             toolStripAllSettings.Text = gStr.gsAllSettings;
 
