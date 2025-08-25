@@ -51,6 +51,16 @@ namespace AgOpenGPS
             this.nudAdaptationSpeed = new System.Windows.Forms.NumericUpDown();
             this.label13 = new System.Windows.Forms.Label();
             this.label14 = new System.Windows.Forms.Label();
+            this.groupBoxTuningStrategy = new System.Windows.Forms.GroupBox();
+            this.nudMaxSimultaneousAdjustments = new System.Windows.Forms.NumericUpDown();
+            this.hsbarAccuracyVsSmoothness = new System.Windows.Forms.HScrollBar();
+            this.lblMaxSimultaneousAdjustments = new System.Windows.Forms.Label();
+            this.lblAccuracyVsSmoothness = new System.Windows.Forms.Label();
+            this.label15 = new System.Windows.Forms.Label();
+            this.label16 = new System.Windows.Forms.Label();
+            this.labelAccuracySmoothnessDesc = new System.Windows.Forms.Label();
+            this.labelAccuracy = new System.Windows.Forms.Label();
+            this.labelSmoothness = new System.Windows.Forms.Label();
             this.btnStartLearning = new System.Windows.Forms.Button();
             this.btnResetToDefaults = new System.Windows.Forms.Button();
             this.btnSaveConfig = new System.Windows.Forms.Button();
@@ -59,8 +69,10 @@ namespace AgOpenGPS
             this.groupBoxPerformance.SuspendLayout();
             this.groupBoxCurrentParams.SuspendLayout();
             this.groupBoxSettings.SuspendLayout();
+            this.groupBoxTuningStrategy.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudLearningRate)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudAdaptationSpeed)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudMaxSimultaneousAdjustments)).BeginInit();
             this.SuspendLayout();
             // 
             // groupBoxStatus
@@ -411,14 +423,120 @@ namespace AgOpenGPS
             this.label14.TabIndex = 2;
             this.label14.Text = "Adaptation Speed (%):";
             // 
+            // groupBoxTuningStrategy
+            // 
+            this.groupBoxTuningStrategy.Controls.Add(this.nudMaxSimultaneousAdjustments);
+            this.groupBoxTuningStrategy.Controls.Add(this.hsbarAccuracyVsSmoothness);
+            this.groupBoxTuningStrategy.Controls.Add(this.lblMaxSimultaneousAdjustments);
+            this.groupBoxTuningStrategy.Controls.Add(this.lblAccuracyVsSmoothness);
+            this.groupBoxTuningStrategy.Controls.Add(this.label15);
+            this.groupBoxTuningStrategy.Controls.Add(this.label16);
+            this.groupBoxTuningStrategy.Controls.Add(this.labelAccuracySmoothnessDesc);
+            this.groupBoxTuningStrategy.Controls.Add(this.labelAccuracy);
+            this.groupBoxTuningStrategy.Controls.Add(this.labelSmoothness);
+            this.groupBoxTuningStrategy.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold);
+            this.groupBoxTuningStrategy.Location = new System.Drawing.Point(12, 490);
+            this.groupBoxTuningStrategy.Name = "groupBoxTuningStrategy";
+            this.groupBoxTuningStrategy.Size = new System.Drawing.Size(460, 120);
+            this.groupBoxTuningStrategy.TabIndex = 4;
+            this.groupBoxTuningStrategy.TabStop = false;
+            this.groupBoxTuningStrategy.Text = "Tuning Strategy";
+            // 
+            // nudMaxSimultaneousAdjustments
+            // 
+            this.nudMaxSimultaneousAdjustments.Font = new System.Drawing.Font("Tahoma", 8.25F);
+            this.nudMaxSimultaneousAdjustments.Location = new System.Drawing.Point(200, 25);
+            this.nudMaxSimultaneousAdjustments.Maximum = new decimal(new int[] { 7, 0, 0, 0 });
+            this.nudMaxSimultaneousAdjustments.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
+            this.nudMaxSimultaneousAdjustments.Name = "nudMaxSimultaneousAdjustments";
+            this.nudMaxSimultaneousAdjustments.Size = new System.Drawing.Size(60, 21);
+            this.nudMaxSimultaneousAdjustments.TabIndex = 1;
+            this.nudMaxSimultaneousAdjustments.Value = new decimal(new int[] { 2, 0, 0, 0 });
+            this.nudMaxSimultaneousAdjustments.ValueChanged += new System.EventHandler(this.nudMaxSimultaneousAdjustments_ValueChanged);
+            // 
+            // hsbarAccuracyVsSmoothness
+            // 
+            this.hsbarAccuracyVsSmoothness.LargeChange = 10;
+            this.hsbarAccuracyVsSmoothness.Location = new System.Drawing.Point(15, 75);
+            this.hsbarAccuracyVsSmoothness.Maximum = 109;
+            this.hsbarAccuracyVsSmoothness.Name = "hsbarAccuracyVsSmoothness";
+            this.hsbarAccuracyVsSmoothness.Size = new System.Drawing.Size(320, 17);
+            this.hsbarAccuracyVsSmoothness.SmallChange = 5;
+            this.hsbarAccuracyVsSmoothness.TabIndex = 3;
+            this.hsbarAccuracyVsSmoothness.Value = 50;
+            this.hsbarAccuracyVsSmoothness.ValueChanged += new System.EventHandler(this.hsbarAccuracyVsSmoothness_ValueChanged);
+            // 
+            // lblMaxSimultaneousAdjustments
+            // 
+            this.lblMaxSimultaneousAdjustments.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold);
+            this.lblMaxSimultaneousAdjustments.Location = new System.Drawing.Point(270, 27);
+            this.lblMaxSimultaneousAdjustments.Name = "lblMaxSimultaneousAdjustments";
+            this.lblMaxSimultaneousAdjustments.Size = new System.Drawing.Size(30, 15);
+            this.lblMaxSimultaneousAdjustments.TabIndex = 2;
+            this.lblMaxSimultaneousAdjustments.Text = "2";
+            // 
+            // lblAccuracyVsSmoothness
+            // 
+            this.lblAccuracyVsSmoothness.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold);
+            this.lblAccuracyVsSmoothness.Location = new System.Drawing.Point(350, 77);
+            this.lblAccuracyVsSmoothness.Name = "lblAccuracyVsSmoothness";
+            this.lblAccuracyVsSmoothness.Size = new System.Drawing.Size(50, 15);
+            this.lblAccuracyVsSmoothness.TabIndex = 4;
+            this.lblAccuracyVsSmoothness.Text = "50%";
+            // 
+            // label15
+            // 
+            this.label15.Font = new System.Drawing.Font("Tahoma", 8.25F);
+            this.label15.Location = new System.Drawing.Point(15, 27);
+            this.label15.Name = "label15";
+            this.label15.Size = new System.Drawing.Size(180, 15);
+            this.label15.TabIndex = 0;
+            this.label15.Text = "Max Simultaneous Adjustments:";
+            // 
+            // label16
+            // 
+            this.label16.Font = new System.Drawing.Font("Tahoma", 8.25F);
+            this.label16.Location = new System.Drawing.Point(15, 55);
+            this.label16.Name = "label16";
+            this.label16.Size = new System.Drawing.Size(150, 15);
+            this.label16.TabIndex = 5;
+            this.label16.Text = "Accuracy vs Smoothness:";
+            // 
+            // labelAccuracySmoothnessDesc
+            // 
+            this.labelAccuracySmoothnessDesc.Font = new System.Drawing.Font("Tahoma", 7.25F, System.Drawing.FontStyle.Italic);
+            this.labelAccuracySmoothnessDesc.Location = new System.Drawing.Point(15, 95);
+            this.labelAccuracySmoothnessDesc.Name = "labelAccuracySmoothnessDesc";
+            this.labelAccuracySmoothnessDesc.Size = new System.Drawing.Size(430, 20);
+            this.labelAccuracySmoothnessDesc.TabIndex = 6;
+            this.labelAccuracySmoothnessDesc.Text = "Higher accuracy = more aggressive tuning, Higher smoothness = more stable tuning";
+            // 
+            // labelAccuracy
+            // 
+            this.labelAccuracy.Font = new System.Drawing.Font("Tahoma", 7.25F);
+            this.labelAccuracy.Location = new System.Drawing.Point(300, 60);
+            this.labelAccuracy.Name = "labelAccuracy";
+            this.labelAccuracy.Size = new System.Drawing.Size(50, 12);
+            this.labelAccuracy.TabIndex = 7;
+            this.labelAccuracy.Text = "Accuracy";
+            // 
+            // labelSmoothness
+            // 
+            this.labelSmoothness.Font = new System.Drawing.Font("Tahoma", 7.25F);
+            this.labelSmoothness.Location = new System.Drawing.Point(15, 60);
+            this.labelSmoothness.Name = "labelSmoothness";
+            this.labelSmoothness.Size = new System.Drawing.Size(60, 12);
+            this.labelSmoothness.TabIndex = 8;
+            this.labelSmoothness.Text = "Smoothness";
+            // 
             // btnStartLearning
             // 
             this.btnStartLearning.BackColor = System.Drawing.Color.LightGreen;
             this.btnStartLearning.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold);
-            this.btnStartLearning.Location = new System.Drawing.Point(12, 490);
+            this.btnStartLearning.Location = new System.Drawing.Point(12, 620);
             this.btnStartLearning.Name = "btnStartLearning";
             this.btnStartLearning.Size = new System.Drawing.Size(110, 30);
-            this.btnStartLearning.TabIndex = 4;
+            this.btnStartLearning.TabIndex = 5;
             this.btnStartLearning.Text = "Start Learning";
             this.btnStartLearning.UseVisualStyleBackColor = false;
             this.btnStartLearning.Click += new System.EventHandler(this.btnStartLearning_Click);
@@ -427,10 +545,10 @@ namespace AgOpenGPS
             // 
             this.btnResetToDefaults.BackColor = System.Drawing.Color.Orange;
             this.btnResetToDefaults.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold);
-            this.btnResetToDefaults.Location = new System.Drawing.Point(130, 490);
+            this.btnResetToDefaults.Location = new System.Drawing.Point(130, 620);
             this.btnResetToDefaults.Name = "btnResetToDefaults";
             this.btnResetToDefaults.Size = new System.Drawing.Size(110, 30);
-            this.btnResetToDefaults.TabIndex = 5;
+            this.btnResetToDefaults.TabIndex = 6;
             this.btnResetToDefaults.Text = "Reset Defaults";
             this.btnResetToDefaults.UseVisualStyleBackColor = false;
             this.btnResetToDefaults.Click += new System.EventHandler(this.btnResetToDefaults_Click);
@@ -439,10 +557,10 @@ namespace AgOpenGPS
             // 
             this.btnSaveConfig.BackColor = System.Drawing.Color.LightBlue;
             this.btnSaveConfig.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold);
-            this.btnSaveConfig.Location = new System.Drawing.Point(248, 490);
+            this.btnSaveConfig.Location = new System.Drawing.Point(248, 620);
             this.btnSaveConfig.Name = "btnSaveConfig";
             this.btnSaveConfig.Size = new System.Drawing.Size(110, 30);
-            this.btnSaveConfig.TabIndex = 6;
+            this.btnSaveConfig.TabIndex = 7;
             this.btnSaveConfig.Text = "Save";
             this.btnSaveConfig.UseVisualStyleBackColor = false;
             this.btnSaveConfig.Click += new System.EventHandler(this.btnSaveConfig_Click);
@@ -451,10 +569,10 @@ namespace AgOpenGPS
             // 
             this.btnLoadConfig.BackColor = System.Drawing.Color.LightYellow;
             this.btnLoadConfig.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold);
-            this.btnLoadConfig.Location = new System.Drawing.Point(366, 490);
+            this.btnLoadConfig.Location = new System.Drawing.Point(366, 620);
             this.btnLoadConfig.Name = "btnLoadConfig";
             this.btnLoadConfig.Size = new System.Drawing.Size(110, 30);
-            this.btnLoadConfig.TabIndex = 7;
+            this.btnLoadConfig.TabIndex = 8;
             this.btnLoadConfig.Text = "Load";
             this.btnLoadConfig.UseVisualStyleBackColor = false;
             this.btnLoadConfig.Click += new System.EventHandler(this.btnLoadConfig_Click);
@@ -463,11 +581,12 @@ namespace AgOpenGPS
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(484, 535);
+            this.ClientSize = new System.Drawing.Size(484, 665);
             this.Controls.Add(this.btnLoadConfig);
             this.Controls.Add(this.btnSaveConfig);
             this.Controls.Add(this.btnResetToDefaults);
             this.Controls.Add(this.btnStartLearning);
+            this.Controls.Add(this.groupBoxTuningStrategy);
             this.Controls.Add(this.groupBoxSettings);
             this.Controls.Add(this.groupBoxCurrentParams);
             this.Controls.Add(this.groupBoxPerformance);
@@ -485,8 +604,10 @@ namespace AgOpenGPS
             this.groupBoxPerformance.ResumeLayout(false);
             this.groupBoxCurrentParams.ResumeLayout(false);
             this.groupBoxSettings.ResumeLayout(false);
+            this.groupBoxTuningStrategy.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.nudLearningRate)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudAdaptationSpeed)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudMaxSimultaneousAdjustments)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -527,6 +648,16 @@ namespace AgOpenGPS
         private System.Windows.Forms.NumericUpDown nudAdaptationSpeed;
         private System.Windows.Forms.Label label13;
         private System.Windows.Forms.Label label14;
+        private System.Windows.Forms.GroupBox groupBoxTuningStrategy;
+        private System.Windows.Forms.NumericUpDown nudMaxSimultaneousAdjustments;
+        private System.Windows.Forms.HScrollBar hsbarAccuracyVsSmoothness;
+        private System.Windows.Forms.Label lblMaxSimultaneousAdjustments;
+        private System.Windows.Forms.Label lblAccuracyVsSmoothness;
+        private System.Windows.Forms.Label label15;
+        private System.Windows.Forms.Label label16;
+        private System.Windows.Forms.Label labelAccuracySmoothnessDesc;
+        private System.Windows.Forms.Label labelAccuracy;
+        private System.Windows.Forms.Label labelSmoothness;
         private System.Windows.Forms.Button btnStartLearning;
         private System.Windows.Forms.Button btnResetToDefaults;
         private System.Windows.Forms.Button btnSaveConfig;

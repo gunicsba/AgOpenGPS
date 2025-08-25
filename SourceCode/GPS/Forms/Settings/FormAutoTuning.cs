@@ -18,16 +18,19 @@ namespace AgOpenGPS
             mf = mainForm;
             InitializeComponent();
             
+            // Initialize timer for real-time updates
             updateTimer = new Timer();
-            updateTimer.Interval = 500; 
+            updateTimer.Interval = 500; // Update every 500ms
             updateTimer.Tick += UpdateTimer_Tick;
             
+            // Set initial values
             LoadCurrentSettings();
         }
 
         private void FormAutoTuning_Load(object sender, EventArgs e)
         {
-            this.Size = new Size(500, 650);
+            // Set window position and size
+            this.Size = new Size(500, 700);
             this.Text = "Auto-Tuning Settings";
             this.StartPosition = FormStartPosition.CenterParent;
             
@@ -45,6 +48,7 @@ namespace AgOpenGPS
         {
             updateTimer.Stop();
             
+            // Save settings
             Properties.Settings.Default.Save();
         }
 
@@ -52,12 +56,20 @@ namespace AgOpenGPS
         {
             if (mf.autoTuner != null)
             {
+                // Load current auto-tuning settings
                 chkAutoTuningEnabled.Checked = mf.autoTuner.IsAutoTuningEnabled;
                 
+                // Load configuration values
                 if (mf.autoTuner.Config != null)
                 {
                     nudLearningRate.Value = (decimal)(mf.autoTuner.Config.LearningRate * 100);
                     nudAdaptationSpeed.Value = (decimal)(mf.autoTuner.Config.AdaptationSpeed * 100);
+                    
+                    // Load new enhanced settings
+                    nudMaxSimultaneousAdjustments.Value = mf.autoTuner.Config.MaxSimultaneousAdjustments;
+                    hsbarAccuracyVsSmoothness.Value = (int)(mf.autoTuner.Config.AccuracyVsSmoothness * 100);
+                    lblMaxSimultaneousAdjustments.Text = mf.autoTuner.Config.MaxSimultaneousAdjustments.ToString();
+                    lblAccuracyVsSmoothness.Text = (mf.autoTuner.Config.AccuracyVsSmoothness * 100).ToString("F0") + "%";
                 }
             }
         }
@@ -89,6 +101,7 @@ namespace AgOpenGPS
                 lblOvershoot.Text = (mf.autoTuner.GetOvershootLevel() * 100).ToString("F1") + "%";
                 lblPerformanceScore.Text = mf.autoTuner.GetCurrentPerformanceScore().ToString("F2");
                 
+                // Update progress bar for performance
                 double score = mf.autoTuner.GetCurrentPerformanceScore();
                 progressPerformance.Value = Math.Min(100, (int)(score * 10));
             }
@@ -125,6 +138,7 @@ namespace AgOpenGPS
                     btnStartLearning.Text = "Stop Learning";
                     btnStartLearning.BackColor = Color.Orange;
                     
+                    // Show message
                     mf.TimedMessageBox(3000, "Auto-Tuning Activated", 
                         "The system will automatically tune steering parameters.");
                 }
@@ -208,6 +222,24 @@ namespace AgOpenGPS
                 mf.autoTuner.LoadConfig();
                 LoadCurrentSettings();
                 mf.TimedMessageBox(2000, "Loaded", "Auto-tuning configuration loaded.");
+            }
+        }
+        
+        private void nudMaxSimultaneousAdjustments_ValueChanged(object sender, EventArgs e)
+        {
+            if (mf.autoTuner?.Config != null)
+            {
+                mf.autoTuner.Config.MaxSimultaneousAdjustments = (int)nudMaxSimultaneousAdjustments.Value;
+                lblMaxSimultaneousAdjustments.Text = nudMaxSimultaneousAdjustments.Value.ToString();
+            }
+        }
+        
+        private void hsbarAccuracyVsSmoothness_ValueChanged(object sender, EventArgs e)
+        {
+            if (mf.autoTuner?.Config != null)
+            {
+                mf.autoTuner.Config.AccuracyVsSmoothness = hsbarAccuracyVsSmoothness.Value / 100.0;
+                lblAccuracyVsSmoothness.Text = hsbarAccuracyVsSmoothness.Value.ToString() + "%";
             }
         }
     }
