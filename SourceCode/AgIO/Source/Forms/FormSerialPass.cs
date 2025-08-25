@@ -2,6 +2,7 @@
 using System.IO.Ports;
 using System.Windows.Forms;
 using AgLibrary.Logging;
+using AgOpenGPS.Core.Translations;
 
 namespace AgIO
 {
@@ -112,7 +113,7 @@ namespace AgIO
             }
             catch (Exception ex)
             {
-                mf.TimedMessageBox(3000, "Error opening port", ex.Message);
+                mf.TimedMessageBox(3000, gStr.gsAgIOErrorOpeningPort, ex.Message);
                 Log.EventWriter("Catch - > Error opening port" + ex.ToString());
             }
         }

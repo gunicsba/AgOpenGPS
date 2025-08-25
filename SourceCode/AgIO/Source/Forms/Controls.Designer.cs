@@ -1,5 +1,6 @@
 ﻿using AgIO.Properties;
 using AgLibrary.Logging;
+using AgOpenGPS.Core.Translations;
 using System;
 using System.Diagnostics;
 using System.IO;
@@ -83,7 +84,7 @@ namespace AgIO
             }
             else
             {
-                TimedMessageBox(2000, "Turn on NTRIP", "NTRIP Client Not Set Up");
+                TimedMessageBox(2000, gStr.gsAgIOTurnOnNTRIP, gStr.gsAgIONTRIPClientNotSetUp);
             }
         }
 
@@ -120,7 +121,7 @@ namespace AgIO
         {
             if (RegistrySettings.profileName == "")
             {
-                TimedMessageBox(3000, "Using Default Profile", "Choose Existing or Create New Profile");
+                TimedMessageBox(3000, gStr.gsAgIOUsingDefaultProfile, gStr.gsAgIOChooseExistingOrCreateNewProfile);
                 return;
             }
             if (!Settings.Default.setUDP_isOn) SettingsEthernet();
@@ -136,7 +137,7 @@ namespace AgIO
         {
             if (RegistrySettings.profileName == "")
             {
-                TimedMessageBox(3000, "Using Default Profile", "Choose Existing or Create New Profile");
+                TimedMessageBox(3000, gStr.gsAgIOUsingDefaultProfile, gStr.gsAgIOChooseExistingOrCreateNewProfile);
                 return;
             }
 
@@ -152,7 +153,7 @@ namespace AgIO
         {
             if (RegistrySettings.profileName == "")
             {
-                TimedMessageBox(3000, "Using Default Profile", "Choose Existing or Create New Profile");
+                TimedMessageBox(3000, gStr.gsAgIOUsingDefaultProfile, gStr.gsAgIOChooseExistingOrCreateNewProfile);
                 return;
             }
 
@@ -251,7 +252,7 @@ namespace AgIO
                 }
                 catch
                 {
-                    TimedMessageBox(2000, "No File Found", "Can't Find AgDiag");
+                    TimedMessageBox(2000, gStr.gsAgIONoFileFound, gStr.gsAgIOCantFindAgDiag);
                     Log.EventWriter("Catch -> Failed to load AgDiag - Not Found");
                 }
             }
@@ -272,19 +273,19 @@ namespace AgIO
         {
             if (RegistrySettings.profileName == "")
             {
-                TimedMessageBox(3000, "Using Default Profile", "Choose Existing or Create New Profile");
+                TimedMessageBox(3000, gStr.gsAgIOUsingDefaultProfile, gStr.gsAgIOChooseExistingOrCreateNewProfile);
                 return;
             }
 
             if (isRadio_RequiredOn)
             {
-                TimedMessageBox(2000, "Radio NTRIP ON", "Turn it off before using Serial Pass Thru");
+                TimedMessageBox(2000, gStr.gsAgIORadioNTRIPON, gStr.gsAgIOTurnItOffBeforeUsingSerialPassThru);
                 return;
             }
 
             if (isNTRIP_RequiredOn)
             {
-                TimedMessageBox(2000, "Air NTRIP ON", "Turn it off before using Serial Pass Thru");
+                TimedMessageBox(2000, gStr.gsAgIOAirNTRIPON, gStr.gsAgIOTurnItOffBeforeUsingSerialPassThru);
                 return;
             }
 
@@ -304,7 +305,7 @@ namespace AgIO
         {
             if (RegistrySettings.profileName == "")
             {
-                TimedMessageBox(3000, "AgIO Default Profile Used", "Create or Choose a Profile");
+                TimedMessageBox(3000, gStr.gsAgIODefaultProfileUsed, gStr.gsAgIOCreateOrChooseAProfile);
             }
 
             using (var form = new FormProfiles(this))
@@ -338,7 +339,7 @@ namespace AgIO
                 }
                 catch
                 {
-                    TimedMessageBox(2000, "No File Found", "Can't Find Simulator");
+                    TimedMessageBox(2000, gStr.gsAgIONoFileFound, gStr.gsAgIOCantFindSimulator);
                     Log.EventWriter("Catch -> Failed to load ModSim - Not Found");
                 }
             }
@@ -411,13 +412,13 @@ namespace AgIO
         {
             if (isRadio_RequiredOn)
             {
-                TimedMessageBox(2000, "Radio NTRIP ON", "Turn it off before using NTRIP");
+                TimedMessageBox(2000, gStr.gsAgIORadioNTRIPON, gStr.gsAgIOTurnItOffBeforeUsingNTRIP);
                 return;
             }
 
             if (isSerialPass_RequiredOn)
             {
-                TimedMessageBox(2000, "Serial NTRIP ON", "Turn it off before using NTRIP");
+                TimedMessageBox(2000, gStr.gsAgIOSerialNTRIPON, gStr.gsAgIOTurnItOffBeforeUsingNTRIP);
                 return;
             }
 
@@ -439,13 +440,13 @@ namespace AgIO
         {
             if (isSerialPass_RequiredOn)
             {
-                TimedMessageBox(2000, "Serial Pass NTRIP ON", "Turn it off before using Radio NTRIP");
+                TimedMessageBox(2000, gStr.gsAgIOSerialPassNTRIPON, gStr.gsAgIOTurnItOffBeforeUsingRadioNTRIP);
                 return;
             }
 
             if (isNTRIP_RequiredOn)
             {
-                TimedMessageBox(2000, "Air NTRIP ON", "Turn it off before using Radio NTRIP");
+                TimedMessageBox(2000, gStr.gsAgIOAirNTRIPON, gStr.gsAgIOTurnItOffBeforeUsingRadioNTRIP);
                 return;
             }
 
@@ -491,7 +492,7 @@ namespace AgIO
                 }
                 catch
                 {
-                    TimedMessageBox(2000, "No File Found", "Can't Find AgOpenGPS");
+                    TimedMessageBox(2000, gStr.gsAgIONoFileFound, gStr.gsAgIOCantFindAgOpenGPS);
                     Log.EventWriter("Can't Find AgOpenGPS - File Not Found");
                 }
             }
@@ -520,7 +521,7 @@ namespace AgIO
                 }
                 catch
                 {
-                    TimedMessageBox(2000, "No File Found", "Can't Find GPS_Out");
+                    TimedMessageBox(2000, gStr.gsAgIONoFileFound, gStr.gsAgIOCantFindGPSOut);
                     Log.EventWriter("No File Found, Can't Find GPS_Out");
                 }
             }

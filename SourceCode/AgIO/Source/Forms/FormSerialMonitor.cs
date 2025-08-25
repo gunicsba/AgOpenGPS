@@ -5,6 +5,7 @@ using System.IO.Ports;
 using System.Windows.Forms;
 using System.Windows.Threading;
 using AgLibrary.Logging;
+using AgOpenGPS.Core.Translations;
 
 namespace AgIO
 {
@@ -152,7 +153,7 @@ namespace AgIO
                 cboxPort.Enabled = true;
                 btnCloseSerial.Enabled = false;
                 btnOpenSerial.Enabled = true;
-                MessageBox.Show("Unable to connect to Port");
+                MessageBox.Show(gStr.gsAgIOUnableToConnectToPort);
             }
         }
 
@@ -215,7 +216,7 @@ namespace AgIO
                 writer.Write(textBoxRcv.Text);
             }
 
-            mf.TimedMessageBox(2000, "File Saved", "To zAgIO_SerialMon_Log.Txt");
+            mf.TimedMessageBox(2000, gStr.gsAgIOFileSaved, gStr.gsAgIOToSerialMonLogTxt);
         }
 
         private void FormSerialMonitor_FormClosing(object sender, FormClosingEventArgs e)

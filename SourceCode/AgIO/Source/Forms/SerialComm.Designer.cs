@@ -6,6 +6,7 @@ using System.Windows.Forms;
 using System.Linq;
 using System.Globalization;
 using AgLibrary.Logging;
+using AgOpenGPS.Core.Translations;
 
 namespace AgIO
 {
@@ -124,7 +125,7 @@ namespace AgIO
             {
                 Log.EventWriter("No Arduino Port, IMU Port Exc: " + ex.ToString());
 
-                MessageBox.Show(ex.Message + "\n\r" + "\n\r" + "Go to Settings -> COM Ports to Fix", "No Arduino Port Active");
+                MessageBox.Show(ex.Message + "\n\r" + "\n\r" + gStr.gsAgIOGoToSettingsCOMPortsToFix, gStr.gsAgIONoArduinoPortActive);
 
 
                 Properties.Settings.Default.setPort_wasIMUConnected = false;

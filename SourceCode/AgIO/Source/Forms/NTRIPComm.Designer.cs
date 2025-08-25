@@ -8,6 +8,7 @@ using System.IO.Ports;
 using System.Collections.Generic;
 using System.Linq;
 using AgLibrary.Logging;
+using AgOpenGPS.Core.Translations;
 
 // Declare the delegate prototype to send data back to the form
 delegate void UpdateRTCM_Data(byte[] data);
@@ -86,7 +87,7 @@ namespace AgIO
             {
                 if (ntripCounter > 29)
                 {
-                    TimedMessageBox(1500, "Connection Problem", "Not Connecting To Caster");
+                    TimedMessageBox(1500, gStr.gsAgIOConnectionProblem, gStr.gsAgIONotConnectingToCaster);
                     ReconnectRequest();
                 }
                 if (clientSocket != null && clientSocket.Connected)

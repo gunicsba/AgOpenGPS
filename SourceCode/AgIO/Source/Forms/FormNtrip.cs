@@ -9,6 +9,7 @@ using System.Threading;
 using System.Windows.Forms;
 using AgIO.Controls;
 using AgLibrary.Logging;
+using AgOpenGPS.Core.Translations;
 
 namespace AgIO
 {
@@ -154,7 +155,7 @@ namespace AgIO
                             break;
                         }
                     }
-                    mf.TimedMessageBox(2500, "IP Located", "Verified: " + actualIP);
+                    mf.TimedMessageBox(2500, gStr.gsAgIOIPLocated, gStr.gsAgIOVerified + actualIP);
                 }
                 else
                 {
@@ -207,7 +208,7 @@ namespace AgIO
             {
                 tboxCasterIP.Text = "127.0.0.1";
                 tboxCasterIP.Focus();
-                mf.TimedMessageBox(2000, "Invalid IP Address", "Set to Default Local 127.0.0.1");
+                mf.TimedMessageBox(2000, gStr.gsAgIOInvalidIPAddress, gStr.gsAgIOSetToDefaultLocal);
             }
         }
 
@@ -249,7 +250,7 @@ namespace AgIO
 
             if (Properties.Settings.Default.setNTRIP_isOn && Properties.Settings.Default.setRadio_isOn)
             {
-                mf.TimedMessageBox(2000, "Radio also enabled", "Disable the Radio NTRIP");
+                mf.TimedMessageBox(2000, gStr.gsAgIORadioAlsoEnabled, gStr.gsAgIODisableTheRadioNTRIP);
                 Properties.Settings.Default.setRadio_isOn = false;
             }
 
@@ -336,14 +337,14 @@ namespace AgIO
             }
             catch (SocketException ex)
             {
-                mf.TimedMessageBox(2000, "Socket Exception", "Invalid IP:Port");
+                mf.TimedMessageBox(2000, gStr.gsAgIOSocketException, gStr.gsAgIOInvalidIPPort);
                 btnGetSourceTable.Enabled = true;
                 Log.EventWriter("Catch -> Socket Exception, Invalid IP:Port" + ex.ToString());
                 return;
             }
             catch (Exception ex)
             {
-                mf.TimedMessageBox(2000, "Exception", "Get Source Table Error");
+                mf.TimedMessageBox(2000, gStr.gsAgIOException, gStr.gsAgIOGetSourceTableError);
                 btnGetSourceTable.Enabled = true;
                 Log.EventWriter("Catch - > Get Source Table Error" + ex.ToString());
                 return;
@@ -359,7 +360,7 @@ namespace AgIO
             }
             else
             {
-                mf.TimedMessageBox(2000, "Error", "No Source Data");
+                mf.TimedMessageBox(2000, gStr.gsAgIOError, gStr.gsAgIONoSourceData);
             }
 
             btnGetSourceTable.Enabled = true;

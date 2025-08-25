@@ -1,5 +1,6 @@
 ﻿using AgIO.Controls;
 using AgIO.Properties;
+using AgOpenGPS.Core.Translations;
 using Microsoft.Win32;
 using System;
 using System.Drawing;
@@ -59,8 +60,8 @@ namespace AgIO
         {
             string newProfile = SanitizeFileName(cboxOverWrite.SelectedItem.ToString()).Trim();
             DialogResult result3 = MessageBox.Show(
-                "Overwrite: " + newProfile + ".xml",
-                "Save And Return",
+                gStr.gsAgIOOverwrite + newProfile + ".xml",
+                gStr.gsAgIOSaveAndReturn,
                 MessageBoxButtons.YesNo,
                 MessageBoxIcon.Question,
                 MessageBoxDefaultButton.Button2);
@@ -107,8 +108,8 @@ namespace AgIO
             }
             else
             {
-                _ = MessageBox.Show("Enter a File Name To Save...",
-                "Save And Return", MessageBoxButtons.OK);
+                _ = MessageBox.Show(gStr.gsAgIOEnterAFileNameToSave,
+                gStr.gsAgIOSaveAndReturn, MessageBoxButtons.OK);
             }
         }
 
@@ -164,8 +165,8 @@ namespace AgIO
             }
             else
             {
-                _ = MessageBox.Show("Enter a File Name To Save...",
-                "Save And Return", MessageBoxButtons.OK);
+                _ = MessageBox.Show(gStr.gsAgIOEnterAFileNameToSave,
+                gStr.gsAgIOSaveAndReturn, MessageBoxButtons.OK);
             }
         }
 

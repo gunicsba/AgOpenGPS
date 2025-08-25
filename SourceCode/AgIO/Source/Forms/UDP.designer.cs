@@ -6,6 +6,7 @@ using System.Net.Sockets;
 using System.Text;
 using System.Windows.Forms;
 using AgLibrary.Logging;
+using AgOpenGPS.Core.Translations;
 
 namespace AgIO
 {
@@ -125,7 +126,7 @@ namespace AgIO
             catch (Exception e)
             {
                 Log.EventWriter("Catch -> Load UDP Server" + e);
-                MessageBox.Show(e.Message, "Serious Network Connection Error",
+                MessageBox.Show(e.Message, gStr.gsAgIOSeriousNetworkConnectionError,
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
                 btnUDP.BackColor = Color.Red;
                 lblIP.Text = "Error";

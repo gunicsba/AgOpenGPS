@@ -6,6 +6,7 @@ using System.Linq;
 using System.Windows.Forms;
 using AgIO.Controls;
 using AgLibrary.Logging;
+using AgOpenGPS.Core.Translations;
 
 namespace AgIO
 {
@@ -84,7 +85,7 @@ namespace AgIO
         {
             if (cboxIsRadioOn.Checked && lvChannels.SelectedItems.Count == 0)
             {
-                mf.TimedMessageBox(2000, "No channel", "Radio is set to on. But no channel is selected");
+                mf.TimedMessageBox(2000, gStr.gsAgIONoChannel, gStr.gsAgIORadioIsSetToOnButNoChannelSelected);
                 // Cancel close
                 DialogResult = DialogResult.None;
                 return;
@@ -102,7 +103,7 @@ namespace AgIO
 
             if (Properties.Settings.Default.setRadio_isOn && Properties.Settings.Default.setNTRIP_isOn)
             {
-                mf.TimedMessageBox(2000, "NTRIP also enabled", "NTRIP is also enabled, diabling it");
+                mf.TimedMessageBox(2000, gStr.gsAgIONTRIPAlsoEnabled, gStr.gsAgIONTRIPIsAlsoEnabledDisablingIt);
                 Properties.Settings.Default.setNTRIP_isOn = false;
             }
 
@@ -155,7 +156,7 @@ namespace AgIO
             }
             catch (Exception ex)
             {
-                mf.TimedMessageBox(3000, "Error opening port", ex.Message);
+                mf.TimedMessageBox(3000, gStr.gsAgIOError, ex.Message);
                 Log.EventWriter("Catch - > Error opening Radio port" + ex.ToString());
             }
 

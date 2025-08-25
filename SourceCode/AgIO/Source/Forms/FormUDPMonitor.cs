@@ -2,6 +2,7 @@
 using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
+using AgOpenGPS.Core.Translations;
 
 namespace AgIO
 {
@@ -62,7 +63,7 @@ namespace AgIO
                 writer.Write(textBoxRcv.Text);
             }
 
-            mf.TimedMessageBox(2000, "File Saved", "To zAgIO_UDP_Log.Txt");
+            mf.TimedMessageBox(2000, gStr.gsAgIOFileSaved, gStr.gsAgIOToUDPLogTxt);
         }
 
         private void FormUDPMonitor_FormClosing(object sender, FormClosingEventArgs e)

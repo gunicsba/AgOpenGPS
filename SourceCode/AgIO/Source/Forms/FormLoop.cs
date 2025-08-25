@@ -1,5 +1,6 @@
 ﻿using AgIO.Properties;
 using AgLibrary.Logging;
+using AgOpenGPS.Core.Translations;
 using Microsoft.Win32;
 using System;
 using System.Diagnostics;
@@ -229,7 +230,7 @@ namespace AgIO
                 catch (Exception ex)
                 {
                     Log.EventWriter(ex.ToString());
-                    TimedMessageBox(1500, "URL Not Located, Network Down?", "Cannot Find: " + Properties.Settings.Default.setNTRIP_casterURL);
+                    TimedMessageBox(1500, gStr.gsAgIOURLNotLocatedNetworkDown, gStr.gsAgIOCannotFind + Properties.Settings.Default.setNTRIP_casterURL);
                     //if we had a timer already, kill it
                     tmr?.Dispose();
 

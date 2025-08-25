@@ -1245,4 +1245,178 @@ USE AT OWN RISK.</value>
   <data name="v_AboutIntro" xml:space="preserve">
     <value>https://www.youtube.com/watch?v=iN2cZ8avHag</value>
   </data>
+  <data name="gsAgIOTurnOnNTRIP" xml:space="preserve">
+    <value>Turn on NTRIP</value>
+  </data>
+  <data name="gsAgIONTRIPClientNotSetUp" xml:space="preserve">
+    <value>NTRIP Client Not Set Up</value>
+  </data>
+  <data name="gsAgIOUsingDefaultProfile" xml:space="preserve">
+    <value>Using Default Profile</value>
+  </data>
+  <data name="gsAgIOChooseExistingOrCreateNewProfile" xml:space="preserve">
+    <value>Choose Existing or Create New Profile</value>
+  </data>
+  <data name="gsAgIONoFileFound" xml:space="preserve">
+    <value>No File Found</value>
+  </data>
+  <data name="gsAgIOCantFindAgDiag" xml:space="preserve">
+    <value>Can't Find AgDiag</value>
+  </data>
+  <data name="gsAgIORadioNTRIPON" xml:space="preserve">
+    <value>Radio NTRIP ON</value>
+  </data>
+  <data name="gsAgIOTurnItOffBeforeUsingSerialPassThru" xml:space="preserve">
+    <value>Turn it off before using Serial Pass Thru</value>
+  </data>
+  <data name="gsAgIOAirNTRIPON" xml:space="preserve">
+    <value>Air NTRIP ON</value>
+  </data>
+  <data name="gsAgIODefaultProfileUsed" xml:space="preserve">
+    <value>AgIO Default Profile Used</value>
+  </data>
+  <data name="gsAgIOCreateOrChooseAProfile" xml:space="preserve">
+    <value>Create or Choose a Profile</value>
+  </data>
+  <data name="gsAgIOCantFindSimulator" xml:space="preserve">
+    <value>Can't Find Simulator</value>
+  </data>
+  <data name="gsAgIOTurnItOffBeforeUsingNTRIP" xml:space="preserve">
+    <value>Turn it off before using NTRIP</value>
+  </data>
+  <data name="gsAgIOSerialNTRIPON" xml:space="preserve">
+    <value>Serial NTRIP ON</value>
+  </data>
+  <data name="gsAgIOSerialPassNTRIPON" xml:space="preserve">
+    <value>Serial Pass NTRIP ON</value>
+  </data>
+  <data name="gsAgIOTurnItOffBeforeUsingRadioNTRIP" xml:space="preserve">
+    <value>Turn it off before using Radio NTRIP</value>
+  </data>
+  <data name="gsAgIOCantFindAgOpenGPS" xml:space="preserve">
+    <value>Can't Find AgOpenGPS</value>
+  </data>
+  <data name="gsAgIOCantFindGPSOut" xml:space="preserve">
+    <value>Can't Find GPS_Out</value>
+  </data>
+  <data name="gsAgIOURLNotLocatedNetworkDown" xml:space="preserve">
+    <value>URL Not Located, Network Down?</value>
+  </data>
+  <data name="gsAgIOCannotFind" xml:space="preserve">
+    <value>Cannot Find: </value>
+  </data>
+  <data name="gsAgIOIPLocated" xml:space="preserve">
+    <value>IP Located</value>
+  </data>
+  <data name="gsAgIOVerified" xml:space="preserve">
+    <value>Verified: </value>
+  </data>
+  <data name="gsAgIOInvalidIPAddress" xml:space="preserve">
+    <value>Invalid IP Address</value>
+  </data>
+  <data name="gsAgIOSetToDefaultLocal" xml:space="preserve">
+    <value>Set to Default Local 127.0.0.1</value>
+  </data>
+  <data name="gsAgIORadioAlsoEnabled" xml:space="preserve">
+    <value>Radio also enabled</value>
+  </data>
+  <data name="gsAgIODisableTheRadioNTRIP" xml:space="preserve">
+    <value>Disable the Radio NTRIP</value>
+  </data>
+  <data name="gsAgIOSocketException" xml:space="preserve">
+    <value>Socket Exception</value>
+  </data>
+  <data name="gsAgIOInvalidIPPort" xml:space="preserve">
+    <value>Invalid IP:Port</value>
+  </data>
+  <data name="gsAgIOException" xml:space="preserve">
+    <value>Exception</value>
+  </data>
+  <data name="gsAgIOGetSourceTableError" xml:space="preserve">
+    <value>Get Source Table Error</value>
+  </data>
+  <data name="gsAgIOError" xml:space="preserve">
+    <value>Error</value>
+  </data>
+  <data name="gsAgIONoSourceData" xml:space="preserve">
+    <value>No Source Data</value>
+  </data>
+  <data name="gsAgIONoChannel" xml:space="preserve">
+    <value>No channel</value>
+  </data>
+  <data name="gsAgIORadioIsSetToOnButNoChannelSelected" xml:space="preserve">
+    <value>Radio is set to on. But no channel is selected</value>
+  </data>
+  <data name="gsAgIOConnectionProblem" xml:space="preserve">
+    <value>Connection Problem</value>
+  </data>
+  <data name="gsAgIONotConnectingToCaster" xml:space="preserve">
+    <value>Not Connecting To Caster</value>
+  </data>
+  <data name="gsAgIOFileSaved" xml:space="preserve">
+    <value>File Saved</value>
+  </data>
+  <data name="gsAgIOToSerialMonLogTxt" xml:space="preserve">
+    <value>To zAgIO_SerialMon_Log.Txt</value>
+  </data>
+  <data name="gsAgIOToUDPLogTxt" xml:space="preserve">
+    <value>To zAgIO_UDP_Log.Txt</value>
+  </data>
+  <data name="gsAgIONTRIPAlsoEnabled" xml:space="preserve">
+    <value>NTRIP also enabled</value>
+  </data>
+  <data name="gsAgIONTRIPIsAlsoEnabledDisablingIt" xml:space="preserve">
+    <value>NTRIP is also enabled, diabling it</value>
+  </data>
+  <data name="gsAgIOErrorOpeningPort" xml:space="preserve">
+    <value>Error opening port</value>
+  </data>
+  <data name="gsAgIOUnableToConnectToPort" xml:space="preserve">
+    <value>Unable to connect to Port</value>
+  </data>
+  <data name="gsAgIOGoToSettingsCOMPortsToFix" xml:space="preserve">
+    <value>Go to Settings -> COM Ports to Fix</value>
+  </data>
+  <data name="gsAgIONoArduinoPortActive" xml:space="preserve">
+    <value>No Arduino Port Active</value>
+  </data>
+  <data name="gsAgIOConnectionAlreadyTerminated" xml:space="preserve">
+    <value>Connection already terminated??</value>
+  </data>
+  <data name="gsAgIOSeriousNetworkConnectionError" xml:space="preserve">
+    <value>Serious Network Connection Error</value>
+  </data>
+  <data name="gsAgIOOverwrite" xml:space="preserve">
+    <value>Overwrite: </value>
+  </data>
+  <data name="gsAgIOSaveAndReturn" xml:space="preserve">
+    <value>Save And Return</value>
+  </data>
+  <data name="gsAgIOEnterAFileNameToSave" xml:space="preserve">
+    <value>Enter a File Name To Save...</value>
+  </data>
+  <data name="gsAgIOCantDeleteTheRegistrySubKeyTree" xml:space="preserve">
+    <value>Can't delete the Registery SubKeyTree</value>
+  </data>
+  <data name="gsAgIOCriticalRegistryError" xml:space="preserve">
+    <value>Critical Registry Error</value>
+  </data>
+  <data name="gsAgIOInvalidId" xml:space="preserve">
+    <value>Invalid Id</value>
+  </data>
+  <data name="gsAgIOIdIsNotAValidNumber" xml:space="preserve">
+    <value>is not a valid number</value>
+  </data>
+  <data name="gsAgIOInvalidName" xml:space="preserve">
+    <value>Invalid Name</value>
+  </data>
+  <data name="gsAgIONameIsNotFilledIn" xml:space="preserve">
+    <value>Name is not filled in</value>
+  </data>
+  <data name="gsAgIOInvalidFrequency" xml:space="preserve">
+    <value>Invalid Frequency</value>
+  </data>
+  <data name="gsAgIOFrequencyIsNotFilledIn" xml:space="preserve">
+    <value>Frequency is not filled in</value>
+  </data>
 </root>

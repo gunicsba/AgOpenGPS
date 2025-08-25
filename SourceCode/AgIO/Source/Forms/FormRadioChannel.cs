@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
 using AgIO.Controls;
+using AgOpenGPS.Core.Translations;
 
 namespace AgIO
 {
@@ -41,21 +42,21 @@ namespace AgIO
         {
             if (!int.TryParse(tbId.Text, out int channelId))
             {
-                mf.TimedMessageBox(2000, "Invalid Id", $"Id '{tbId.Text}' is not a valid number");
+                mf.TimedMessageBox(2000, gStr.gsAgIOInvalidId, $"Id '{tbId.Text}' " + gStr.gsAgIOIdIsNotAValidNumber);
                 DialogResult = DialogResult.None;
                 return;
             }
 
             if (string.IsNullOrEmpty(tbName.Text))
             {
-                mf.TimedMessageBox(2000, "Invalid Name", $"Name is not filled in");
+                mf.TimedMessageBox(2000, gStr.gsAgIOInvalidName, gStr.gsAgIONameIsNotFilledIn);
                 DialogResult = DialogResult.None;
                 return;
             }
 
             if (string.IsNullOrEmpty(tbFrequency.Text))
             {
-                mf.TimedMessageBox(2000, "Invalid Frequency", $"Frequency is not filled in");
+                mf.TimedMessageBox(2000, gStr.gsAgIOInvalidFrequency, gStr.gsAgIOFrequencyIsNotFilledIn);
                 DialogResult = DialogResult.None;
                 return;
             }

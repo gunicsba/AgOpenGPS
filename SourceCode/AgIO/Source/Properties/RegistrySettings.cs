@@ -1,5 +1,6 @@
 ﻿using AgIO.Properties;
 using AgLibrary.Logging;
+using AgOpenGPS.Core.Translations;
 using Microsoft.Win32;
 using System;
 using System.Configuration;
@@ -109,8 +110,8 @@ namespace AgIO
 
                 Log.FileSaveSystemEvents();
 
-                MessageBox.Show("Can't delete the Registery SubKeyTree",
-                "Critical Registry Error",
+                MessageBox.Show(gStr.gsAgIOCantDeleteTheRegistrySubKeyTree,
+                gStr.gsAgIOCriticalRegistryError,
                 MessageBoxButtons.OK,
                 MessageBoxIcon.Error);
                 Environment.Exit(0);
