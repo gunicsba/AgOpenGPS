@@ -1,4 +1,4 @@
-﻿namespace AgOpenGPS
+﻿﻿﻿﻿﻿﻿namespace AgOpenGPS
 {
     partial class FormSteer
     {
@@ -241,6 +241,8 @@
             this.button2 = new System.Windows.Forms.Button();
             this.pboxSendSteer = new System.Windows.Forms.PictureBox();
             this.btnSendSteerConfigPGN = new System.Windows.Forms.Button();
+            this.btnAutoTuning = new System.Windows.Forms.Button();
+            this.labelAutoTuning = new System.Windows.Forms.Label();
             this.btnClose = new System.Windows.Forms.Button();
             this.tabControl1.SuspendLayout();
             this.tabPP.SuspendLayout();
@@ -644,6 +646,7 @@
             this.hsbarHoldLookAhead.Size = new System.Drawing.Size(264, 30);
             this.hsbarHoldLookAhead.TabIndex = 354;
             this.hsbarHoldLookAhead.Value = 25;
+
             this.hsbarHoldLookAhead.ValueChanged += new System.EventHandler(this.hsbarHoldLookAhead_ValueChanged);
             // 
             // hsbarIntegralPurePursuit
@@ -3284,6 +3287,32 @@
             this.btnSendSteerConfigPGN.UseVisualStyleBackColor = false;
             this.btnSendSteerConfigPGN.Click += new System.EventHandler(this.btnSendSteerConfigPGN_Click);
             // 
+            // btnAutoTuning
+            // 
+            this.btnAutoTuning.BackColor = System.Drawing.Color.LightGreen;
+            this.btnAutoTuning.FlatAppearance.BorderColor = System.Drawing.Color.Black;
+            this.btnAutoTuning.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnAutoTuning.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Bold);
+            this.btnAutoTuning.ForeColor = System.Drawing.Color.Black;
+            this.btnAutoTuning.Location = new System.Drawing.Point(474, 554);
+            this.btnAutoTuning.Name = "btnAutoTuning";
+            this.btnAutoTuning.Size = new System.Drawing.Size(75, 69);
+            this.btnAutoTuning.TabIndex = 531;
+            this.btnAutoTuning.Text = "Manual";
+            this.btnAutoTuning.UseVisualStyleBackColor = false;
+            this.btnAutoTuning.Click += new System.EventHandler(this.btnAutoTuning_Click);
+            // 
+            // labelAutoTuning
+            // 
+            this.labelAutoTuning.BackColor = System.Drawing.Color.Transparent;
+            this.labelAutoTuning.Font = new System.Drawing.Font("Tahoma", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelAutoTuning.ForeColor = System.Drawing.Color.Black;
+            this.labelAutoTuning.Location = new System.Drawing.Point(462, 530);
+            this.labelAutoTuning.Name = "labelAutoTuning";
+            this.labelAutoTuning.Size = new System.Drawing.Size(100, 23);
+            this.labelAutoTuning.TabIndex = 532;
+            this.labelAutoTuning.Text = "Auto Tuning";
+            this.labelAutoTuning.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // btnClose
             // 
             this.btnClose.BackColor = System.Drawing.Color.Transparent;
@@ -3306,6 +3335,8 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.BackColor = System.Drawing.Color.WhiteSmoke;
             this.ClientSize = new System.Drawing.Size(898, 628);
+            this.Controls.Add(this.labelAutoTuning);
+            this.Controls.Add(this.btnAutoTuning);
             this.Controls.Add(this.btnClose);
             this.Controls.Add(this.labelWizard);
             this.Controls.Add(this.btnSteerWizard);
@@ -3590,6 +3621,8 @@
         private System.Windows.Forms.Label labelAquire;
         private System.Windows.Forms.Label lblAcquirePP;
         private System.Windows.Forms.Label labelWasZero;
+        private System.Windows.Forms.Button btnAutoTuning;
+        private System.Windows.Forms.Label labelAutoTuning;
         private System.Windows.Forms.Button btnClose;
     }
 }
