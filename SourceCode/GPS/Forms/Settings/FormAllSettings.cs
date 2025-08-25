@@ -38,7 +38,7 @@ namespace AgOpenGPS
             label16.Text = Properties.Settings.Default.setAS_minSteerPWM.ToString();
             label18.Text = Properties.Settings.Default.setAS_Kp.ToString();
             label20.Text = Properties.Settings.Default.setVehicle_panicStopSpeed.ToString();
-           
+
             label22.Text = Properties.Settings.Default.setVehicle_goalPointAcquireFactor.ToString("N2");
             label24.Text = Properties.Settings.Default.setVehicle_goalPointLookAheadHold.ToString();
             label168.Text = Properties.Settings.Default.setVehicle_goalPointLookAheadMult.ToString();
@@ -60,15 +60,15 @@ namespace AgOpenGPS
 
             label60.Text = RegistrySettings.culture;
             label64.Text = Properties.Settings.Default.setF_isRemoteWorkSystemOn.ToString();
-            label66.Text = Properties.Settings.Default.setF_isSteerWorkSwitchEnabled.ToString(); 
+            label66.Text = Properties.Settings.Default.setF_isSteerWorkSwitchEnabled.ToString();
             label68.Text = Properties.Settings.Default.setF_isSteerWorkSwitchManualSections.ToString();
             label70.Text = Properties.Settings.Default.setF_isWorkSwitchActiveLow.ToString();
             label72.Text = Properties.Settings.Default.setF_isWorkSwitchEnabled.ToString();
             label74.Text = Properties.Settings.Default.setF_isWorkSwitchManualSections.ToString();
             label76.Text = Properties.Settings.Default.setF_minHeadingStepDistance.ToString();
-            label78.Text = RegistrySettings.vehiclesDirectory + " -> " 
+            label78.Text = RegistrySettings.vehiclesDirectory + " -> "
                     + RegistrySettings.vehicleFileName + ".xml";
-            
+
             label80.Text = Properties.Settings.Default.setGPS_ageAlarm.ToString();
             label82.Text = Properties.Settings.Default.setGPS_dualHeadingOffset.ToString();
             label84.Text = Properties.Settings.Default.setGPS_dualReverseDetectionDistance.ToString();

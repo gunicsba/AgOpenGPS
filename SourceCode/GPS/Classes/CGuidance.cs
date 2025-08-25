@@ -16,11 +16,11 @@ namespace AgOpenGPS
         public double steerAngleGu, rEastSteer, rNorthSteer, rEastPivot, rNorthPivot;
 
         public double inty, xTrackSteerCorrection = 0;
-        public double steerHeadingError, steerHeadingErrorDegrees;
+        public double steerHeadingError;
 
         public double distSteerError, lastDistSteerError, derivativeDistError;
 
-        public double pivotDistanceError, stanleyModeMultiplier;
+        public double pivotDistanceError;
 
         //public int modeTimeCounter = 0;
 

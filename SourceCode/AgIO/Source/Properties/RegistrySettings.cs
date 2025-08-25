@@ -59,7 +59,7 @@ namespace AgIO
                     Log.EventWriter("Registry -> Culture was null and Created");
                 }
                 culture = regKey.GetValue("Language").ToString();
-                
+
                 regKey.Close();
             }
             catch (Exception ex)

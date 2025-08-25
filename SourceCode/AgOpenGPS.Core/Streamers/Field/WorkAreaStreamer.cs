@@ -1,4 +1,5 @@
-﻿using AgOpenGPS.Core.Interfaces;
+﻿using AgLibrary.Logging;
+using AgOpenGPS.Core.Interfaces;
 using AgOpenGPS.Core.Models;
 using System.IO;
 
@@ -7,32 +8,35 @@ namespace AgOpenGPS.Core.Streamers
     public class WorkedAreaStreamer : FieldAspectStreamer
     {
         public WorkedAreaStreamer(
-            ILogger logger
-        )
-            : base(logger, "Sections.txt")
+            IFieldStreamerPresenter presenter
+        ) :
+            base("Sections.txt", presenter)
         {
         }
 
-        public void TryRead(WorkedArea workedArea, string fieldPath)
+        public WorkedArea TryRead(DirectoryInfo fieldDirectory)
         {
-            if (!File.Exists(FullPath(fieldPath)))
+            WorkedArea workedArea = null;
+            if (!File.Exists(FullPath(fieldDirectory)))
             {
                 _presenter.PresentSectionFileMissing();
             }
             try
             {
-                Read(workedArea, fieldPath);
+                workedArea = Read(fieldDirectory);
             }
             catch (System.Exception e)
             {
                 _presenter.PresentSectionFileCorrupt();
-                _logger.LogError("Section file" + e.ToString());
+                Log.EventWriter("Section file" + e.ToString());
             }
+            return workedArea;
         }
 
-        public void Read(WorkedArea workedArea, string fieldPath)
+        public WorkedArea Read(DirectoryInfo fieldDirectory)
         {
-            using (GeoStreamReader reader = new GeoStreamReader(FullPath(fieldPath)))
+            WorkedArea workedArea = new WorkedArea();
+            using (GeoStreamReader reader = new GeoStreamReader(FullPath(fieldDirectory)))
             {
                 //read header
                 while (!reader.EndOfStream)
@@ -50,11 +54,12 @@ namespace AgOpenGPS.Core.Streamers
                     workedArea.AddStrip(strip);
                 }
             }
+            return workedArea;
         }
 
-        public void AppendUnsavedWork(WorkedArea workedArea, string fieldPath)
+        public void AppendUnsavedWork(WorkedArea workedArea, DirectoryInfo fieldDirectory)
         {
-            using (GeoStreamWriter writer = new GeoStreamWriter(FullPath(fieldPath), true))
+            using (GeoStreamWriter writer = new GeoStreamWriter(FullPath(fieldDirectory), true))
             {
                 //for each patch, write out the list of triangles to the file
                 foreach (var quadStrip in workedArea.UnsavedWork)

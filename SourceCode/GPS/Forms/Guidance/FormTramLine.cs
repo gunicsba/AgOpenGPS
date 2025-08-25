@@ -1,4 +1,4 @@
-﻿using AgOpenGPS.Culture;
+﻿using AgOpenGPS.Core.Translations;
 using AgOpenGPS.Helpers;
 using OpenTK;
 using OpenTK.Graphics.OpenGL;
@@ -119,11 +119,10 @@ namespace AgOpenGPS
 
                 mf.tram.displayMode = 0;
             }
-            
+
             mf.FileSaveTram();
             mf.PanelUpdateRightAndBottom();
             mf.FixTramModeButton();
-            
 
             Properties.Settings.Default.setWindow_tramLineSize = Size;
             Properties.Settings.Default.setTram_alpha = mf.tram.alpha;
@@ -142,13 +141,13 @@ namespace AgOpenGPS
                     //default side assuming built in AB Draw - isVisible is used for side to draw
                     gTemp.Add(new CTrk(item));
                     if (item.mode == TrackMode.AB)
-                        gTemp[gTemp.Count-1].isVisible = false;
+                        gTemp[gTemp.Count - 1].isVisible = false;
                     else
                         gTemp[gTemp.Count - 1].isVisible = true;
                 }
             }
 
-            if (gTemp == null || gTemp.Count == 0 )
+            if (gTemp == null || gTemp.Count == 0)
             {
                 mf.YesMessageBox(gStr.gsNoGuidanceLines + "\r\n\r\n  Exiting");
                 isCancel = true;
@@ -260,7 +259,7 @@ namespace AgOpenGPS
             double sideHeading = 0;
             if (gTemp[indx].isVisible) sideHeading = Math.PI;
 
-            for (int i = cntr; i <= (passes + startPass)-1; i++)
+            for (int i = cntr; i <= (passes + startPass) - 1; i++)
             {
                 tramArr = new List<vec2>
                 {
@@ -312,7 +311,7 @@ namespace AgOpenGPS
                 }
             }
 
-            for (int i = cntr; i <= (passes + startPass)-1; i++)
+            for (int i = cntr; i <= (passes + startPass) - 1; i++)
             {
                 tramArr = new List<vec2>
                 {
@@ -373,10 +372,10 @@ namespace AgOpenGPS
             double hsin = Math.Sin(abHeading);
             double hcos = Math.Cos(abHeading);
 
-            gTemp[indx].endPtA.easting = gTemp[indx].ptA.easting -   (Math.Sin(abHeading) * mf.maxFieldDistance);
+            gTemp[indx].endPtA.easting = gTemp[indx].ptA.easting - (Math.Sin(abHeading) * mf.maxFieldDistance);
             gTemp[indx].endPtA.northing = gTemp[indx].ptA.northing - (Math.Cos(abHeading) * mf.maxFieldDistance);
-                                                                                            
-            gTemp[indx].endPtB.easting = gTemp[indx].ptB.easting +   (Math.Sin(abHeading) * mf.maxFieldDistance);
+
+            gTemp[indx].endPtB.easting = gTemp[indx].ptB.easting + (Math.Sin(abHeading) * mf.maxFieldDistance);
             gTemp[indx].endPtB.northing = gTemp[indx].ptB.northing + (Math.Cos(abHeading) * mf.maxFieldDistance);
 
             double len = glm.Distance(gTemp[indx].endPtA, gTemp[indx].endPtB);
@@ -408,7 +407,7 @@ namespace AgOpenGPS
             int cntr = startPass;
 
             double widd;
-            for (int i = cntr; i < passes+startPass; i++)
+            for (int i = cntr; i < passes + startPass; i++)
             {
                 tramArr = new List<vec2>
                 {
@@ -503,9 +502,9 @@ namespace AgOpenGPS
             {
                 ptCut = plotPt;
 
-                bool isLeft = (ptB.easting - ptA.easting) * (ptCut.northing - ptA.northing) 
+                bool isLeft = (ptB.easting - ptA.easting) * (ptCut.northing - ptA.northing)
                     > (ptB.northing - ptA.northing) * (ptCut.easting - ptA.easting);
-                
+
                 bool isIntersect = false;
 
                 if (tramList.Count > 0)
@@ -632,7 +631,7 @@ namespace AgOpenGPS
             GL.End();
 
             GL.Begin(PrimitiveType.Points);
-            GL.Color3(0,1.0, 0);
+            GL.Color3(0, 1.0, 0);
             GL.Vertex3(ptB.easting, ptB.northing, 0);
             GL.End();
 
@@ -846,7 +845,7 @@ namespace AgOpenGPS
             }
 
             FixLabelsCurve();
-            lblStartPass.Text = "Start\r\n"+startPass.ToString();
+            lblStartPass.Text = "Start\r\n" + startPass.ToString();
             lblNumPasses.Text = passes.ToString();
             BuildTram();
         }

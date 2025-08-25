@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace AgOpenGPS
 {
@@ -6,6 +7,8 @@ namespace AgOpenGPS
     {
         //copy of the mainform address
         private readonly FormGPS mf;
+
+
 
         public List<CBoundaryList> bndList = new List<CBoundaryList>();
 

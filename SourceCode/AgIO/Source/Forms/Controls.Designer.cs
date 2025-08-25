@@ -78,7 +78,7 @@ namespace AgIO
                     isRadio_RequiredOn = Properties.Settings.Default.setRadio_isOn;
                     lblWatch.Text = "Waiting";
                     lblNTRIP_IP.Text = "--";
-                    lblMount.Text= "--";
+                    lblMount.Text = "--";
                 }
             }
             else
@@ -234,6 +234,35 @@ namespace AgIO
             ShowSerialMonitor();
         }
 
+        private void toolStripAgDiag_Click(object sender, EventArgs e)
+        {
+            Process[] processName = Process.GetProcessesByName("AgDiag");
+            if (processName.Length == 0)
+            {
+                //Start application here
+                string strPath = Path.Combine(Application.StartupPath, "AgDiag.exe");
+
+                try
+                {
+                    ProcessStartInfo processInfo = new ProcessStartInfo();
+                    processInfo.FileName = strPath;
+                    processInfo.WorkingDirectory = Path.GetDirectoryName(strPath);
+                    Process proc = Process.Start(processInfo);
+                }
+                catch
+                {
+                    TimedMessageBox(2000, "No File Found", "Can't Find AgDiag");
+                    Log.EventWriter("Catch -> Failed to load AgDiag - Not Found");
+                }
+            }
+            else
+            {
+                //Set foreground window
+                ShowWindow(processName[0].MainWindowHandle, 9);
+                SetForegroundWindow(processName[0].MainWindowHandle);
+            }
+        }
+
         private void deviceManagerToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Process.Start("devmgmt.msc");
@@ -266,6 +295,7 @@ namespace AgIO
                     ////Clicked Save
                     //Application.Restart();
                     //Environment.Exit(0);
+                    Settings.Default.Save();
                 }
             }
         }
@@ -283,11 +313,11 @@ namespace AgIO
                 if (form.DialogResult == DialogResult.Yes)
                 {
                     Log.EventWriter("Program Reset: Saving or Selecting Profile");
-                    
+
                     Program.Restart();
                 }
             }
-            this.Text = "AgIO  v" + Program.Version + "   Using Profile: " 
+            this.Text = "AgIO  v" + Program.Version + "   Using Profile: "
                 + RegistrySettings.profileName;
         }
 
@@ -400,6 +430,7 @@ namespace AgIO
                     {
                         SettingsShutDownNTRIP();
                     }
+                    Settings.Default.Save();
                 }
             }
         }
@@ -428,7 +459,10 @@ namespace AgIO
 
             using (var form = new FormRadio(this))
             {
-                form.ShowDialog(this);
+                if (form.ShowDialog(this) == DialogResult.OK)
+                {
+                    Settings.Default.Save();
+                }
             }
         }
 

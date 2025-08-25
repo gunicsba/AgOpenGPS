@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Windows.Forms;
-using AgOpenGPS.Culture;
+using AgOpenGPS.Core.Translations;
 using AgOpenGPS.Helpers;
 
 namespace AgOpenGPS
@@ -10,9 +10,6 @@ namespace AgOpenGPS
         public Form_First(Form callingForm)
         {
             InitializeComponent();
-            
-
-
         }
 
         private void linkLabelGit_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
@@ -27,7 +24,6 @@ namespace AgOpenGPS
 
         private void Form_About_Load(object sender, EventArgs e)
         {
-            
             //translate labels
             labelAgree.Text = gStr.gsAgree;
             labelDisagree.Text = gStr.gsDisagree;
@@ -57,7 +53,7 @@ namespace AgOpenGPS
             }
 
             label1.Text = RegistrySettings.culture + " | " +
-                RegistrySettings.vehiclesDirectory + " -> " + 
+                RegistrySettings.vehiclesDirectory + " -> " +
                 RegistrySettings.vehicleFileName + ".xml";
         }
 
@@ -78,5 +74,5 @@ namespace AgOpenGPS
             Properties.Settings.Default.Save();
             DialogResult = DialogResult.OK;
         }
-    }   
+    }
 }

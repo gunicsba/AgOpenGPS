@@ -1,6 +1,6 @@
 ﻿//Please, if you use this, share the improvements
 
-using AgOpenGPS.Culture;
+using AgOpenGPS.Core.Translations;
 using AgOpenGPS.Helpers;
 using AgOpenGPS.Properties;
 using System;

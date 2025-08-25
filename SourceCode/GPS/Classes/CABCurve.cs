@@ -1,5 +1,5 @@
 ﻿using AgLibrary.Logging;
-using AgOpenGPS.Culture;
+using AgOpenGPS.Core.Translations;
 using OpenTK.Graphics.OpenGL;
 using System;
 using System.Collections.Generic;
@@ -21,7 +21,7 @@ namespace AgOpenGPS
 
         public bool isHeadingSameWay = true, lastIsHeadingSameWay = true;
 
-        public double howManyPathsAway, lastHowManyPathsAway;
+        public int howManyPathsAway, lastHowManyPathsAway;
         public vec2 refPoint1 = new vec2(1, 1), refPoint2 = new vec2(2, 2);
 
         private int A, B, C;
@@ -35,7 +35,7 @@ namespace AgOpenGPS
         public vec2 radiusPointCu = new vec2(0, 0);
         public double steerAngleCu, rEastCu, rNorthCu, ppRadiusCu, manualUturnHeading;
 
-        public bool isSmoothWindowOpen, isLooping;
+        public bool isSmoothWindowOpen;
         public List<vec3> smooList = new List<vec3>();
 
         //the list of points of curve to drive on
@@ -51,7 +51,7 @@ namespace AgOpenGPS
         public List<vec3> desList = new List<vec3>();
         public string desName = "**";
 
-        public double pivotDistanceError, pivotDistanceErrorLast, pivotDerivative, pivotDerivativeSmoothed, lastCurveDistance = 10000;
+        public double pivotDistanceError, pivotDistanceErrorLast, pivotDerivative;
 
         //derivative counters
         private int counter2;
@@ -215,7 +215,7 @@ namespace AgOpenGPS
             }
         }
 
-        
+
         public List<vec3> BuildNewOffsetList(double distAway, CTrk track, CancellationToken ct = default)
         {
             //the list of points of curve new list from async
@@ -509,7 +509,7 @@ namespace AgOpenGPS
             {
                 Log.EventWriter("Exception Build new offset curve" + e.ToString());
             }
-            
+
             return newCurList;
         }
 
@@ -634,7 +634,7 @@ namespace AgOpenGPS
                 // Update based on autosteer settings and distance from line
                 double goalPointDistance = mf.vehicle.UpdateGoalPointDistance();
                 bool ReverseHeading = mf.isReverse ? !isHeadingSameWay : isHeadingSameWay;
-                
+
                 if (mf.yt.isYouTurnTriggered && mf.yt.DistanceFromYouTurnLine())//do the pure pursuit from youTurn
                 {
                     //now substitute what it thinks are AB line values with auto turn values
@@ -751,7 +751,7 @@ namespace AgOpenGPS
                         }
                         else
                         {
-                            A --;
+                            A--;
                             B = A + 1;
                         }
 
@@ -977,12 +977,9 @@ namespace AgOpenGPS
 
                 GL.End();
 
-                if (mf.font.isFontOn)
-                {
-                    GL.Color3(0.40f, 0.90f, 0.95f);
-                    mf.font.DrawText3D(mf.trk.gArr[mf.trk.idx].ptA.easting, mf.trk.gArr[mf.trk.idx].ptA.northing, "&A");
-                    mf.font.DrawText3D(mf.trk.gArr[mf.trk.idx].ptB.easting, mf.trk.gArr[mf.trk.idx].ptB.northing, "&B");
-                }
+                GL.Color3(0.40f, 0.90f, 0.95f);
+                mf.font.DrawText3D(mf.trk.gArr[mf.trk.idx].ptA.easting, mf.trk.gArr[mf.trk.idx].ptA.northing, "&A", mf.camHeading);
+                mf.font.DrawText3D(mf.trk.gArr[mf.trk.idx].ptB.easting, mf.trk.gArr[mf.trk.idx].ptB.northing, "&B", mf.camHeading);
 
                 //just draw ref and smoothed line if smoothing window is open
                 if (isSmoothWindowOpen)
@@ -1000,8 +997,8 @@ namespace AgOpenGPS
             {
                 if (curList.Count > 0)
                 {
-                    GL.LineWidth(mf.ABLine.lineWidth*3);
-                    GL.Color3(0,0,0);
+                    GL.LineWidth(mf.ABLine.lineWidth * 3);
+                    GL.Color3(0, 0, 0);
 
                     //GL.Enable(EnableCap.LineSmooth);
 
@@ -1383,30 +1380,6 @@ namespace AgOpenGPS
                 if (arr[i].heading < 0) arr[i].heading += glm.twoPI;
                 mf.trk.gArr[mf.trk.idx].curvePts.Add(arr[i]);
             }
-        }
-
-        public bool PointOnLine(vec3 pt1, vec3 pt2, vec3 pt)
-        {
-            vec2 r = new vec2(0, 0);
-            if (pt1.northing == pt2.northing && pt1.easting == pt2.easting) { pt1.northing -= 0.00001; }
-
-            double U = ((pt.northing - pt1.northing) * (pt2.northing - pt1.northing)) + ((pt.easting - pt1.easting) * (pt2.easting - pt1.easting));
-
-            double Udenom = Math.Pow(pt2.northing - pt1.northing, 2) + Math.Pow(pt2.easting - pt1.easting, 2);
-
-            U /= Udenom;
-
-            r.northing = pt1.northing + (U * (pt2.northing - pt1.northing));
-            r.easting = pt1.easting + (U * (pt2.easting - pt1.easting));
-
-            double minx, maxx, miny, maxy;
-
-            minx = Math.Min(pt1.northing, pt2.northing);
-            maxx = Math.Max(pt1.northing, pt2.northing);
-
-            miny = Math.Min(pt1.easting, pt2.easting);
-            maxy = Math.Max(pt1.easting, pt2.easting);
-            return _ = r.northing >= minx && r.northing <= maxx && (r.easting >= miny && r.easting <= maxy);
         }
 
         //add extensons

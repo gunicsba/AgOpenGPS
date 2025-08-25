@@ -1,17 +1,21 @@
 ﻿using AgOpenGPS.Core.Models;
 using System.Collections.Generic;
+using System.IO;
 
 namespace AgOpenGPS.Core.Models
 {
     public class Field
     {
 
-        public Field(string name)
+        // Read a Field from an already existing directory
+        public Field(DirectoryInfo fieldDirectory)
         {
-            Name = name;
+            FieldDirectory = fieldDirectory;
         }
 
-        public string Name { get; }
+        public DirectoryInfo FieldDirectory { get; }
+
+        public string Name => FieldDirectory.Name;
         public BackgroundPicture BackgroundPicture { get; set; }
         public Boundary Boundary { get; set; }
         public Contour Contour { get; set; }

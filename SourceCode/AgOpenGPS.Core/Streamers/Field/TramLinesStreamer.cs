@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using AgLibrary.Logging;
 using AgOpenGPS.Core.Interfaces;
 using AgOpenGPS.Core.Models;
 
@@ -8,29 +9,30 @@ namespace AgOpenGPS.Core.Streamers
     public class TramLinesStreamer : FieldAspectStreamer
     {
         public TramLinesStreamer(
-            ILogger logger
-        ) : base(logger, "Tram.txt")
+            IFieldStreamerPresenter presenter
+        ) :
+            base("Tram.txt", presenter)
         {
         }
 
-        public TramLines TryRead(string fieldPath)
+        public TramLines TryRead(DirectoryInfo fieldDirectory)
         {
             TramLines tramLines = null;
             try
             {
-                tramLines = Read(fieldPath);
+                tramLines = Read(fieldDirectory);
             }
             catch (Exception e)
             {
                 _presenter.PresentTramLinesFileCorrupt();
-                _logger.LogError("Load Boundary Line" + e.ToString());
+                Log.EventWriter("Load Boundary Line" + e.ToString());
             }
             return tramLines;
         }
 
-        public TramLines Read(string fieldPath)
+        public TramLines Read(DirectoryInfo fieldDirectory)
         {
-            string fullPath = FullPath(fieldPath);
+            string fullPath = FullPath(fieldDirectory);
             if (!File.Exists(fullPath))
             {
                 return null;
@@ -58,11 +60,10 @@ namespace AgOpenGPS.Core.Streamers
             return tramLines;
         }
 
-        public void Write(TramLines tramLines, string fieldPath)
+        public void Write(TramLines tramLines, DirectoryInfo fieldDirectory)
         {
-            CreateDirectory(fieldPath);
-
-            using (GeoStreamWriter writer = new GeoStreamWriter(FullPath(fieldPath)))
+            fieldDirectory.Create();
+            using (GeoStreamWriter writer = new GeoStreamWriter(FullPath(fieldDirectory)))
             {
                 writer.WriteLine("$Tram");
                 if (null != tramLines)

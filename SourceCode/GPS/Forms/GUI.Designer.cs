@@ -1,7 +1,7 @@
 ﻿﻿//Please, if you use this, share the improvements
 
 using AgLibrary.Logging;
-using AgOpenGPS.Culture;
+using AgOpenGPS.Core.Translations;
 using AgOpenGPS.Helpers;
 using AgOpenGPS.Properties;
 using System;
@@ -12,12 +12,10 @@ using System.Globalization;
 using System.IO;
 using System.Windows.Forms;
 using AgOpenGPS.Core.Models;
+using AgOpenGPS.Core.Drawing;
 
 namespace AgOpenGPS
 {
-    public enum TractorBrand { AGOpenGPS, Case, Claas, Deutz, Fendt, JDeere, Kubota, Massey, NewHolland, Same, Steyr, Ursus, Valtra, JCB }
-    public enum HarvesterBrand { AgOpenGPS, Case, Claas, JDeere, NewHolland }
-    public enum ArticulatedBrand { AgOpenGPS, Case, Challenger, JDeere, NewHolland, Holder }
 
     public partial class FormGPS
     {
@@ -41,20 +39,21 @@ namespace AgOpenGPS
         public Color sectionColorDay;
         public Color fieldColorDay;
         public Color fieldColorNight;
+        public ColorRgb fieldColor => (ColorRgb)(isDay ? fieldColorDay : fieldColorNight);
+        public ColorRgb worldGridColor => (ColorRgb)(isDay ? Colors.WorldGridDayColor : Colors.WorldGridNightColor);
 
         public Color textColorDay;
         public Color textColorNight;
 
-        public bool isVehicleImage;
-
         //Is it in 2D or 3D, metric or imperial, display lightbar, display grid etc
-        public bool isMetric = true, isLightbarOn = true, isGridOn, isFullScreen;
-        public bool isUTurnAlwaysOn, isCompassOn, isSpeedoOn, isSideGuideLines = true;
+        public bool isLightbarOn = true, isGridOn, isFullScreen;
+        public bool isUTurnAlwaysOn, isSpeedoOn, isSideGuideLines = true;
         public bool isPureDisplayOn = true, isSkyOn = true, isRollMeterOn = false, isTextureOn = true;
-        public bool isDay = true, isDayTime = true, isBrightnessOn = true;
+        public bool isDayTime = true, isBrightnessOn = true;
         public bool isLogElevation = false, isDirectionMarkers;
         public bool isKeyboardOn = true, isAutoStartAgIO = true, isSvennArrowOn = true;
         public bool isSectionlinesOn = true, isLineSmooth = true;
+        public bool isHeadlandDistanceOn;
 
         public bool isLightBarNotSteerBar = false;
 
@@ -204,7 +203,7 @@ namespace AgOpenGPS
                             break;
                     }
 
-                    if (tram.displayMode == 0) 
+                    if (tram.displayMode == 0)
                         tram.isRightManualOn = tram.isLeftManualOn = false;
                 }
                 else
@@ -214,23 +213,20 @@ namespace AgOpenGPS
                         case 0:
                             lblCurrentField.Text = (tool.width * m2FtOrM).ToString("N2") + unitsFtM + " - " + RegistrySettings.vehicleFileName;
                             break;
-
                         case 1:
                             lblCurrentField.Text = DateTime.Now.ToString("dddd, dd MMMM yyyy HH:mm:ss ");
                             break;
-
                         case 2:
-                            lblCurrentField.Text = "Lat: " + pn.latitude.ToString("N7") + "   Lon: " + pn.longitude.ToString("N7");
+                            lblCurrentField.Text = "Lat: " +
+                                AppModel.CurrentLatLon.Latitude.ToString("N7") + "   Lon: " +
+                                AppModel.CurrentLatLon.Longitude.ToString("N7");
                             break;
-
                         case 3:
-                            lblCurrentField.Text = DateTime.Now.ToString("dddd, dd MMMM yyyy HH:mm:ss ");                            
+                            lblCurrentField.Text = DateTime.Now.ToString("dddd, dd MMMM yyyy HH:mm:ss ");
                             break;
-
                         case 4:
                             lblCurrentField.Text = "";
                             break;
-
                         default:
                             break;
                     }
@@ -295,7 +291,7 @@ namespace AgOpenGPS
                         break;
                     case 2:
                         btnGPSData.BackColor = Color.Yellow;
-                        break;                               
+                        break;
                     default:
                         btnGPSData.BackColor = Color.Red;
                         break;
@@ -330,12 +326,14 @@ namespace AgOpenGPS
                 //reset the counter
                 oneHalfSecondCounter = 0;
 
+                bnd.CheckHeadlandProximity();
+
                 isFlashOnOff = !isFlashOnOff;
 
                 //the main formgps windows
 
                 //Make sure it is off when it should
-                if (!ct.isContourBtnOn && trk.idx == -1 && isBtnAutoSteerOn) 
+                if (!ct.isContourBtnOn && trk.idx == -1 && isBtnAutoSteerOn)
                 {
                     btnAutoSteer.PerformClick();
                     TimedMessageBox(2000, gStr.gsGuidanceStopped, gStr.gsNoGuidanceLines);
@@ -518,7 +516,6 @@ namespace AgOpenGPS
             isGridOn = Settings.Default.setMenu_isGridOn;
             isBrightnessOn = Settings.Default.setDisplay_isBrightnessOn;
 
-            isCompassOn = Settings.Default.setMenu_isCompassOn;
             isSpeedoOn = Settings.Default.setMenu_isSpeedoOn;
             isSideGuideLines = Settings.Default.setMenu_isSideGuideLines;
             isSvennArrowOn = Settings.Default.setDisplay_isSvennArrowOn;
@@ -529,11 +526,13 @@ namespace AgOpenGPS
 
             isDirectionMarkers = Settings.Default.setTool_isDirectionMarkers;
 
+            isHeadlandDistanceOn = Settings.Default.isHeadlandDistanceOn;
+
             panelNavigation.Location = new System.Drawing.Point(90, 100);
             panelDrag.Location = new System.Drawing.Point(87, 268);
 
             vehicle.VehicleConfig.Opacity = ((double)(Properties.Settings.Default.setDisplay_vehicleOpacity) * 0.01);
-            isVehicleImage = Properties.Settings.Default.setDisplay_isVehicleImage;
+            vehicle.VehicleConfig.IsImage = Properties.Settings.Default.setDisplay_isVehicleImage;
 
             string directoryName = Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location);
 
@@ -608,6 +607,11 @@ namespace AgOpenGPS
             gyd.sideHillCompFactor = Properties.Settings.Default.setAS_sideHillComp;
 
             ahrs = new CAHRS();
+
+            // invalidate curve/ab line to force recalculation in case dependent settings were chagned,
+            // for example, change of tool offset or tool width
+            curve.isCurveValid = false;
+            ABLine.isABValid = false;
 
             fd.UpdateFieldBoundaryGUIAreas();
 
@@ -748,7 +752,7 @@ namespace AgOpenGPS
             PanelsAndOGLSize();
             PanelUpdateRightAndBottom();
 
-            camera.camSetDistance = camera.zoomValue * camera.zoomValue * -1;
+            camera.DistanceToLookAt = 0.5 * camera.ZoomValue * camera.ZoomValue;
             SetZoom();
 
             lblGuidanceLine.BringToFront();
@@ -827,7 +831,7 @@ namespace AgOpenGPS
                 if (trk.idx > -1 && trk.gArr.Count > 0 && !ct.isContourBtnOn)
                 {
                     lblNumCu.Visible = true;
-                    lblNumCu.Text = (trk.idx+1).ToString() + "/" + trk.gArr.Count.ToString();
+                    lblNumCu.Text = (trk.idx + 1).ToString() + "/" + trk.gArr.Count.ToString();
                 }
                 else
                 {
@@ -999,27 +1003,6 @@ namespace AgOpenGPS
             }
         }
 
-        private void ZoomByMouseWheel(object sender, MouseEventArgs e)
-        {
-            if (e.Delta < 0)
-            {
-                if (camera.zoomValue <= 20) camera.zoomValue += camera.zoomValue * 0.06;
-                else camera.zoomValue += camera.zoomValue * 0.02;
-                if (camera.zoomValue > 120) camera.zoomValue = 120;
-                camera.camSetDistance = camera.zoomValue * camera.zoomValue * -1;
-                SetZoom();
-            }
-            else
-            {
-                if (camera.zoomValue <= 20)
-                { if ((camera.zoomValue -= camera.zoomValue * 0.06) < 4.0) camera.zoomValue = 4.0; }
-                else { if ((camera.zoomValue -= camera.zoomValue * 0.02) < 4.0) camera.zoomValue = 4.0; }
-
-                camera.camSetDistance = camera.zoomValue * camera.zoomValue * -1;
-                SetZoom();
-            }
-        }
-
         public void SwapDayNightMode()
         {
             isDay = !isDay;
@@ -1138,13 +1121,10 @@ namespace AgOpenGPS
                 Settings.Default.setWindow_Minimized = true;
             }
 
-            Settings.Default.setDisplay_camPitch = camera.camPitch;
-            Properties.Settings.Default.setDisplay_camZoom = camera.zoomValue;
+            Settings.Default.setDisplay_camPitch = camera.PitchInDegrees;
+            Properties.Settings.Default.setDisplay_camZoom = camera.ZoomValue;
 
             Settings.Default.setF_UserTotalArea = fd.workedAreaTotalUser;
-
-            //Settings.Default.setDisplay_panelSnapLocation = panelSnap.Location;
-            Settings.Default.setDisplay_panelSimLocation = panelSim.Location;
 
             Settings.Default.Save();
         }
@@ -1157,35 +1137,35 @@ namespace AgOpenGPS
 
             if (heading > 337.5 || heading < 22.5)
             {
-                return (" " +  gStr.gsNorth + " ");
+                return (" " + gStr.gsNorth + " ");
             }
             if (heading > 22.5 && heading < 67.5)
             {
-                return (" " +  gStr.gsN_East + " ");
+                return (" " + gStr.gsN_East + " ");
             }
             if (heading > 67.5 && heading < 111.5)
             {
-                return (" " +  gStr.gsEast + " ");
+                return (" " + gStr.gsEast + " ");
             }
             if (heading > 111.5 && heading < 157.5)
             {
-                return (" " +  gStr.gsS_East + " ");
+                return (" " + gStr.gsS_East + " ");
             }
             if (heading > 157.5 && heading < 202.5)
             {
-                return (" " +  gStr.gsSouth + " ");
+                return (" " + gStr.gsSouth + " ");
             }
             if (heading > 202.5 && heading < 247.5)
             {
-                return (" " +  gStr.gsS_West + " ");
+                return (" " + gStr.gsS_West + " ");
             }
             if (heading > 247.5 && heading < 292.5)
             {
-                return (" " +  gStr.gsWest + " ");
+                return (" " + gStr.gsWest + " ");
             }
             if (heading > 292.5 && heading < 337.5)
             {
-                return (" " +  gStr.gsN_West + " ");
+                return (" " + gStr.gsN_West + " ");
             }
             return (" ?? ");
         }
@@ -1335,8 +1315,8 @@ namespace AgOpenGPS
                             Form form = new FormPan(this);
                             form.Show(this);
 
-                            form.Top = this.Height/3 + this.Top;
-                            form.Left = this.Width -400 + this.Left;
+                            form.Top = this.Height / 3 + this.Top;
+                            form.Left = this.Width - 400 + this.Left;
                         }
 
                         if (isJobStarted)
@@ -1353,7 +1333,7 @@ namespace AgOpenGPS
                     //tram override
                     int bottomSide = oglMain.Height / 5 + 25;
 
-                    if (tool.isDisplayTramControl && (point.Y > (bottomSide-50) && point.Y < bottomSide))
+                    if (tool.isDisplayTramControl && (point.Y > (bottomSide - 50) && point.Y < bottomSide))
                     {
                         if (point.X > centerX - 100 && point.X < centerX - 20)
                         {
@@ -1369,13 +1349,12 @@ namespace AgOpenGPS
                 //zoom buttons
                 if (point.X > oglMain.Width - 80)
                 {
-                    //---
+                    // --
                     if (point.Y < 260 && point.Y > 170)
                     {
-                        if (camera.zoomValue <= 20) camera.zoomValue += camera.zoomValue * 0.2;
-                        else camera.zoomValue += camera.zoomValue * 0.1;
-                        if (camera.zoomValue > 180) camera.zoomValue = 180;
-                        camera.camSetDistance = camera.zoomValue * camera.zoomValue * -1;
+                        double adjustFactor = (camera.ZoomValue <= 20) ? 1.2 : 1.1;
+                        camera.ZoomValue = System.Math.Min(adjustFactor * camera.ZoomValue, 180);
+                        camera.DistanceToLookAt = 0.5 * camera.ZoomValue * camera.ZoomValue;
                         SetZoom();
                         return;
                     }
@@ -1383,11 +1362,9 @@ namespace AgOpenGPS
                     //++
                     if (point.Y < 120 && point.Y > 30)
                     {
-                        if (camera.zoomValue <= 20)
-                        { if ((camera.zoomValue -= camera.zoomValue * 0.2) < 4.0) camera.zoomValue = 4.0; }
-                        else { if ((camera.zoomValue -= camera.zoomValue * 0.1) < 4.0) camera.zoomValue = 4.0; }
-
-                        camera.camSetDistance = camera.zoomValue * camera.zoomValue * -1;
+                        double adjustFactor = (camera.ZoomValue <= 20) ? 0.8 : 0.9;
+                        camera.ZoomValue = System.Math.Max(4.0, adjustFactor * camera.ZoomValue);
+                        camera.DistanceToLookAt = 0.5 * camera.ZoomValue * camera.ZoomValue;
                         SetZoom();
                         return;
                     }
@@ -1487,8 +1464,8 @@ namespace AgOpenGPS
 
         #region Properties // ---------------------------------------------------------------------
 
-        public string Latitude { get { return Convert.ToString(Math.Round(pn.latitude, 7)); } }
-        public string Longitude { get { return Convert.ToString(Math.Round(pn.longitude, 7)); } }
+        public string Latitude { get { return Convert.ToString(Math.Round(AppModel.CurrentLatLon.Latitude, 7)); } }
+        public string Longitude { get { return Convert.ToString(Math.Round(AppModel.CurrentLatLon.Longitude, 7)); } }
         public string SatsTracked { get { return Convert.ToString(pn.satellitesTracked); } }
         public string HDOP { get { return Convert.ToString(pn.hdop); } }
         public string Heading { get { return Convert.ToString(Math.Round(glm.toDegrees(fixHeading), 1)) + "\u00B0"; } }
@@ -1528,7 +1505,7 @@ namespace AgOpenGPS
             }
         }
         public string SetSteerAngle { get { return ((double)(guidanceLineSteerAngle) * 0.01).ToString("N1"); } }
-        public string ActualSteerAngle { get { return ((mc.actualSteerAngleDegrees) ).ToString("N1") ; } }
+        public string ActualSteerAngle { get { return (mc.actualSteerAngleDegrees).ToString("N1"); } }
 
         //Metric and Imperial Properties
         public string SpeedMPH
@@ -1538,7 +1515,7 @@ namespace AgOpenGPS
                 if (avgSpeed > 2)
                     return (avgSpeed * 0.62137).ToString("N1");
                 else
-                    return(avgSpeed * 0.62137).ToString("N2");
+                    return (avgSpeed * 0.62137).ToString("N2");
             }
         }
         public string SpeedKPH
@@ -1552,16 +1529,13 @@ namespace AgOpenGPS
             }
         }
 
-        public string FixOffset { get { return (pn.fixOffset.easting.ToString("N2") + ", " + pn.fixOffset.northing.ToString("N2")); } }
-        public string FixOffsetInch { get { return ((pn.fixOffset.easting*glm.m2in).ToString("N0")+ ", " + (pn.fixOffset.northing*glm.m2in).ToString("N0")); } }
-
-        public string Altitude { get { return Convert.ToString(Math.Round(pn.altitude,2)); } }
-        public string AltitudeFeet { get { return Convert.ToString((Math.Round((pn.altitude * 3.28084),1))); } }
+        public string Altitude { get { return Convert.ToString(Math.Round(pn.altitude, 2)); } }
+        public string AltitudeFeet { get { return Convert.ToString((Math.Round((pn.altitude * 3.28084), 1))); } }
         public string DistPivotM
         {
             get
             {
-                if (distancePivotToTurnLine > 0 )
+                if (distancePivotToTurnLine > 0)
                     return ((int)(distancePivotToTurnLine)) + " m";
                 else return "--";
             }
@@ -1570,7 +1544,7 @@ namespace AgOpenGPS
         {
             get
             {
-                if (distancePivotToTurnLine > 0 ) return (((int)(glm.m2ft * (distancePivotToTurnLine))) + " ft");
+                if (distancePivotToTurnLine > 0) return (((int)(glm.m2ft * (distancePivotToTurnLine))) + " ft");
                 else return "--";
             }
         }
@@ -1578,95 +1552,7 @@ namespace AgOpenGPS
         #endregion properties 
 
         //Load Bitmaps brand
-        public Bitmap GetTractorBrand(TractorBrand brand)
-        {
-            switch (brand)
-            {
-                case TractorBrand.Case:
-                    return Resources.z_TractorCase;
-                case TractorBrand.Claas:
-                    return Resources.z_TractorClaas;
-                case TractorBrand.Deutz:
-                    return Resources.z_TractorDeutz;
-                case TractorBrand.Fendt:
-                    return Resources.z_TractorFendt;
-                case TractorBrand.JDeere:
-                    return Resources.z_TractorJDeere;
-                case TractorBrand.Kubota:
-                    return Resources.z_TractorKubota;
-                case TractorBrand.Massey:
-                    return Resources.z_TractorMassey;
-                case TractorBrand.NewHolland:
-                    return Resources.z_TractorNH;
-                case TractorBrand.Same:
-                    return Resources.z_TractorSame;
-                case TractorBrand.Steyr:
-                    return Resources.z_TractorSteyr;
-                case TractorBrand.Ursus:
-                    return Resources.z_TractorUrsus;
-                case TractorBrand.Valtra:
-                    return Resources.z_TractorValtra;
-                case TractorBrand.JCB:
-                    return Resources.z_TractorJCB;
-                default:
-                    return Resources.z_TractorAoG;
-            }
-        }
 
-        public Bitmap GetHarvesterBrand(HarvesterBrand brand)
-        {
-            switch (brand)
-            {
-                case HarvesterBrand.Case:
-                    return Resources.z_HarvesterCase;
-                case HarvesterBrand.Claas:
-                    return Resources.z_HarvesterClaas;
-                case HarvesterBrand.JDeere:
-                    return Resources.z_HarvesterJD;
-                case HarvesterBrand.NewHolland:
-                    return Resources.z_HarvesterNH;
-                default:
-                    return Resources.z_HarvesterAoG;
-            }
-        }
-
-        public Bitmap GetArticulatedBrandFront(ArticulatedBrand brand)
-        {
-            switch (brand)
-            {
-                case ArticulatedBrand.Case:
-                    return Resources.z_ArticulatedFrontCase;
-                case ArticulatedBrand.Challenger:
-                    return Resources.z_ArticulatedFrontChallenger;
-                case ArticulatedBrand.JDeere:
-                    return Resources.z_ArticulatedFrontJDeere;
-                case ArticulatedBrand.NewHolland:
-                    return Resources.z_ArticulatedFrontNH;
-                case ArticulatedBrand.Holder:
-                    return Resources.z_ArticulatedFrontHolder;
-                default:
-                    return Resources.z_ArticulatedFrontAoG;
-            }
-        }
-        
-        public Bitmap GetArticulatedBrandRear(ArticulatedBrand brand)
-        {
-            switch (brand)
-            {
-                case ArticulatedBrand.Case:
-                    return Resources.z_ArticulatedRearCase;
-                case ArticulatedBrand.Challenger:
-                    return Resources.z_ArticulatedRearChallenger;
-                case ArticulatedBrand.JDeere:
-                    return Resources.z_ArticulatedRearJDeere;
-                case ArticulatedBrand.NewHolland:
-                    return Resources.z_ArticulatedRearNH;
-                case ArticulatedBrand.Holder:
-                    return Resources.z_ArticulatedRearHolder;
-                default:
-                    return Resources.z_ArticulatedRearAoG;
-            }
-        }
 
     }//end class
 }//end namespace

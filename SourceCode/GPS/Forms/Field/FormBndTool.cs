@@ -1,4 +1,5 @@
-using AgOpenGPS.Culture;
+using AgOpenGPS.Core.Translations;
+using AgOpenGPS.Forms;
 using AgOpenGPS.Helpers;
 using OpenTK;
 using OpenTK.Graphics.OpenGL;
@@ -34,7 +35,6 @@ namespace AgOpenGPS
         public List<vec3> secList = new List<vec3>();
         public List<vec3> bndList = new List<vec3>();
         public List<vec3> smooList = new List<vec3>();
-        public List<vec3> tempList = new List<vec3>();
 
         private double minDistSq = 1, minDistDisp = 1;
 
@@ -72,7 +72,7 @@ namespace AgOpenGPS
             panel1.Visible = false;
             //translate
             labelCreate.Text = gStr.gsCreate;
-            labelSmooth.Text = gStr.gsSmooth;   
+            labelSmooth.Text = gStr.gsSmooth;
             labelPleaseWait.Text = gStr.gsPleaseWait;
             labelReducedPoints.Text = gStr.gsReducedPoints;
             labelSpacing.Text = gStr.gsSpacing;
@@ -425,18 +425,20 @@ namespace AgOpenGPS
 
             if (mf.bnd.bndList.Count > 0)
             {
-                DialogResult result3 = MessageBox.Show(gStr.gsDeleteBoundaryMapping,
+                // Show custom confirmation dialog for boundary deletion
+                DialogResult result3 = FormDialog.Show(
                     gStr.gsDeleteForSure,
-                    MessageBoxButtons.YesNo,
-                    MessageBoxIcon.Question,
-                    MessageBoxDefaultButton.Button2);
-                if (result3 != DialogResult.Yes)
+                    gStr.gsDeleteBoundaryMapping,
+                    MessageBoxButtons.YesNo);
+
+                if (result3 != DialogResult.OK)
                 {
                     return;
                 }
             }
 
             DeleteBoundary();
+
 
             isStep = false;
             timer1.Interval = 500;
@@ -624,7 +626,7 @@ namespace AgOpenGPS
 
                 //points all around it are removed or > minDist
                 arr[i].heading = 2;
-                
+
                 cntr++;
 
                 if (cntr > 200)
@@ -952,7 +954,7 @@ namespace AgOpenGPS
             start = 99999; end = 99999;
             btnExit.Focus();
             isC = false;
-            isA= true;
+            isA = true;
 
             btnAddPoints.Enabled = false;
         }

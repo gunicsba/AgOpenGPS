@@ -400,14 +400,6 @@ namespace AgIO
             }
         }
 
-        private void btnClrGPS_Click(object sender, EventArgs e)
-        {
-            mf.CloseGPSPort();
-            FormLoop.portNameGPS = "GPS 1";
-            Properties.Settings.Default.setPort_portNameGPS = FormLoop.portNameGPS;
-            Properties.Settings.Default.Save();
-        }
-
         private void btnOpenIMU_Click(object sender, EventArgs e)
         {
             mf.OpenIMUPort();

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AgOpenGPS.Core.Translations;
+using System;
 using System.IO;
 using System.Windows.Forms;
 
@@ -17,8 +18,8 @@ namespace AgOpenGPS
             InitializeComponent();
 
             //translate all the controls
-            this.Text = Culture.gStr.gsFieldPicker;
-            btnOpenExistingLv.Text = Culture.gStr.gsUseSelected;
+            this.Text = gStr.gsFieldPicker;
+            btnOpenExistingLv.Text = gStr.gsUseSelected;
 
             string[] fileList = _fileList.Split(',');
             for (int i = 0; i < fileList.Length; i++)
@@ -30,7 +31,7 @@ namespace AgOpenGPS
 
         private void FormFilePicker_Load(object sender, EventArgs e)
         {
-            btnOpenExistingLv.Text = Culture.gStr.gsUseSelected;
+            btnOpenExistingLv.Text = gStr.gsUseSelected;
         }
 
         private void btnOpenExistingLv_Click(object sender, EventArgs e)

@@ -1,6 +1,6 @@
 ﻿using AgLibrary.Logging;
 using AgOpenGPS.Controls;
-using AgOpenGPS.Culture;
+using AgOpenGPS.Core.Translations;
 using AgOpenGPS.Helpers;
 using System;
 using System.Drawing;
@@ -320,7 +320,7 @@ namespace AgOpenGPS
                     {
                         hsbarAckerman.Value = 100;
                         lblAckermannError.Text = "Error, Ackermann set to 100";
-                        Log.EventWriter("Error, Ackermann set to 100"+ eh.ToString());
+                        Log.EventWriter("Error, Ackermann set to 100" + eh.ToString());
                     }
                 }
             }
@@ -565,7 +565,6 @@ namespace AgOpenGPS
 
             Properties.Settings.Default.setArdSteer_maxPulseCounts = 0;
 
-            Properties.Settings.Default.setVehicle_goalPointLookAhead = 2.5;
             Properties.Settings.Default.setVehicle_goalPointLookAheadMult = 1;
 
             Properties.Settings.Default.stanleyHeadingErrorGain = 1;

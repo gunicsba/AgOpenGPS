@@ -5,7 +5,7 @@ using System.IO;
 using System.Windows.Forms;
 using AgLibrary.Logging;
 using AgOpenGPS.Helpers;
-using AgOpenGPS.Culture;
+using AgOpenGPS.Core.Translations;
 
 namespace AgOpenGPS
 {
@@ -24,7 +24,7 @@ namespace AgOpenGPS
             //translate all the controls
             this.Text = gStr.gsButtonPicker;
             groupBoxSelectButtons.Text = gStr.gsSelectButtons;
-            groupBoxAOGMenu.Text = gStr.gsAOGMenu; 
+            groupBoxAOGMenu.Text = gStr.gsAOGMenu;
             labelButtonArrangeOne.Text = gStr.gsArrangeText;
             buttonLabelDefault.Text = gStr.gsDefault;
             buttonLabelReset.Text = gStr.gsReset;
@@ -218,23 +218,6 @@ namespace AgOpenGPS
 
             mf.PanelBuildRightMenu();
             mf.PanelUpdateRightAndBottom();
-        }
-
-        private void btnVideoHelp_Click(object sender, EventArgs e)
-
-        {
-            Process[] processName = Process.GetProcessesByName("BobsYourUncle");
-            //Start application here
-            string strPath = Path.Combine(Application.StartupPath, "Buttons.mp4");
-
-            try
-            {
-                Process.Start(strPath);
-            }
-            catch
-            {
-                mf.TimedMessageBox(2000, "Playback Error", "Can't Find Media Player");
-            }
         }
     }
 }

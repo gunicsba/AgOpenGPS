@@ -31,7 +31,7 @@ namespace AgOpenGPS
 
                 }
             }
-            catch (Exception ex) 
+            catch (Exception ex)
             {
                 rtbLogViewer.AppendText("Catch ->  error loading logfile" + ex.ToString());
             }

@@ -18,11 +18,30 @@ namespace AgOpenGPS
         public btnStates manualBtnState = btnStates.Off;
         public btnStates autoBtnState = btnStates.Off;
 
+        private void MarkAsWorkedTrack()
+        {
+            // return if there was a track selected
+            if (this.trk.idx < 0) return;
+
+            var track = this.trk.gArr[this.trk.idx];
+
+            if (track.mode == TrackMode.AB)
+            {
+                track.workedTracks.Add(this.ABLine.howManyPathsAway);
+            }
+            else if (track.mode == TrackMode.Curve)
+            {
+                track.workedTracks.Add(this.curve.howManyPathsAway);
+            }
+        }
+
+
         //Section Manual and Auto buttons on right side
         private void btnSectionMasterManual_Click(object sender, EventArgs e)
         {
             //System.Media.SystemSounds.Asterisk.Play();
-            if (sounds.isSectionsSoundOn) sounds.sndSectionOff.Play();
+            if (sounds.isSectionsSoundOn && (!mc.isSteerWorkSwitchEnabled || !mc.isSteerWorkSwitchManualSections))
+                sounds.sndSectionOff.Play();
 
             //if Auto is on, turn it off
             autoBtnState = btnStates.Off;
@@ -33,6 +52,10 @@ namespace AgOpenGPS
                 case btnStates.Off:
                     manualBtnState = btnStates.On;
                     btnSectionMasterManual.Image = Properties.Resources.ManualOn;
+
+                    //add current track when it doesn't exist in the worked track list
+                    MarkAsWorkedTrack();
+
                     break;
 
                 case btnStates.On:
@@ -60,14 +83,20 @@ namespace AgOpenGPS
 
                     autoBtnState = btnStates.Auto;
                     btnSectionMasterAuto.Image = Properties.Resources.SectionMasterOn;
-                    if (sounds.isSectionsSoundOn) sounds.sndSectionOn.Play();
+                    if (sounds.isSectionsSoundOn && (!mc.isSteerWorkSwitchEnabled || !mc.isSteerWorkSwitchManualSections))
+                        sounds.sndSectionOn.Play();
+
+                    //add current track when it doesn't exist in the worked track list
+                    MarkAsWorkedTrack();
+
                     break;
 
                 case btnStates.Auto:
 
                     autoBtnState = btnStates.Off;
                     btnSectionMasterAuto.Image = Properties.Resources.SectionMasterOff;
-                    if (sounds.isSectionsSoundOn) sounds.sndSectionOn.Play();
+                    if (sounds.isSectionsSoundOn && (!mc.isSteerWorkSwitchEnabled || !mc.isSteerWorkSwitchManualSections))
+                        sounds.sndSectionOn.Play();
                     break;
             }
 
@@ -111,7 +140,6 @@ namespace AgOpenGPS
             IndividualSectionAndButonToState(state, sectionX - 1, (Button)sender);
         }
 
-
         //Section buttons************************8
         public void AllSectionsAndButtonsToState(btnStates state)
         {
@@ -121,51 +149,28 @@ namespace AgOpenGPS
             }
         }
 
-        private void IndividualSectionAndButonToState(btnStates state, int sectNumber, Button btn)
+        private void SetColors(Button button, btnStates state)
         {
-            section[sectNumber].sectionBtnState = state;
-
-            switch (section[sectNumber].sectionBtnState)
+            switch (state)
             {
                 case btnStates.Off:
-                    if (isDay)
-                    {
-                        btn.ForeColor = Color.Black;
-                        btn.BackColor = Color.Red;
-                    }
-                    else
-                    {
-                        btn.BackColor = Color.Crimson;
-                        btn.ForeColor = Color.White;
-                    }
+                    button.BackColor = isDay ? Color.Red : Color.Crimson;
                     break;
-
                 case btnStates.Auto:
-                    if (isDay)
-                    {
-                        btn.BackColor = Color.Lime;
-                        btn.ForeColor = Color.Black;
-                    }
-                    else
-                    {
-                        btn.BackColor = Color.ForestGreen;
-                        btn.ForeColor = Color.White;
-                    }
+                    button.BackColor = isDay ? Color.Lime : Color.ForestGreen;
                     break;
 
                 case btnStates.On:
-                    if (isDay)
-                    {
-                        btn.BackColor = Color.Yellow;
-                        btn.ForeColor = Color.Black;
-                    }
-                    else
-                    {
-                        btn.BackColor = Color.DarkGoldenrod;
-                        btn.ForeColor = Color.White;
-                    }
+                    button.BackColor = isDay ? Color.Yellow : Color.DarkGoldenrod;
                     break;
             }
+            button.ForeColor = isDay ? Color.Black : Color.White;
+        }
+
+        private void IndividualSectionAndButonToState(btnStates state, int sectNumber, Button btn)
+        {
+            section[sectNumber].sectionBtnState = state;
+            SetColors(btn, state);
         }
 
         public void HideSections()
@@ -173,6 +178,7 @@ namespace AgOpenGPS
             for (int i = 1; i <= 16; i++)
                 (this.Controls.Find("btnSection" + i.ToString() + "Man", true).First() as Button).Visible = false;
         }
+
         public void HideZones()
         {
             for (int i = 1; i <= 8; i++)
@@ -268,50 +274,7 @@ namespace AgOpenGPS
             {
                 section[i].sectionBtnState = state;
             }
-
-            //update zone buttons
-            switch (state)
-            {
-                case btnStates.Auto:
-                    if (isDay)
-                    {
-                        btn.BackColor = Color.Lime;
-                        btn.ForeColor = Color.Black;
-                    }
-                    else
-                    {
-                        btn.BackColor = Color.ForestGreen;
-                        btn.ForeColor = Color.White;
-                    }
-                    break;
-
-
-                case btnStates.On:
-                    if (isDay)
-                    {
-                        btn.BackColor = Color.Yellow;
-                        btn.ForeColor = Color.Black;
-                    }
-                    else
-                    {
-                        btn.BackColor = Color.DarkGoldenrod;
-                        btn.ForeColor = Color.White;
-                    }
-                    break;
-
-                case btnStates.Off:
-                    if (isDay)
-                    {
-                        btn.ForeColor = Color.Black;
-                        btn.BackColor = Color.Red;
-                    }
-                    else
-                    {
-                        btn.BackColor = Color.Crimson;
-                        btn.ForeColor = Color.White;
-                    }
-                    break;
-            }
+            SetColors(btn, state);
         }
 
         public void LineUpAllZoneButtons()
@@ -351,7 +314,7 @@ namespace AgOpenGPS
 
             //if (tool.zones == 0) return;
             int oglButtonWidth = oglMain.Width * 3 / 4;
-            int buttonWidth = Math.Min(oglButtonWidth / tool.zones,buttonMaxWidth);
+            int buttonWidth = Math.Min(oglButtonWidth / tool.zones, buttonMaxWidth);
             Size size = new System.Drawing.Size(buttonWidth, buttonHeight);
 
             for (int i = 1; i <= 8; i++)
@@ -363,7 +326,8 @@ namespace AgOpenGPS
                 if (isJobStarted)
                 {
                     btn.BackColor = Color.Red;
-                } else
+                }
+                else
                 {
                     btn.BackColor = Color.Silver;
                 }

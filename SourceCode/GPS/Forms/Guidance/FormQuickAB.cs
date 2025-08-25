@@ -1,5 +1,5 @@
 ﻿using AgOpenGPS.Controls;
-using AgOpenGPS.Culture;
+using AgOpenGPS.Core.Translations;
 using AgOpenGPS.Helpers;
 using System;
 using System.Collections.Generic;
@@ -14,7 +14,6 @@ namespace AgOpenGPS
         private readonly FormGPS mf;
 
         private double aveLineHeading;
-        public List<CTrk> gTemp = new List<CTrk>();
 
         private vec2 ptAa = new vec2();
         private vec2 ptBb = new vec2();
@@ -76,7 +75,7 @@ namespace AgOpenGPS
 
             mf.PanelUpdateRightAndBottom();
         }
-        
+
         #region Pick
         private void btnzABCurve_Click(object sender, EventArgs e)
         {
@@ -280,7 +279,7 @@ namespace AgOpenGPS
             mf.ABLine.desPtB.easting = mf.ABLine.desPtA.easting - (Math.Sin(mf.pivotAxlePos.heading) * 1);
             mf.ABLine.desPtB.northing = mf.ABLine.desPtA.northing - (Math.Cos(mf.pivotAxlePos.heading) * 1);
 
-            mf.ABLine.desLineEndA.easting =  mf.ABLine.desPtA.easting - (Math.Sin(mf.pivotAxlePos.heading) * 1000);
+            mf.ABLine.desLineEndA.easting = mf.ABLine.desPtA.easting - (Math.Sin(mf.pivotAxlePos.heading) * 1000);
             mf.ABLine.desLineEndA.northing = mf.ABLine.desPtA.northing - (Math.Cos(mf.pivotAxlePos.heading) * 1000);
 
             mf.ABLine.desLineEndB.easting = mf.ABLine.desPtA.easting + (Math.Sin(mf.pivotAxlePos.heading) * 1000);
@@ -329,8 +328,8 @@ namespace AgOpenGPS
             mf.trk.gArr[idx].heading = mf.ABLine.desHeading;
 
             mf.ABLine.desName = "AB " +
-                (Math.Round(glm.toDegrees(mf.ABLine.desHeading), 5)).ToString(CultureInfo.InvariantCulture) + "\u00B0 " ;
-            
+                (Math.Round(glm.toDegrees(mf.ABLine.desHeading), 5)).ToString(CultureInfo.InvariantCulture) + "\u00B0 ";
+
             textBox1.Text = mf.ABLine.desName;
             mf.trk.gArr[idx].name = mf.ABLine.desName;
 
@@ -398,7 +397,7 @@ namespace AgOpenGPS
 
             btnEnter_AB.Enabled = true;
             nudHeading.Enabled = true;
-           
+
             nudHeading.Value = (decimal)(glm.toDegrees(mf.ABLine.desHeading));
             timer1.Enabled = true;
             mf.Activate();
@@ -423,7 +422,7 @@ namespace AgOpenGPS
                 mf.ABLine.desLineEndB.easting = mf.ABLine.desPtA.easting + (Math.Sin(mf.ABLine.desHeading) * 1000);
                 mf.ABLine.desLineEndB.northing = mf.ABLine.desPtA.northing + (Math.Cos(mf.ABLine.desHeading) * 1000);
             }
-        mf.Activate();
+            mf.Activate();
         }
 
         private void btnEnter_APlus_Click(object sender, EventArgs e)
@@ -443,7 +442,7 @@ namespace AgOpenGPS
             mf.trk.gArr[idx].heading = mf.ABLine.desHeading;
 
             mf.ABLine.desName = "A+" +
-                (Math.Round(glm.toDegrees(mf.ABLine.desHeading), 5)).ToString(CultureInfo.InvariantCulture) + "\u00B0 " ;
+                (Math.Round(glm.toDegrees(mf.ABLine.desHeading), 5)).ToString(CultureInfo.InvariantCulture) + "\u00B0 ";
             textBox1.Text = mf.ABLine.desName;
 
             double dist;

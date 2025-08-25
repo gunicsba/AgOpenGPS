@@ -97,20 +97,6 @@ namespace AgOpenGPS
             btnExit.Focus();
         }
 
-        private void BtnMakeABLine_Click(object sender, EventArgs e)
-        {         
-
-            //calculate the Heading
-            double abHead = Math.Atan2(
-                pntB.easting - pntA.easting,
-                pntB.northing - pntA.northing);
-            if (abHead < 0) abHead += glm.twoPI;
-
-            //clean up gui
-
-            start = 99999; end = 99999;
-        }
-
         private void oglSelf_MouseDown(object sender, MouseEventArgs e)
         {
             Point pt = oglSelf.PointToClient(Cursor.Position);
@@ -260,15 +246,14 @@ namespace AgOpenGPS
                 mf.worldGrid.gridRotation = Math.Atan2(
                     mf.trk.gArr[mf.trk.idx].ptB.easting - mf.trk.gArr[mf.trk.idx].ptA.easting,
                     mf.trk.gArr[mf.trk.idx].ptB.northing - mf.trk.gArr[mf.trk.idx].ptA.northing);
-                    if (mf.worldGrid.gridRotation < 0) mf.worldGrid.gridRotation += glm.twoPI;
-                    mf.worldGrid.gridRotation = glm.toDegrees(mf.worldGrid.gridRotation);
+                if (mf.worldGrid.gridRotation < 0) mf.worldGrid.gridRotation += glm.twoPI;
+                mf.worldGrid.gridRotation = glm.toDegrees(mf.worldGrid.gridRotation);
             }
             Close();
         }
 
         private void FormABDraw_ResizeEnd(object sender, EventArgs e)
         {
-            
             Width = (int)((double)Height * 1.09);
 
             oglSelf.Height = oglSelf.Width = Height - 40;
@@ -288,7 +273,7 @@ namespace AgOpenGPS
             GL.MatrixMode(MatrixMode.Modelview);
 
             tlp1.Width = Width - oglSelf.Width - 10;
-            tlp1.Left = oglSelf.Width-2;
+            tlp1.Left = oglSelf.Width - 2;
 
             Screen myScreen = Screen.FromControl(this);
             Rectangle area = myScreen.WorkingArea;
@@ -317,7 +302,7 @@ namespace AgOpenGPS
             oglSelf.MakeCurrent();
             GL.Enable(EnableCap.CullFace);
             GL.CullFace(CullFaceMode.Back);
-            GL.ClearColor(0.0f,0.0f,0.0f,1.0f);
+            GL.ClearColor(0.0f, 0.0f, 0.0f, 1.0f);
         }
 
         private void DrawSections()

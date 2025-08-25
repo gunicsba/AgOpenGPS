@@ -1,6 +1,6 @@
 ﻿using AgLibrary.Logging;
 using AgOpenGPS.Controls;
-using AgOpenGPS.Culture;
+using AgOpenGPS.Core.Translations;
 using AgOpenGPS.Helpers;
 using OpenTK;
 using OpenTK.Graphics.OpenGL;
@@ -47,7 +47,7 @@ namespace AgOpenGPS
             mf.hdl.idx = -1;
             //label3.Text = mf.unitsFtM +"       Tool: ";
 
-            lblToolWidth.Text = "( "+ mf.unitsFtM + " )           Tool: " + ((mf.tool.width - mf.tool.overlap) * mf.m2FtOrM).ToString("N1") + " " + mf.unitsFtM;
+            lblToolWidth.Text = "( " + mf.unitsFtM + " )           Tool: " + ((mf.tool.width - mf.tool.overlap) * mf.m2FtOrM).ToString("N1") + " " + mf.unitsFtM;
 
             start = 99999; end = 99999;
             isA = true;
@@ -551,7 +551,7 @@ namespace AgOpenGPS
             oglSelf.MakeCurrent();
             GL.Enable(EnableCap.CullFace);
             GL.CullFace(CullFaceMode.Back);
-            GL.ClearColor(0.1f, 0.1f, 0.1f ,1.0f);
+            GL.ClearColor(0.1f, 0.1f, 0.1f, 1.0f);
             GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
         }
         private void oglSelf_Resize(object sender, EventArgs e)
@@ -705,8 +705,6 @@ namespace AgOpenGPS
 
         // Returns 1 if the lines intersect, otherwis
         public double iE = 0, iN = 0;
-
-        public List<int> crossings = new List<int>(1);
 
         private void btnBndLoop_Click(object sender, EventArgs e)
         {
@@ -993,8 +991,8 @@ namespace AgOpenGPS
 
         private void btnBShrink_Click(object sender, EventArgs e)
         {
-                if (sliceArr.Count > 8)
-                    sliceArr.RemoveRange(sliceArr.Count - 5, 5);
+            if (sliceArr.Count > 8)
+                sliceArr.RemoveRange(sliceArr.Count - 5, 5);
         }
 
         private void btnAShrink_Click(object sender, EventArgs e)

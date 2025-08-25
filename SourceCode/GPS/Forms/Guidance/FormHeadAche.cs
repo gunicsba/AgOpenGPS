@@ -1,6 +1,6 @@
 ﻿using AgLibrary.Logging;
 using AgOpenGPS.Controls;
-using AgOpenGPS.Culture;
+using AgOpenGPS.Core.Translations;
 using AgOpenGPS.Helpers;
 using OpenTK;
 using OpenTK.Graphics.OpenGL;
@@ -48,7 +48,7 @@ namespace AgOpenGPS
             mf.FileLoadHeadLines();
             FixLabelsCurve();
 
-            lblToolWidth.Text = "( " + mf.unitsFtM + " )      Tool: " 
+            lblToolWidth.Text = "( " + mf.unitsFtM + " )      Tool: "
                 + ((mf.tool.width - mf.tool.overlap) * mf.m2FtOrM).ToString("N1") + mf.unitsFtM + " ";
 
             mf.bnd.bndList[0].hdLine?.Clear();
@@ -94,7 +94,7 @@ namespace AgOpenGPS
 
         private void FormHeadAche_ResizeEnd(object sender, EventArgs e)
         {
-            Width = (Height * 4/3);
+            Width = (Height * 4 / 3);
 
             oglSelf.Height = oglSelf.Width = Height - 50;
 
@@ -204,7 +204,7 @@ namespace AgOpenGPS
             //Convert to Origin in the center of window, 800 pixels
             fixPt.X = pt.X - halfWid;
             fixPt.Y = (wid - pt.Y - halfWid);
-            
+
             vec3 plotPt = new vec3
             {
                 //convert screen coordinates to field coordinates
@@ -634,10 +634,10 @@ namespace AgOpenGPS
 
                     int cnt = mf.hdl.tracksArr[mf.hdl.idx].trackPts.Count - 1;
                     GL.PointSize(28);
-                    GL.Color3(0,0,0);
+                    GL.Color3(0, 0, 0);
                     GL.Begin(PrimitiveType.Points);
                     GL.Vertex3(mf.hdl.tracksArr[mf.hdl.idx].trackPts[0].easting, mf.hdl.tracksArr[mf.hdl.idx].trackPts[0].northing, 0);
-                    GL.Color3(0,0,0);
+                    GL.Color3(0, 0, 0);
                     GL.Vertex3(mf.hdl.tracksArr[mf.hdl.idx].trackPts[cnt].easting, mf.hdl.tracksArr[mf.hdl.idx].trackPts[cnt].northing, 0);
                     GL.End();
 
@@ -868,12 +868,6 @@ namespace AgOpenGPS
             mf.FileSaveHeadland();
         }
 
-        private void btnDeletePoints_Click(object sender, EventArgs e)
-        {
-            start = 99999; end = 99999;
-            isA = true;
-        }
-
         private void cboxToolWidths_SelectedIndexChanged(object sender, EventArgs e)
         {
             nudSetDistance.Value = (decimal)((Math.Round((mf.tool.width - mf.tool.overlap) * cboxToolWidths.SelectedIndex, 1)) * mf.m2FtOrM);
@@ -909,7 +903,7 @@ namespace AgOpenGPS
             if (mf.hdl.idx > -1)
             {
                 if (mf.hdl.tracksArr[mf.hdl.idx].trackPts.Count > 8)
-                    mf.hdl.tracksArr[mf.hdl.idx].trackPts.RemoveRange(mf.hdl.tracksArr[mf.hdl.idx].trackPts.Count-5, 5);
+                    mf.hdl.tracksArr[mf.hdl.idx].trackPts.RemoveRange(mf.hdl.tracksArr[mf.hdl.idx].trackPts.Count - 5, 5);
             }
         }
 

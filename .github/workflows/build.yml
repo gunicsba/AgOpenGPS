@@ -19,13 +19,16 @@ env:
   # https://docs.github.com/actions/learn-github-actions/managing-complex-workflows#using-a-build-matrix
   BUILD_CONFIGURATION: Release
 
+  # Path to the output folder
+  PUBLISH_DIR: ./AgOpenGPS
+
 jobs:
   build:
     runs-on: windows-latest
 
     steps:
     - name: Checkout
-      uses: actions/checkout@v4
+      uses: actions/checkout@v5
       with:
         fetch-depth: 0
 
@@ -33,33 +36,29 @@ jobs:
       uses: actions/setup-dotnet@v4
 
     - name: Setup GitVersion
-      uses: gittools/actions/gitversion/setup@v3.1.11
+      uses: gittools/actions/gitversion/setup@v4.1.0
       with:
-        versionSpec: '5.12.x'
+        versionSpec: '6.3.x'
 
     - name: Determine Version
-      uses: gittools/actions/gitversion/execute@v3.1.11
+      uses: gittools/actions/gitversion/execute@v4.1.0
       with:
-        updateAssemblyInfo: true
+        updateProjectFiles: true
 
-    - name: Add MSBuild to PATH
-      uses: microsoft/setup-msbuild@v2
-
-    - name: Restore NuGet packages
-      run: nuget restore ${{env.SOLUTION_FILE_PATH}} -PackagesDirectory .\SourceCode\packages -source "https://api.nuget.org/v3/index.json"
+    - name: Install dependencies
+      run: dotnet restore ${{env.SOLUTION_FILE_PATH}}
 
     - name: Build
-      run: msbuild /m /p:Configuration=${{env.BUILD_CONFIGURATION}} ${{env.SOLUTION_FILE_PATH}}
+      run: dotnet build --no-restore ${{env.SOLUTION_FILE_PATH}}
 
     - name: Test
-      run: dotnet test ${{env.SOLUTION_FILE_PATH}}
+      run: dotnet test --no-restore --no-build ${{env.SOLUTION_FILE_PATH}}
 
-    - name: Create AgOpenGPS.zip
-      shell: powershell
-      run: Compress-Archive -Path "AgOpenGPS" -Destination "AgOpenGPS.zip"
+    - name: Publish
+      run: dotnet publish --no-restore --configuration ${{env.BUILD_CONFIGURATION}} ${{env.SOLUTION_FILE_PATH}}
 
     - name: Upload artifact
       uses: actions/upload-artifact@v4
       with:
-        name: AgOpenGPS.zip
-        path: AgOpenGPS.zip
+        name: AgOpenGPS
+        path: ${{env.PUBLISH_DIR}}

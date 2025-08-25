@@ -55,8 +55,6 @@ namespace AgIO
         //timer variables
         public double secondsSinceStart, twoSecondTimer, tenSecondTimer, threeMinuteTimer, pingSecondsStart;
 
-        public string lastSentence;
-
         public bool isNTRIPToggle;
 
         //usually 256 - send ntrip to serial in chunks
@@ -257,7 +255,7 @@ namespace AgIO
 
             //run gps_out or not
             cboxAutoRunGPS_Out.Checked = Properties.Settings.Default.setDisplay_isAutoRunGPS_Out;
-            
+
             this.Text =
             "AgIO  v" + Program.Version + " Profile: " + RegistrySettings.profileName;
 

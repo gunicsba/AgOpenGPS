@@ -67,7 +67,7 @@ namespace AgOpenGPS
         {
             if (mf.trk.idx > -1)
             {
-                if (mf.trk.gArr[mf.trk.idx].nudgeDistance == 0 )
+                if (mf.trk.gArr[mf.trk.idx].nudgeDistance == 0)
                     lblOffset.Text = ((int)(mf.trk.gArr[mf.trk.idx].nudgeDistance * mf.m2InchOrCm * -1)).ToString() + mf.unitsInCm;
                 else if (mf.trk.gArr[mf.trk.idx].nudgeDistance < 0)
                     lblOffset.Text = "< " + ((int)(mf.trk.gArr[mf.trk.idx].nudgeDistance * mf.m2InchOrCm * -1)).ToString() + mf.unitsInCm;
@@ -87,7 +87,7 @@ namespace AgOpenGPS
         {
             ((NudlessNumericUpDown)sender).ShowKeypad(this);
             snapAdj = (double)nudSnapDistance.Value * mf.inchOrCm2m;
-            Properties.Settings.Default.setAS_snapDistance = snapAdj*100;
+            Properties.Settings.Default.setAS_snapDistance = snapAdj * 100;
             Properties.Settings.Default.Save();
             mf.Activate();
         }
@@ -131,7 +131,7 @@ namespace AgOpenGPS
 
         private void btnHalfToolRight_Click(object sender, EventArgs e)
         {
-            mf.trk.NudgeTrack((mf.tool.width-mf.tool.overlap) * 0.5);
+            mf.trk.NudgeTrack((mf.tool.width - mf.tool.overlap) * 0.5);
             UpdateMoveLabel();
             mf.Activate();
         }

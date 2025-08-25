@@ -4,42 +4,37 @@ namespace AgOpenGPS.Core.Models
 {
     public struct GeoDir
     {
-        public GeoDir(double angle)
+        public GeoDir(double angleInRadians)
         {
-            Angle = angle;
+            AngleInRadians = angleInRadians;
         }
 
         public GeoDir(GeoDelta delta)
         {
-            Angle = Math.Atan2(delta.EastingDelta, delta.NorthingDelta);
+            AngleInRadians = Math.Atan2(delta.EastingDelta, delta.NorthingDelta);
         }
 
-        public double Angle { get; private set; }
+        public double AngleInRadians { get; }
+        public double AngleInDegrees => Units.RadiansToDegrees(AngleInRadians);
 
-        public GeoDir PerpendicularLeft => new GeoDir(Angle - 0.5 * Math.PI);
+        public GeoDir PerpendicularLeft => new GeoDir(AngleInRadians - 0.5 * Math.PI);
 
-        public GeoDir PerpendicularRight => new GeoDir(Angle + 0.5 * Math.PI);
-        public GeoDir Inverted => new GeoDir(Angle + Math.PI);
-
-
-        public void Invert()
-        {
-            Angle += Math.PI;
-        }
+        public GeoDir PerpendicularRight => new GeoDir(AngleInRadians + 0.5 * Math.PI);
+        public GeoDir Inverted => new GeoDir(AngleInRadians + Math.PI);
 
         public static GeoDelta operator *(double distance, GeoDir dir)
         {
-            return new GeoDelta(distance * Math.Cos(dir.Angle), distance * Math.Sin(dir.Angle));
+            return new GeoDelta(distance * Math.Cos(dir.AngleInRadians), distance * Math.Sin(dir.AngleInRadians));
         }
 
-        public static GeoDir operator +(GeoDir dir, double angle)
+        public static GeoDir operator +(GeoDir dir, double angleInRadians)
         {
-            return new GeoDir(dir.Angle + angle);
+            return new GeoDir(dir.AngleInRadians + angleInRadians);
         }
 
-        public static GeoDir operator -(GeoDir dir, double angle)
+        public static GeoDir operator -(GeoDir dir, double angleInRadians)
         {
-            return new GeoDir(dir.Angle - angle);
+            return new GeoDir(dir.AngleInRadians - angleInRadians);
         }
 
     }

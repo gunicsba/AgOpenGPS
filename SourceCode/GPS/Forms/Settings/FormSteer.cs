@@ -1,6 +1,7 @@
 ﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿using AgLibrary.Logging;
 using AgOpenGPS.Controls;
-using AgOpenGPS.Culture;
+using AgOpenGPS.Core.Translations;
+using AgOpenGPS.Forms;
 using AgOpenGPS.Helpers;
 using AgOpenGPS.Properties;
 using System;
@@ -57,11 +58,11 @@ namespace AgOpenGPS
             labelMaxLimit.Text = gStr.gsMaxLimit;
             labelMinToMove.Text = gStr.gsMinToMove;
             labelWasZero.Text = gStr.gsWasZero;
-            labelCountsPerDegree.Text = gStr.gsCountsPerDegree; 
+            labelCountsPerDegree.Text = gStr.gsCountsPerDegree;
             labelAckermann.Text = gStr.gsAckermann;
-            labelMaxSteerAngle.Text = gStr.gsMaxSteerAngle; 
+            labelMaxSteerAngle.Text = gStr.gsMaxSteerAngle;
             labelDeadzone.Text = gStr.gsDeadzone;
-            labelHeadingDegree.Text = gStr.gsHeading;   
+            labelHeadingDegree.Text = gStr.gsHeading;
             labelOnDelay.Text = gStr.gsOnDelay;
             labelSpeedFactor.Text = gStr.gsSpeedFactor;
             labelAquireFactor.Text = gStr.gsAquireFactor;
@@ -72,14 +73,14 @@ namespace AgOpenGPS
 
             //translate pop-out
             labelEncoder.Text = gStr.gsTurnSensor;
-            labelTurnSensor.Text = gStr.gsTurnSensor;   
+            labelTurnSensor.Text = gStr.gsTurnSensor;
             labelPressureTurnSensor.Text = gStr.gsPressureTurnSensor;
             labelCurrentTurnSensor.Text = gStr.gsCurrentTurnSensor;
-            labelInvertWas.Text = gStr.gsInvertWas; 
+            labelInvertWas.Text = gStr.gsInvertWas;
             labelInvertMotor.Text = gStr.gsInvertMotor;
             labelInvertRelays.Text = gStr.gsInvertRelays;
             labelMotorDriver.Text = gStr.gsMotorDriver;
-            labelADConverter.Text = gStr.gsADConverter; 
+            labelADConverter.Text = gStr.gsADConverter;
             labelIMUAxis.Text = gStr.gsIMUAxis;
             labelSteerEnable.Text = gStr.gsSteerEnable;
             labelSteerDescription.Text = gStr.gsSteerDescription;
@@ -98,7 +99,7 @@ namespace AgOpenGPS
             labelSteerBar.Text = gStr.gsSteerBar;
             labelWizard.Text = gStr.gsWizard;
             labelReset.Text = gStr.gsReset;
-            labelSendAndSave.Text = gStr.gsSendAndSave; 
+            labelSendAndSave.Text = gStr.gsSendAndSave;
 
             this.Width = 388;
             this.Height = 490;
@@ -106,6 +107,12 @@ namespace AgOpenGPS
 
         private void FormSteer_Load(object sender, EventArgs e)
         {
+            // Start smart WAS calibration data collection when FormSteer opens
+            if (mf.smartWASCalibration != null)
+            {
+                mf.smartWASCalibration.StartDataCollection();
+            }
+
             mf.vehicle.goalPointLookAheadHold = Properties.Settings.Default.setVehicle_goalPointLookAheadHold;
             cboxSteerInReverse.Checked = Properties.Settings.Default.setAS_isSteerInReverse;
 
@@ -224,7 +231,7 @@ namespace AgOpenGPS
             mf.vehicle.driveFreeSteerAngle = 0;
 
             //nudDeadZoneDistance.Value = (decimal)((double)(Properties.Settings.Default.setAS_deadZoneDistance)/10);
-            nudDeadZoneHeading.Value = (decimal)((double)(Properties.Settings.Default.setAS_deadZoneHeading)/100);
+            nudDeadZoneHeading.Value = (decimal)((double)(Properties.Settings.Default.setAS_deadZoneHeading) / 100);
             nudDeadZoneDelay.Value = (decimal)(mf.vehicle.deadZoneDelay);
 
             toSend = false;
@@ -347,10 +354,26 @@ namespace AgOpenGPS
 
             if (mf.isLightBarNotSteerBar) rbtnLightBar.Checked = true;
             else rbtnSteerBar.Checked = true;
+
+            // Add click event handlers for Smart WAS calibration labels to allow manual reset
+            lblSmartCalStatus.Click += SmartCalLabel_Click;
+            lblSmartCalSamples.Click += SmartCalLabel_Click;
+            lblSmartCalConfidence.Click += SmartCalLabel_Click;
+
+            // Set cursor to indicate clickable labels
+            lblSmartCalStatus.Cursor = Cursors.Hand;
+            lblSmartCalSamples.Cursor = Cursors.Hand;
+            lblSmartCalConfidence.Cursor = Cursors.Hand;
         }
 
         private void FormSteer_FormClosing(object sender, FormClosingEventArgs e)
         {
+            // Stop smart WAS calibration data collection and reset samples when FormSteer closes
+            if (mf.smartWASCalibration != null)
+            {
+                mf.smartWASCalibration.StopDataCollection();
+                mf.smartWASCalibration.ResetData();
+            }
             mf.vehicle.isInFreeDriveMode = false;
 
             Properties.Settings.Default.setVehicle_goalPointLookAheadHold = mf.vehicle.goalPointLookAheadHold;
@@ -444,7 +467,7 @@ namespace AgOpenGPS
             lblAV_Set.Text = mf.setAngVel.ToString("N1");
 
             lblPWMDisplay.Text = mf.mc.pwmDisplay.ToString();
-            
+
             counter++;
 
             if (toSend && counter > 4)
@@ -496,6 +519,9 @@ namespace AgOpenGPS
                 else
                     lblPercentFS.Text = mf.mc.sensorData.ToString();
             }
+
+            // Update Smart WAS Calibration status
+            UpdateSmartCalibrationStatus();
         }
 
         #region Tab Sensors
@@ -503,6 +529,7 @@ namespace AgOpenGPS
         private void EnableAlert_Click(object sender, EventArgs e)
         {
             pboxSendSteer.Visible = true;
+            btnClose.Enabled = false;
 
             if (sender is CheckBox checkbox)
             {
@@ -568,12 +595,15 @@ namespace AgOpenGPS
             if (((NudlessNumericUpDown)sender).ShowKeypad(this))
             {
                 pboxSendSteer.Visible = true;
+                btnClose.Enabled = false;
+
             }
         }
 
         private void hsbarSensor_Scroll(object sender, ScrollEventArgs e)
         {
             pboxSendSteer.Visible = true;
+            btnClose.Enabled = false;
             lblhsbarSensor.Text = ((int)((double)hsbarSensor.Value * 0.3921568627)).ToString() + "%";
         }
 
@@ -898,7 +928,7 @@ namespace AgOpenGPS
             int offset = (int)(hsbarCountsPerDegree.Value * -mf.mc.actualSteerAngleDegrees + hsbarWasOffset.Value);
             if (Math.Abs(offset) > 3900)
             {
-                mf.TimedMessageBox(2000, "Exceeded Range", "Excessive Steer Angle - Cannot Zero");
+                mf.TimedMessageBox(2000, gStr.gsExceededRange, gStr.gsExceededRangeMsg);
                 Log.EventWriter("Excessive Steer Angle, No Zero " + offset);
             }
             else
@@ -907,9 +937,56 @@ namespace AgOpenGPS
             }
         }
 
-        private void btnWASZeroReset_Click(object sender, EventArgs e)
+        private void btnSmartZeroWAS_Click(object sender, EventArgs e)
         {
-            hsbarWasOffset.Value = 0;
+            if (mf.smartWASCalibration == null)
+            {
+                mf.TimedMessageBox(2000, gStr.gsSmartCalibrationError, gStr.gsSmartWASNotAvailable);
+                return;
+            }
+
+            if (!mf.smartWASCalibration.HasValidRecommendation)
+            {
+                if (mf.smartWASCalibration.SampleCount < 200)
+                {
+                    mf.TimedMessageBox(3000, gStr.gsInsufficientData,
+                        string.Format(gStr.gsInsufficientDataMsg, mf.smartWASCalibration.SampleCount));
+                }
+                else
+                {
+                    mf.TimedMessageBox(3000, gStr.gsLowConfidence,
+                        string.Format(gStr.gsLowConfidenceMsg, mf.smartWASCalibration.ConfidenceLevel.ToString("F1")));
+                }
+                return;
+            }
+
+            // Get the recommended adjustment
+            int recommendedOffsetAdjustment = mf.smartWASCalibration.GetRecommendedWASOffsetAdjustment(hsbarCountsPerDegree.Value);
+            int newOffset = hsbarWasOffset.Value + recommendedOffsetAdjustment;
+
+            // Check if the new offset is within acceptable range
+            if (Math.Abs(newOffset) > 3900)
+            {
+                mf.TimedMessageBox(3000, gStr.gsExceededRange,
+                    string.Format(gStr.gsExceededRangeMsg, mf.smartWASCalibration.RecommendedWASZero.ToString("F2"))
+                    );
+                Log.EventWriter($"Smart Zero exceeded range: {newOffset}");
+                return;
+            }
+
+            // Apply the smart zero adjustment
+            hsbarWasOffset.Value = newOffset;
+
+            // Show success message with details
+            mf.TimedMessageBox(4000, gStr.gsSmartZeroApplied,
+                string.Format(gStr.gsSmartZeroAppliedMsg,
+                    mf.smartWASCalibration.SampleCount.ToString("F2"),
+                    mf.smartWASCalibration.ConfidenceLevel.ToString("F1"),
+                    mf.smartWASCalibration.RecommendedWASZero.ToString("F2"),
+                    recommendedOffsetAdjustment.ToString("F1")));
+            Log.EventWriter($"Smart WAS Zero Applied - Samples: {mf.smartWASCalibration.SampleCount}, " +
+                          $"Confidence: {mf.smartWASCalibration.ConfidenceLevel:F1}%, " +
+                          $"Adjustment: {mf.smartWASCalibration.RecommendedWASZero:F2}°");
         }
 
         private void btnStartSA_Click(object sender, EventArgs e)
@@ -1059,11 +1136,6 @@ namespace AgOpenGPS
             if (mf.vehicle.driveFreeSteerAngle > 40) mf.vehicle.driveFreeSteerAngle = 40;
         }
 
-        private void label34_Click(object sender, EventArgs e)
-        {
-
-        }
-
         private void btnSteerAngleDown_MouseDown(object sender, MouseEventArgs e)
         {
             mf.vehicle.driveFreeSteerAngle--;
@@ -1078,10 +1150,14 @@ namespace AgOpenGPS
             SaveSettings();
             mf.SendPgnToLoop(mf.p_251.pgn);
             pboxSendSteer.Visible = false;
+            btnClose.Enabled = true;
             Log.EventWriter("Steer Form, Send and Save Pressed");
 
-            mf.TimedMessageBox(2000, gStr.gsAutoSteerPort, "Settings Sent To Steer Module");
-            
+            mf.TimedMessageBox(2000, gStr.gsAutoSteerPort, gStr.gsSettingsSent);
+        }
+
+        private void btnClose_Click(object sender, EventArgs e)
+        {
             Close();
         }
 
@@ -1189,7 +1265,7 @@ namespace AgOpenGPS
             mf.p_251.pgn[mf.p_251.set0] = Properties.Settings.Default.setArdSteer_setting0;
             mf.p_251.pgn[mf.p_251.set1] = Properties.Settings.Default.setArdSteer_setting1;
             mf.p_251.pgn[mf.p_251.maxPulse] = Properties.Settings.Default.setArdSteer_maxPulseCounts;
-            mf.p_251.pgn[mf.p_251.minSpeed] = unchecked((byte)(Properties.Settings.Default.setAS_minSteerSpeed * 10)); 
+            mf.p_251.pgn[mf.p_251.minSpeed] = unchecked((byte)(Properties.Settings.Default.setAS_minSteerSpeed * 10));
 
             if (Properties.Settings.Default.setAS_isConstantContourOn)
                 mf.p_251.pgn[mf.p_251.angVel] = 1;
@@ -1208,12 +1284,12 @@ namespace AgOpenGPS
 
         private void btnVehicleReset_Click(object sender, EventArgs e)
         {
-            DialogResult result3 = MessageBox.Show("Reset This Page to Defaults",
+            DialogResult result3 = FormDialog.Show(
+                "Reset This Page to Defaults",
                 "Are you Sure",
-                MessageBoxButtons.YesNo,
-                MessageBoxIcon.Question,
-                MessageBoxDefaultButton.Button2);
-            if (result3 == DialogResult.Yes)
+                MessageBoxButtons.YesNo);
+
+            if (result3 == DialogResult.OK)
             {
                 Log.EventWriter("Steer Form - Steer Settings Set to Default");
 
@@ -1225,6 +1301,7 @@ namespace AgOpenGPS
                     mf.autoTuner.ResetToManualDefaults();
                 }
                 
+                mf.TimedMessageBox(2000, gStr.gsReset, gStr.gsResetToDefault);
                 Properties.Settings.Default.setVehicle_maxSteerAngle = mf.vehicle.maxSteerAngle
                     = 45;
 
@@ -1253,7 +1330,7 @@ namespace AgOpenGPS
                 Properties.Settings.Default.stanleyIntegralGainAB = 0;
 
                 Properties.Settings.Default.purePursuitIntegralGainAB = 0;
-                
+
                 Properties.Settings.Default.setAS_sideHillComp = 0;
 
                 Properties.Settings.Default.setAS_uTurnCompensation = 1;
@@ -1425,5 +1502,64 @@ namespace AgOpenGPS
         }
         
         #endregion
+
+        private void SmartCalLabel_Click(object sender, EventArgs e)
+        {
+            // Reset Smart WAS calibration when any of the status labels is clicked
+            if (mf.smartWASCalibration != null)
+            {
+                mf.smartWASCalibration.ResetData();
+                UpdateSmartCalibrationStatus();
+
+                // Show brief confirmation message
+                mf.TimedMessageBox(1500, gStr.gsSmartWASCalibration, gStr.gsCalibrationDataReset);
+            }
+        }
+
+        private void UpdateSmartCalibrationStatus()
+        {
+            if (mf.smartWASCalibration == null)
+            {
+                lblSmartCalStatus.Text = gStr.gsSmartWASNotAvailable;
+                lblSmartCalStatus.ForeColor = Color.Gray;
+                lblSmartCalSamples.Text = $"{gStr.gsSamples}: 0";
+                lblSmartCalConfidence.Text = $"{gStr.gsConfidence}: 0%";
+                btnSmartZeroWAS.Enabled = false;
+                btnSmartZeroWAS.Text = $"{gStr.gsSmartZero}\nN/A";
+                return;
+            }
+
+            // Update samples count
+            lblSmartCalSamples.Text = $"{gStr.gsSamples}: {mf.smartWASCalibration.SampleCount}";
+
+            // Update confidence
+            lblSmartCalConfidence.Text = $"{gStr.gsConfidence}: {mf.smartWASCalibration.ConfidenceLevel:F1}%";
+
+            // Update status text and button state based on calibration readiness
+            if (mf.smartWASCalibration.HasValidRecommendation)
+            {
+                lblSmartCalStatus.Text = gStr.gsReadyForCalibration;
+                lblSmartCalStatus.ForeColor = Color.Green;
+                lblSmartCalConfidence.ForeColor = Color.DarkGreen;
+                btnSmartZeroWAS.Enabled = true;
+                btnSmartZeroWAS.Text = $"{gStr.gsSmartZero}\n{mf.smartWASCalibration.RecommendedWASZero:F1}°";
+            }
+            else if (mf.smartWASCalibration.SampleCount >= 200)
+            {
+                lblSmartCalStatus.Text = gStr.gsLowConfidence;
+                lblSmartCalStatus.ForeColor = Color.Orange;
+                lblSmartCalConfidence.ForeColor = Color.Orange;
+                btnSmartZeroWAS.Enabled = false;
+                btnSmartZeroWAS.Text = $"{gStr.gsSmartZero}\n{gStr.gsLowConfidence}";
+            }
+            else
+            {
+                lblSmartCalStatus.Text = gStr.gsCollectingData;
+                lblSmartCalStatus.ForeColor = Color.Orange;
+                lblSmartCalConfidence.ForeColor = Color.Red;
+                btnSmartZeroWAS.Enabled = false;
+                btnSmartZeroWAS.Text = $"{gStr.gsSmartZero}\nNeed {200 - mf.smartWASCalibration.SampleCount}";
+            }
+        }
     }
 }

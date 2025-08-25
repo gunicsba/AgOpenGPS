@@ -1,14 +1,11 @@
 ﻿//Please, if you use this, share the improvements
 
 using AgLibrary.Logging;
-using AgOpenGPS.Culture;
+using AgOpenGPS.Core.Models;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Globalization;
 using System.Text;
-using System.Windows.Forms;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.TrackBar;
 
 namespace AgOpenGPS
 {
@@ -52,7 +49,7 @@ namespace AgOpenGPS
         public vec2 lastReverseFix = new vec2(0, 0);
 
         //headings
-        public double fixHeading = 0.0, camHeading = 0.0, smoothCamHeading = 0, gpsHeading = 10.0, prevGPSHeading = 0.0;
+        public double camHeading = 0.0, smoothCamHeading = 0, gpsHeading = 10.0, prevGPSHeading = 0.0;
 
         //storage for the cos and sin of heading
         public double cosSectionHeading = 1.0, sinSectionHeading = 0.0;
@@ -102,6 +99,8 @@ namespace AgOpenGPS
         private double nowHz = 0, filteredDelta = 0, delta = 0;
 
         public bool isRTK_AlarmOn, isRTK_KillAutosteer;
+        private DateTime RTKBackSinceUtc = DateTime.MinValue;
+        private const int RTK_RECOVER_DEBOUNCE_MS = 1000;
 
         public double headlandDistanceDelta = 0, boundaryDistanceDelta = 0;
 
@@ -121,6 +120,8 @@ namespace AgOpenGPS
         //public double jumpDistance = 0, jumpDistanceMax;
         //public double jumpDistanceAlarm = 20;
         //public int jumpCounter = 0;
+
+        public double camSmoothFactor = ((double)(Properties.Settings.Default.setDisplay_camSmooth) * 0.004) + 0.2;
 
         public void UpdateFixPosition()
         {
@@ -533,7 +534,7 @@ namespace AgOpenGPS
                         if (camDelta > glm.twoPI) camDelta -= glm.twoPI;
                         else if (camDelta < -glm.twoPI) camDelta += glm.twoPI;
 
-                        smoothCamHeading -= camDelta * camera.camSmoothFactor;
+                        smoothCamHeading -= camDelta * camSmoothFactor;
 
                         if (smoothCamHeading > glm.twoPI) smoothCamHeading -= glm.twoPI;
                         else if (smoothCamHeading < -glm.twoPI) smoothCamHeading += glm.twoPI;
@@ -570,7 +571,7 @@ namespace AgOpenGPS
                         if (camDelta > glm.twoPI) camDelta -= glm.twoPI;
                         else if (camDelta < -glm.twoPI) camDelta += glm.twoPI;
 
-                        smoothCamHeading -= camDelta * camera.camSmoothFactor;
+                        smoothCamHeading -= camDelta * camSmoothFactor;
 
                         if (smoothCamHeading > glm.twoPI) smoothCamHeading -= glm.twoPI;
                         else if (smoothCamHeading < -glm.twoPI) smoothCamHeading += glm.twoPI;
@@ -741,7 +742,7 @@ namespace AgOpenGPS
                             double delta = Math.Abs(Math.PI - Math.Abs(Math.Abs(newHeading - fixHeading) - Math.PI));
 
                             //are we going backwards
-                            isReverse = delta > 2 ? true : false;
+                            isReverse = (delta > 2);
 
                             //save for next meter check
                             lastReverseFix = pn.fix;
@@ -762,7 +763,7 @@ namespace AgOpenGPS
                         if (camDelta > glm.twoPI) camDelta -= glm.twoPI;
                         else if (camDelta < -glm.twoPI) camDelta += glm.twoPI;
 
-                        smoothCamHeading -= camDelta * camera.camSmoothFactor;
+                        smoothCamHeading -= camDelta * camSmoothFactor;
 
                         if (smoothCamHeading > glm.twoPI) smoothCamHeading -= glm.twoPI;
                         else if (smoothCamHeading < -glm.twoPI) smoothCamHeading += glm.twoPI;
@@ -832,18 +833,15 @@ namespace AgOpenGPS
             #endregion
 
             #region Corrected Position
-            double latitud;
-            double longitud;
-
-            pn.ConvertLocalToWGS84(pn.fix.northing, pn.fix.easting, out latitud, out longitud);
+            Wgs84 latLon = AppModel.LocalPlane.ConvertGeoCoordToWgs84(pn.fix.ToGeoCoord());
             byte[] correctedPosition = new byte[30];
             correctedPosition[0] = 0x80;
             correctedPosition[1] = 0x81;
             correctedPosition[2] = 0x7F;
             correctedPosition[3] = 0x64;
             correctedPosition[4] = 24;
-            Buffer.BlockCopy(BitConverter.GetBytes(longitud), 0, correctedPosition, 5, 8);
-            Buffer.BlockCopy(BitConverter.GetBytes(latitud), 0, correctedPosition, 13, 8);
+            Buffer.BlockCopy(BitConverter.GetBytes(latLon.Longitude), 0, correctedPosition, 5, 8);
+            Buffer.BlockCopy(BitConverter.GetBytes(latLon.Latitude), 0, correctedPosition, 13, 8);
             Buffer.BlockCopy(BitConverter.GetBytes(glm.toDegrees(gpsHeading)), 0, correctedPosition, 21, 8);
             SendPgnToLoop(correctedPosition);
             #endregion
@@ -1038,6 +1036,13 @@ namespace AgOpenGPS
             //out serial to autosteer module  //indivdual classes load the distance and heading deltas 
             SendPgnToLoop(p_254.pgn);
 
+            // Smart WAS Calibration data collection
+            if (smartWASCalibration != null && Math.Abs(guidanceLineDistanceOff) < 500) // Within 50cm of guidance line
+            {
+                // Convert guidanceLineSteerAngle from centidegrees to degrees and collect data
+                smartWASCalibration.AddSteerAngleSample(guidanceLineSteerAngle * 0.01, Math.Abs(avgSpeed));
+            }
+
             //for average cross track error
             if (guidanceLineDistanceOff < 29000)
             {
@@ -1196,8 +1201,8 @@ namespace AgOpenGPS
             {
                 //grab fix and elevation
                 sbGrid.Append(
-                      pn.latitude.ToString("N7", CultureInfo.InvariantCulture) + ","
-                    + pn.longitude.ToString("N7", CultureInfo.InvariantCulture) + ","
+                    AppModel.CurrentLatLon.Latitude.ToString("N7", CultureInfo.InvariantCulture) + ","
+                    + AppModel.CurrentLatLon.Longitude.ToString("N7", CultureInfo.InvariantCulture) + ","
                     + Math.Round((pn.altitude - vehicle.VehicleConfig.AntennaHeight),3).ToString(CultureInfo.InvariantCulture) + ","
                     + pn.fixQuality.ToString(CultureInfo.InvariantCulture) + ","
                     + pn.fix.easting.ToString("N2", CultureInfo.InvariantCulture) + ","
@@ -1654,13 +1659,11 @@ namespace AgOpenGPS
             {
                 if (!isJobStarted)
                 {
-                    pn.latStart = pn.latitude;
-                    pn.lonStart = pn.longitude;
-                    pn.SetLocalMetersPerDegree(false);
+                    pn.DefineLocalPlane(AppModel.CurrentLatLon, false);
                 }
-
-                pn.ConvertWGS84ToLocal(pn.latitude, pn.longitude, out pn.fix.northing, out pn.fix.easting);
-
+                GeoCoord fixCoord = AppModel.LocalPlane.ConvertWgs84ToGeoCoord(AppModel.CurrentLatLon);
+                pn.fix.northing = fixCoord.Northing;
+                pn.fix.easting = fixCoord.Easting;
                 //Draw a grid once we know where in the world we are.
                 isFirstFixPositionSet = true;
 
@@ -1672,7 +1675,6 @@ namespace AgOpenGPS
 
                 return;
             }
-
             else
             {
                 prevFix.easting = pn.fix.easting; prevFix.northing = pn.fix.northing;

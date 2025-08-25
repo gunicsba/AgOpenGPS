@@ -20,10 +20,7 @@ namespace AgOpenGPS
         //pure pursuit values
         public vec2 goalPointAB = new vec2(0, 0);
 
-        //List of all available ABLines
-        public CTrk refLine = new CTrk();
-
-        public double howManyPathsAway, lastHowManyPathsAway;
+        public int howManyPathsAway, lastHowManyPathsAway;
         public bool isMakingABLine;
         public bool isHeadingSameWay = true, lastIsHeadingSameWay;
 
@@ -50,17 +47,15 @@ namespace AgOpenGPS
         public string desName = "";
 
         //autosteer errors
-        public double pivotDistanceError, pivotDistanceErrorLast, pivotDerivative, pivotDerivativeSmoothed;
+        public double pivotDistanceError, pivotDistanceErrorLast, pivotDerivative;
 
         //derivative counters
         private int counter2;
 
         public double inty;
-        public double steerAngleSmoothed, pivotErrorTotal;
-        public double distSteerError, lastDistSteerError, derivativeDistError;
+        public double pivotErrorTotal;
 
         //Color tramColor = Color.YellowGreen;
-        public int tramPassEvery;
 
         //pointers to mainform controls
         private readonly FormGPS mf;
@@ -338,16 +333,16 @@ namespace AgOpenGPS
         public void DrawABLineNew()
         {
             //ABLine currently being designed
-                GL.LineWidth(lineWidth);
-                GL.Begin(PrimitiveType.Lines);
-                GL.Color3(0.95f, 0.70f, 0.50f);
-                GL.Vertex3(desLineEndA.easting, desLineEndA.northing, 0.0);
-                GL.Vertex3(desLineEndB.easting, desLineEndB.northing, 0.0);
-                GL.End();
+            GL.LineWidth(lineWidth);
+            GL.Begin(PrimitiveType.Lines);
+            GL.Color3(0.95f, 0.70f, 0.50f);
+            GL.Vertex3(desLineEndA.easting, desLineEndA.northing, 0.0);
+            GL.Vertex3(desLineEndB.easting, desLineEndB.northing, 0.0);
+            GL.End();
 
-                GL.Color3(0.2f, 0.950f, 0.20f);
-                mf.font.DrawText3D(desPtA.easting, desPtA.northing, "&A");
-                mf.font.DrawText3D(desPtB.easting, desPtB.northing, "&B");
+            GL.Color3(0.2f, 0.950f, 0.20f);
+            mf.font.DrawText3D(desPtA.easting, desPtA.northing, "&A", mf.camHeading);
+            mf.font.DrawText3D(desPtB.easting, desPtB.northing, "&B", mf.camHeading);
         }
 
         public void DrawABLines()
@@ -364,10 +359,10 @@ namespace AgOpenGPS
             //GL.Vertex3(mf.bnd.iE, mf.bnd.iN, 0.0);
             GL.End();
 
-            if (mf.font.isFontOn && !isMakingABLine)
+            if (!isMakingABLine)
             {
-                mf.font.DrawText3D(mf.trk.gArr[mf.trk.idx].ptA.easting, mf.trk.gArr[mf.trk.idx].ptA.northing, "&A");
-                mf.font.DrawText3D(mf.trk.gArr[mf.trk.idx].ptB.easting, mf.trk.gArr[mf.trk.idx].ptB.northing, "&B");
+                mf.font.DrawText3D(mf.trk.gArr[mf.trk.idx].ptA.easting, mf.trk.gArr[mf.trk.idx].ptA.northing, "&A", mf.camHeading);
+                mf.font.DrawText3D(mf.trk.gArr[mf.trk.idx].ptB.easting, mf.trk.gArr[mf.trk.idx].ptB.northing, "&B", mf.camHeading);
             }
 
             GL.PointSize(1.0f);
@@ -414,9 +409,9 @@ namespace AgOpenGPS
             GL.End();
 
             //draw current AB Line
-            GL.LineWidth(lineWidth*3);
+            GL.LineWidth(lineWidth * 3);
             GL.Begin(PrimitiveType.Lines);
-            GL.Color3(0,0,0);
+            GL.Color3(0, 0, 0);
             GL.Vertex3(currentLinePtA.easting, currentLinePtA.northing, 0.0);
             GL.Vertex3(currentLinePtB.easting, currentLinePtB.northing, 0.0);
             GL.End();
@@ -437,7 +432,7 @@ namespace AgOpenGPS
                 double cosHeading = Math.Cos(-abHeading);
                 double sinHeading = Math.Sin(-abHeading);
 
-                GL.Color4(0,0,0, 0.5);
+                GL.Color4(0, 0, 0, 0.5);
 
                 GL.LineWidth(lineWidth * 3);
 
@@ -449,7 +444,7 @@ namespace AgOpenGPS
                     {
                         GL.Vertex3((cosHeading * (toolWidth * i)) + currentLinePtA.easting, (sinHeading * (toolWidth * i)) + currentLinePtA.northing, 0);
                         GL.Vertex3((cosHeading * (toolWidth * i)) + currentLinePtB.easting, (sinHeading * (toolWidth * i)) + currentLinePtB.northing, 0);
-                        
+
                         GL.Vertex3((cosHeading * (-toolWidth * i)) + currentLinePtA.easting, (sinHeading * (-toolWidth * i)) + currentLinePtA.northing, 0);
                         GL.Vertex3((cosHeading * (-toolWidth * i)) + currentLinePtB.easting, (sinHeading * (-toolWidth * i)) + currentLinePtB.northing, 0);
                     }
