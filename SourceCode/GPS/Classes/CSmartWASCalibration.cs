@@ -96,6 +96,33 @@ namespace AgOpenGPS
         }
 
         /// <summary>
+        /// Apply an offset to all collected data to account for WAS zero changes
+        /// This prevents the offset from being applied multiple times
+        /// </summary>
+        /// <param name="appliedOffsetDegrees">The offset that was applied to the WAS zero in degrees</param>
+        public void ApplyOffsetToCollectedData(double appliedOffsetDegrees)
+        {
+            lock (lockObject)
+            {
+                if (steerAngleHistory.Count == 0) return;
+
+                // Apply the offset to all collected samples
+                for (int i = 0; i < steerAngleHistory.Count; i++)
+                {
+                    steerAngleHistory[i] += appliedOffsetDegrees;
+                }
+
+                // Recalculate statistics with the adjusted data
+                if (SampleCount >= MIN_SAMPLES_FOR_ANALYSIS)
+                {
+                    PerformStatisticalAnalysis();
+                }
+
+                AgLibrary.Logging.Log.EventWriter($"Smart WAS: Applied {appliedOffsetDegrees:F2}° offset to {steerAngleHistory.Count} collected samples");
+            }
+        }
+
+        /// <summary>
         /// Add a new steer angle measurement to the collection
         /// Called from the main GPS update loop
         /// </summary>

@@ -1302,4 +1302,7 @@ USE AT OWN RISK.</value>
   <data name="v_AboutIntro" xml:space="preserve">
     <value>https://www.youtube.com/watch?v=iN2cZ8avHag</value>
   </data>
+  <data name="gsProposed" xml:space="preserve">
+    <value>Proposed</value>
+  </data>
 </root>

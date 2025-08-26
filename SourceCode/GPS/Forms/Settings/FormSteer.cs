@@ -957,13 +957,18 @@ namespace AgOpenGPS
             // Apply the smart zero adjustment
             hsbarWasOffset.Value = newOffset;
 
+            // CRITICAL: Apply the offset to the collected data to prevent spam-clicking bug
+            // This ensures that repeated applications don't keep adding the same offset
+            mf.smartWASCalibration.ApplyOffsetToCollectedData(mf.smartWASCalibration.RecommendedWASZero);
+
             // Show success message with details
             mf.TimedMessageBox(4000, gStr.gsSmartZeroApplied,
                 string.Format(gStr.gsSmartZeroAppliedMsg,
-                    mf.smartWASCalibration.SampleCount.ToString("F2"),
+                    mf.smartWASCalibration.SampleCount,
                     mf.smartWASCalibration.ConfidenceLevel.ToString("F1"),
                     mf.smartWASCalibration.RecommendedWASZero.ToString("F2"),
-                    recommendedOffsetAdjustment.ToString("F1")));
+                    recommendedOffsetAdjustment));
+
             Log.EventWriter($"Smart WAS Zero Applied - Samples: {mf.smartWASCalibration.SampleCount}, " +
                           $"Confidence: {mf.smartWASCalibration.ConfidenceLevel:F1}%, " +
                           $"Adjustment: {mf.smartWASCalibration.RecommendedWASZero:F2}°");
@@ -1363,7 +1368,7 @@ namespace AgOpenGPS
             {
                 lblSmartCalStatus.Text = gStr.gsSmartWASNotAvailable;
                 lblSmartCalStatus.ForeColor = Color.Gray;
-                lblSmartCalSamples.Text = $"{gStr.gsSamples}: 0";
+                lblSmartCalSamples.Text = $"{gStr.gsProposed}: 0";
                 lblSmartCalConfidence.Text = $"{gStr.gsConfidence}: 0%";
                 btnSmartZeroWAS.Enabled = false;
                 btnSmartZeroWAS.Text = $"{gStr.gsSmartZero}\nN/A";
@@ -1371,7 +1376,7 @@ namespace AgOpenGPS
             }
 
             // Update samples count
-            lblSmartCalSamples.Text = $"{gStr.gsSamples}: {mf.smartWASCalibration.SampleCount}";
+            lblSmartCalSamples.Text = $"{gStr.gsProposed}: {mf.smartWASCalibration.RecommendedWASZero:F1}°";
 
             // Update confidence
             lblSmartCalConfidence.Text = $"{gStr.gsConfidence}: {mf.smartWASCalibration.ConfidenceLevel:F1}%";
@@ -1383,7 +1388,10 @@ namespace AgOpenGPS
                 lblSmartCalStatus.ForeColor = Color.Green;
                 lblSmartCalConfidence.ForeColor = Color.DarkGreen;
                 btnSmartZeroWAS.Enabled = true;
-                btnSmartZeroWAS.Text = $"{gStr.gsSmartZero}\n{mf.smartWASCalibration.RecommendedWASZero:F1}°";
+
+                // Display the proposed offset prominently on the button
+                int proposedOffsetCounts = mf.smartWASCalibration.GetRecommendedWASOffsetAdjustment(hsbarCountsPerDegree.Value);
+                btnSmartZeroWAS.Text = $"{gStr.gsSmartZero}";
             }
             else if (mf.smartWASCalibration.SampleCount >= 200)
             {

@@ -2367,6 +2367,15 @@ namespace AgOpenGPS.Core.Translations {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Proposed.
+        /// </summary>
+        public static string gsProposed {
+            get {
+                return ResourceManager.GetString("gsProposed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Quick AB Line creator.
         /// </summary>
         public static string gsQuickAB {
