@@ -2136,7 +2136,7 @@ namespace AgOpenGPS
                     sim.DoSimTick(lastSimGuidanceAngle);
                 }
             }
-            else sim.DoSimTick(sim.steerAngleScrollBar);
+            else sim.DoSimTick(sim.steerAngleScrollBar + mc.actualSteerAngleDegrees);
         }
         private void btnSimReverseDirection_Click(object sender, EventArgs e)
         {

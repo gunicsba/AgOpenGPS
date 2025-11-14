@@ -30,7 +30,6 @@ namespace AgOpenGPS
         {
             steerAngle = _st;
             // Add the actual wheel angle value to the simulator angle.
-            steerAngle += mf.mc.actualSteerAngleDegrees;
 
             double diff = Math.Abs(steerAngle - steerangleAve);
 
@@ -62,6 +61,7 @@ namespace AgOpenGPS
             {
                 steerangleAve = steerAngle;
             }
+
 
 
 
