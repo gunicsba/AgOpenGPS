@@ -1,4 +1,4 @@
-﻿//Please, if you use this, share the improvements
+﻿﻿﻿//Please, if you use this, share the improvements
 
 using System;
 using System.Collections.Generic;
@@ -256,6 +256,9 @@ namespace AgOpenGPS
         public CWindowsSettingsBrightnessController displayBrightness;
 
         /// <summary>
+        /// Auto-tuning system for steering parameters
+        /// </summary>
+        public CAutoTuner autoTuner;
         /// Smart WAS calibration system
         /// </summary>
         public CSmartWASCalibration smartWASCalibration;
@@ -393,6 +396,9 @@ namespace AgOpenGPS
 
             //brightness object class
             displayBrightness = new CWindowsSettingsBrightnessController(Properties.Settings.Default.setDisplay_isBrightnessOn);
+            
+            //auto-tuning system initialization
+            autoTuner = new CAutoTuner(this);
 
             //smart WAS calibration system
             smartWASCalibration = new CSmartWASCalibration(this);
