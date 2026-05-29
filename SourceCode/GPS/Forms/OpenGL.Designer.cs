@@ -387,6 +387,10 @@ namespace AgOpenGPS
                             else
                                 curve.DrawCurve();
                         }
+
+                        // Draw tree planting target visualization when mode is active
+                        if (isTreePlantModeOn && trk.idx > -1 && trk.gArr[trk.idx].mode == TrackMode.AB)
+                            ABLine.DrawTreePlant();
                     }
 
                     //draw line creations
@@ -481,6 +485,8 @@ namespace AgOpenGPS
                     {
                         if (isLightbarOn) DrawSteerBarText();
                     }
+
+                    if (isTreePlantModeOn) DrawTreePlantIndicator();
 
                     if (trk.idx > -1 && !ct.isContourBtnOn) DrawTrackInfo();
 
@@ -2354,6 +2360,72 @@ namespace AgOpenGPS
                     GL.End();
                 }
             }
+        }
+
+        private void DrawTreePlantIndicator()
+        {
+            if (!isTreePlantModeOn || trk.idx < 0 || trk.gArr[trk.idx].mode != TrackMode.AB)
+                return;
+
+            double textSize = (100 + (double)(oglMain.Height - 600)) * 0.0012;
+            int wide = (int)((double)oglMain.Width / 18);
+            if (wide < 64) wide = 64;
+
+            // Smoothing - same pattern as cross-track
+            ABLine.avgTreePlantDistance = ABLine.avgTreePlantDistance * 0.8 + ABLine.treePlantDistance * 0.2;
+
+            // Convert meters to cm or inches
+            double distDisplay = ABLine.avgTreePlantDistance * m2InchOrCm;
+            if (distDisplay > 999) distDisplay = 999;
+            if (distDisplay < -999) distDisplay = -999;
+
+            // Color based on absolute distance in meters
+            double absDistM = Math.Abs(ABLine.avgTreePlantDistance);
+            double green, red;
+            if (absDistM < 0.05)
+            {
+                green = 0.98;
+                red = 0.0;
+            }
+            else if (absDistM < 0.25)
+            {
+                green = 0.98;
+                red = 0.9;
+            }
+            else
+            {
+                green = 0.2;
+                red = 0.95;
+            }
+
+            // Position below the cross-track bar
+            int topY = (int)(35 * (1 + textSize)) + 4;
+            int botY = topY + (int)(32 * (1 + textSize));
+
+            GL.Color4(red, green, 0.3, 1.0);
+            XyCoord u0v0 = new XyCoord(-wide, botY);
+            XyCoord u1v1 = new XyCoord(wide, topY);
+            ScreenTextures.CrossTrackBackground.Draw(u0v0, u1v1);
+
+            // Build display text with direction
+            string hede;
+            if (Math.Abs(distDisplay) < 0.5)
+            {
+                hede = "Tram == 0 ==";
+            }
+            else if (distDisplay > 0)
+            {
+                hede = "Tram << " + (Math.Abs(distDisplay)).ToString("N0") + " " + unitsInCmNS;
+            }
+            else
+            {
+                hede = "Tram " + (Math.Abs(distDisplay)).ToString("N0") + " " + unitsInCmNS + " >>";
+            }
+
+            int center = -(int)(((double)(hede.Length) * 0.5) * (18 * (1.0 + textSize)));
+
+            GL.Color4(0.12f, 0.12770f, 0.120f, 1);
+            font.DrawText(center, topY + 2, hede, 1.0 + textSize);
         }
 
         private void DrawTrackInfo()

@@ -150,6 +150,7 @@ namespace AgOpenGPS
             this.flagByLatLonToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.recordedPathStripMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.copyTracksToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.treePlantingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.lblCurrentField = new System.Windows.Forms.Label();
             this.lblGuidanceLine = new System.Windows.Forms.Label();
             this.flp1 = new System.Windows.Forms.FlowLayoutPanel();
@@ -1850,7 +1851,8 @@ namespace AgOpenGPS
             this.deleteAppliedToolStripMenuItem,
             this.flagByLatLonToolStripMenuItem,
             this.recordedPathStripMenu,
-            this.copyTracksToolStripMenuItem});
+            this.copyTracksToolStripMenuItem,
+            this.treePlantingToolStripMenuItem});
             this.toolStripBtnFieldTools.Enabled = false;
             this.toolStripBtnFieldTools.Font = new System.Drawing.Font("Tahoma", 27.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.toolStripBtnFieldTools.Image = global::AgOpenGPS.Properties.Resources.FieldTools;
@@ -1941,6 +1943,15 @@ namespace AgOpenGPS
             this.copyTracksToolStripMenuItem.Size = new System.Drawing.Size(445, 70);
             this.copyTracksToolStripMenuItem.Text = "Import Tracks";
             this.copyTracksToolStripMenuItem.Click += new System.EventHandler(this.copyTracksToolStripMenuItem_Click);
+            //
+            // treePlantingToolStripMenuItem
+            //
+            this.treePlantingToolStripMenuItem.Font = new System.Drawing.Font("Tahoma", 26.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.treePlantingToolStripMenuItem.Image = global::AgOpenGPS.Properties.Resources.TreePlantOff;
+            this.treePlantingToolStripMenuItem.Name = "treePlantingToolStripMenuItem";
+            this.treePlantingToolStripMenuItem.Size = new System.Drawing.Size(445, 70);
+            this.treePlantingToolStripMenuItem.Text = "Tree Planting";
+            this.treePlantingToolStripMenuItem.Click += new System.EventHandler(this.treePlantingToolStripMenuItem_Click);
             // 
             // lblCurrentField
             // 
@@ -2676,9 +2687,9 @@ namespace AgOpenGPS
             this.btnContourLock.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.btnContourLock.UseVisualStyleBackColor = false;
             this.btnContourLock.Click += new System.EventHandler(this.btnContourLock_Click);
-            // 
+            //
             // lblNumCu
-            // 
+            //
             this.lblNumCu.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.lblNumCu.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblNumCu.ForeColor = System.Drawing.Color.Black;
@@ -3084,6 +3095,7 @@ namespace AgOpenGPS
         private System.Windows.Forms.ToolStripMenuItem flagByLatLonToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem recordedPathStripMenu;
         private System.Windows.Forms.ToolStripMenuItem copyTracksToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem treePlantingToolStripMenuItem;
         private System.Windows.Forms.Panel panelControlBox;
         public System.Windows.Forms.Button btnTiltDn;
         public System.Windows.Forms.Button btnTiltUp;

@@ -112,6 +112,14 @@ namespace AgOpenGPS.Properties
         public bool setTool_isDirectionMarkers = true;
         public double setTool_trailingToolToPivotLength = 0;
 
+        // Tree planting mode
+        public bool setTool_isTreePlantMode = false;
+        public double setTool_treePlantAngleScale = 20.0;
+        public double setTool_treePlantAngle = 90.0;
+        public double setTool_treePlantSideExtension = 50.0;
+        public double setTool_treePlantGridSpacing = 4.8;
+        public bool setTool_treePlantAngleOutput = false;
+
         public int setVehicle_numSections = 3;
         public int setTool_numSectionsMulti = 20;
         public bool setSection_isFast = true;

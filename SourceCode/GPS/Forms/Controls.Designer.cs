@@ -65,6 +65,13 @@ namespace AgOpenGPS
                     TimedMessageBox(2000, gStr.gsGuidanceStopped, gStr.gsContourOn);
                 }
 
+                // Disable tree planting mode when contour is active
+                if (isTreePlantModeOn)
+                {
+                    isTreePlantModeOn = false;
+                    isTreePlantAngleOutputOn = false;
+                }
+
                 // Enable and show Track button when Contour is inactive
                 btnTrack.Enabled = true;
                 btnTrack.Visible = true;
@@ -677,6 +684,10 @@ namespace AgOpenGPS
                     tool.overlap = Properties.ToolSettings.Default.setVehicle_toolOverlap;
                     tool.isSectionsNotZones = Properties.ToolSettings.Default.setTool_isSectionsNotZones;
 
+                    // Restore tree planting mode from tool profile
+                    isTreePlantModeOn = Properties.ToolSettings.Default.setTool_isTreePlantMode;
+                    isTreePlantAngleOutputOn = Properties.ToolSettings.Default.setTool_treePlantAngleOutput;
+
                     if (tool.isSectionsNotZones)
                         tool.numOfSections = Properties.ToolSettings.Default.setVehicle_numSections;
                     else
@@ -1127,6 +1138,19 @@ namespace AgOpenGPS
             {
                 TimedMessageBox(3000, gStr.gsFieldNotOpen, gStr.gsStartNewField);
             }
+        }
+
+        private void treePlantingToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Form fc = Application.OpenForms["FormTreePlant"];
+            if (fc != null)
+            {
+                fc.Focus();
+                return;
+            }
+
+            var form = new FormTreePlant(this);
+            form.Show(this);
         }
 
         #endregion

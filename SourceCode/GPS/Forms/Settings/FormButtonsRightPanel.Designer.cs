@@ -37,6 +37,7 @@
             this.skipPrev = new System.Windows.Forms.Button();
             this.skipNext = new System.Windows.Forms.Button();
             this.contour = new System.Windows.Forms.Button();
+            this.treePlant = new System.Windows.Forms.Button();
             this.btnAutoSteer = new System.Windows.Forms.Button();
             this.btnAutoYouTurn = new System.Windows.Forms.Button();
             this.btnSectionMasterAuto = new System.Windows.Forms.Button();
@@ -218,9 +219,26 @@
             this.contour.TabIndex = 550;
             this.contour.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.contour.UseVisualStyleBackColor = false;
-            // 
+            //
+            // treePlant
+            //
+            this.treePlant.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.treePlant.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.treePlant.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.treePlant.FlatAppearance.BorderColor = System.Drawing.SystemColors.HotTrack;
+            this.treePlant.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.treePlant.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.treePlant.Image = global::AgOpenGPS.Properties.Resources.TreePlantOff;
+            this.treePlant.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+            this.treePlant.Location = new System.Drawing.Point(3, 3);
+            this.treePlant.Name = "treePlant";
+            this.treePlant.Size = new System.Drawing.Size(84, 72);
+            this.treePlant.TabIndex = 560;
+            this.treePlant.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.treePlant.UseVisualStyleBackColor = false;
+            //
             // btnAutoSteer
-            // 
+            //
             this.btnAutoSteer.BackColor = System.Drawing.Color.WhiteSmoke;
             this.btnAutoSteer.FlatAppearance.BorderColor = System.Drawing.SystemColors.HotTrack;
             this.btnAutoSteer.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -358,9 +376,9 @@
             this.btnContour.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.btnContour.UseVisualStyleBackColor = false;
             this.btnContour.Click += new System.EventHandler(this.btnContour_Click);
-            // 
+            //
             // buttonLabelReset
-            // 
+            //
             this.buttonLabelReset.BackColor = System.Drawing.Color.WhiteSmoke;
             this.buttonLabelReset.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.buttonLabelReset.FlatAppearance.BorderColor = System.Drawing.SystemColors.HotTrack;
@@ -551,6 +569,7 @@
         public System.Windows.Forms.Button buttonLabelReset;
         public System.Windows.Forms.Button track;
         public System.Windows.Forms.Button contour;
+        public System.Windows.Forms.Button treePlant;
         public System.Windows.Forms.Button skipNext;
         public System.Windows.Forms.Button skipPrev;
         public System.Windows.Forms.Button manualSection;

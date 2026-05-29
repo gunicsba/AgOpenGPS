@@ -1,6 +1,7 @@
 using AgOpenGPS.Core.Drawing;
 using AgOpenGPS.Core.DrawLib;
 using AgOpenGPS.Core.Models;
+using OpenTK.Graphics.OpenGL;
 using System;
 using System.Collections.Generic;
 
@@ -67,6 +68,13 @@ namespace AgOpenGPS
 
         public double inty;
         public double pivotErrorTotal;
+
+        // Tree planting: signed distance in meters from nearest perpendicular tramline
+        public double treePlantDistance;
+        // Tree planting: smoothed distance for display
+        public double avgTreePlantDistance;
+        // Tree planting: center point on the nearest tramline (for drawing target circles)
+        public vec2 treePlantTargetPoint = new vec2(0, 0);
 
         //Color tramColor = Color.YellowGreen;
 
@@ -570,6 +578,202 @@ namespace AgOpenGPS
             {
                 //return;
             }
+        }
+
+        public void CalculateTreePlantDistance()
+        {
+            if (mf.trk.gArr == null || mf.trk.gArr.Count == 0 || mf.trk.idx < 0) return;
+
+            CTrk track = mf.trk.gArr[mf.trk.idx];
+            if (track.mode != TrackMode.AB) return;
+
+            // AB line direction vector
+            double dx = track.endPtB.easting - track.endPtA.easting;
+            double dy = track.endPtB.northing - track.endPtA.northing;
+            double lineLen = Math.Sqrt(dx * dx + dy * dy);
+            if (lineLen < 0.001) return;
+
+            // Unit direction vector along AB line
+            double ux = dx / lineLen;
+            double uy = dy / lineLen;
+
+            // Vector from ptA to current tool position (antenna is on the implement)
+            double px = mf.toolPos.easting - track.endPtA.easting;
+            double py = mf.toolPos.northing - track.endPtA.northing;
+
+            // Get settings
+            double gridSpacing = Properties.ToolSettings.Default.setTool_treePlantGridSpacing;
+            if (gridSpacing < 0.1) gridSpacing = 0.1;
+            double angleDeg = Properties.ToolSettings.Default.setTool_treePlantAngle;
+            double angleRad = angleDeg * Math.PI / 180.0;
+
+            // Tramline direction: rotate AB direction by angle
+            double tDirX = ux * Math.Cos(angleRad) - uy * Math.Sin(angleRad);
+            double tDirY = uy * Math.Cos(angleRad) + ux * Math.Sin(angleRad);
+
+            // Cross-tramline direction (perpendicular to tramline, in the grid direction)
+            double cDirX = -tDirY;
+            double cDirY = tDirX;
+
+            // Project position onto cross-tramline direction
+            double crossCoord = px * cDirX + py * cDirY;
+
+            // Modulo gridSpacing, snap to nearest tramline
+            double dist = crossCoord % gridSpacing;
+            if (dist < 0) dist += gridSpacing;
+
+            double halfGrid = gridSpacing * 0.5;
+            if (dist > halfGrid) dist -= gridSpacing;
+
+            // Calculate the target point on the nearest tramline
+            // Project position onto tramline direction to get along-tramline coordinate
+            double alongTram = px * tDirX + py * tDirY;
+            // Target = position - (perpendicular distance) * crossDirection
+            treePlantTargetPoint.easting = mf.toolPos.easting - dist * cDirX;
+            treePlantTargetPoint.northing = mf.toolPos.northing - dist * cDirY;
+
+            // Sign convention: positive = behind (haven't reached it), negative = ahead
+            if (!isHeadingSameWay) dist = -dist;
+
+            treePlantDistance = dist;
+        }
+
+        public void DrawTreePlant()
+        {
+            if (!isABValid) return;
+            if (mf.trk.gArr == null || mf.trk.idx < 0) return;
+            if (mf.trk.gArr[mf.trk.idx].mode != TrackMode.AB) return;
+
+            CTrk track = mf.trk.gArr[mf.trk.idx];
+            double gridSpacing = Properties.ToolSettings.Default.setTool_treePlantGridSpacing;
+            if (gridSpacing < 0.1) return;
+
+            double dx = track.endPtB.easting - track.endPtA.easting;
+            double dy = track.endPtB.northing - track.endPtA.northing;
+            double len = Math.Sqrt(dx * dx + dy * dy);
+            if (len < 0.01) return;
+
+            double ux = dx / len;
+            double uy = dy / len;
+
+            // Tramline direction from angle setting
+            double angleDeg = Properties.ToolSettings.Default.setTool_treePlantAngle;
+            double angleRad = angleDeg * Math.PI / 180.0;
+            double tDirX = ux * Math.Cos(angleRad) - uy * Math.Sin(angleRad);
+            double tDirY = uy * Math.Cos(angleRad) + ux * Math.Sin(angleRad);
+
+            double sideExtension = Properties.ToolSettings.Default.setTool_treePlantSideExtension;
+
+            // --- Part A: Draw tramlines at configured angle ---
+            // Tramline crossing points along AB line are at intervals of gridSpacing / sin(angle)
+            double sinAngle = Math.Sin(angleRad);
+            if (Math.Abs(sinAngle) < 0.01) return; // Near-parallel tramlines, skip
+            double spacingAlongAB = gridSpacing / sinAngle;
+
+            double pivotAlong = ((mf.toolPos.easting - track.endPtA.easting) * dx
+                               + (mf.toolPos.northing - track.endPtA.northing) * dy) / (len * len);
+
+            int iStart = Math.Max(0, (int)Math.Floor((pivotAlong - 0.5) * len / spacingAlongAB) - 1);
+            int iEnd = (int)Math.Ceiling((pivotAlong + 0.5) * len / spacingAlongAB) + 1;
+
+            GL.LineWidth(2);
+            GL.Color4(0.95f, 0.75f, 0.1f, 0.8f); // Orange-yellow
+            GL.Begin(PrimitiveType.Lines);
+            for (int i = iStart; i <= iEnd; i++)
+            {
+                double distAlong = i * spacingAlongAB;
+                double cx = track.endPtA.easting + ux * distAlong;
+                double cy = track.endPtA.northing + uy * distAlong;
+                GL.Vertex3(cx - tDirX * sideExtension, cy - tDirY * sideExtension, 0);
+                GL.Vertex3(cx + tDirX * sideExtension, cy + tDirY * sideExtension, 0);
+            }
+            GL.End();
+
+            // --- Part B: Target circles (bullseye) ---
+            double centerX = treePlantTargetPoint.easting;
+            double centerY = treePlantTargetPoint.northing;
+
+            // Inner circle: 5cm radius (1 degree threshold)
+            // Outer circle: 25cm radius (5 degree threshold)
+            double innerRadius = 0.05;
+            double outerRadius = 0.25;
+            const int segments = 36;
+
+            double absDist = Math.Abs(treePlantDistance);
+
+            // Outer circle - background (black halo)
+            GL.LineWidth(5);
+            GL.Color4(0, 0, 0, 0.8);
+            GL.Begin(PrimitiveType.LineLoop);
+            for (int i = 0; i < segments; i++)
+            {
+                double angle = i * Math.PI * 2.0 / segments;
+                GL.Vertex3(centerX + outerRadius * Math.Cos(angle),
+                           centerY + outerRadius * Math.Sin(angle), 0);
+            }
+            GL.End();
+
+            // Outer circle - foreground (color based on distance)
+            GL.LineWidth(2);
+            if (absDist <= innerRadius)
+                GL.Color4(0.1f, 0.95f, 0.1f, 0.9f); // Green: on target
+            else if (absDist <= outerRadius)
+                GL.Color4(0.95f, 0.95f, 0.1f, 0.9f); // Yellow: close
+            else
+                GL.Color4(0.95f, 0.2f, 0.1f, 0.9f); // Red: far
+            GL.Begin(PrimitiveType.LineLoop);
+            for (int i = 0; i < segments; i++)
+            {
+                double angle = i * Math.PI * 2.0 / segments;
+                GL.Vertex3(centerX + outerRadius * Math.Cos(angle),
+                           centerY + outerRadius * Math.Sin(angle), 0);
+            }
+            GL.End();
+
+            // Inner circle - background
+            GL.LineWidth(3);
+            GL.Color4(0, 0, 0, 0.8);
+            GL.Begin(PrimitiveType.LineLoop);
+            for (int i = 0; i < segments; i++)
+            {
+                double angle = i * Math.PI * 2.0 / segments;
+                GL.Vertex3(centerX + innerRadius * Math.Cos(angle),
+                           centerY + innerRadius * Math.Sin(angle), 0);
+            }
+            GL.End();
+
+            // Inner circle - foreground (green)
+            GL.LineWidth(1);
+            GL.Color4(0.1f, 0.95f, 0.1f, 0.9f);
+            GL.Begin(PrimitiveType.LineLoop);
+            for (int i = 0; i < segments; i++)
+            {
+                double angle = i * Math.PI * 2.0 / segments;
+                GL.Vertex3(centerX + innerRadius * Math.Cos(angle),
+                           centerY + innerRadius * Math.Sin(angle), 0);
+            }
+            GL.End();
+
+            // Center dot
+            GL.PointSize(6);
+            GL.Color4(0.1f, 0.95f, 0.1f, 0.9f);
+            GL.Begin(PrimitiveType.Points);
+            GL.Vertex3(centerX, centerY, 0);
+            GL.End();
+
+            // --- Part C: Direction line from antenna to target center ---
+            GL.LineWidth(1);
+            GL.Color4(0.95f, 0.95f, 0.1f, 0.6f); // Yellow dashed
+            GL.Enable(EnableCap.LineStipple);
+            GL.LineStipple(1, 0x0F0F);
+            GL.Begin(PrimitiveType.Lines);
+            GL.Vertex3(mf.toolPos.easting, mf.toolPos.northing, 0);
+            GL.Vertex3(centerX, centerY, 0);
+            GL.End();
+            GL.Disable(EnableCap.LineStipple);
+
+            GL.LineWidth(1);
+            GL.PointSize(1);
         }
     }
 }
