@@ -34,6 +34,14 @@ namespace AgOpenGPS.Properties
         public bool setTool_isDirectionMarkers = true;
         public double setTool_trailingToolToPivotLength = 0;
 
+        // Tree planting mode
+        public bool setTool_isTreePlantMode = false;
+        public double setTool_treePlantAngleScale = 20.0; // degrees per meter (20 = 1deg per 5cm)
+        public double setTool_treePlantAngle = 90.0; // angle between tramline and AB line (90 = perpendicular)
+        public double setTool_treePlantSideExtension = 50.0; // meters each side of AB line
+        public double setTool_treePlantGridSpacing = 4.8; // perpendicular distance between tramlines
+        public bool setTool_treePlantAngleOutput = false; // send distance as steer angle via PGN
+
         // Sections
         public int setVehicle_numSections = 3;
         public int setTool_numSectionsMulti = 20;

@@ -285,6 +285,14 @@ namespace AgOpenGPS
             dest.setTool_isDirectionMarkers = source.setTool_isDirectionMarkers;
             dest.setTool_trailingToolToPivotLength = source.setTool_trailingToolToPivotLength;
 
+            // Tree planting mode
+            dest.setTool_isTreePlantMode = source.setTool_isTreePlantMode;
+            dest.setTool_treePlantAngleScale = source.setTool_treePlantAngleScale;
+            dest.setTool_treePlantAngle = source.setTool_treePlantAngle;
+            dest.setTool_treePlantSideExtension = source.setTool_treePlantSideExtension;
+            dest.setTool_treePlantGridSpacing = source.setTool_treePlantGridSpacing;
+            dest.setTool_treePlantAngleOutput = source.setTool_treePlantAngleOutput;
+
             // Sections
             dest.setVehicle_numSections = source.setVehicle_numSections;
             dest.setTool_numSectionsMulti = source.setTool_numSectionsMulti;

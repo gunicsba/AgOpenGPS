@@ -27,6 +27,10 @@ namespace AgOpenGPS
         public short guidanceLineDistanceOff, guidanceLineSteerAngle;
         public double avGuidanceSteerAngle;
 
+        // tree planting mode
+        public bool isTreePlantModeOn;
+        public bool isTreePlantAngleOutputOn;
+
         public short errorAngVel;
         public double setAngVel, actAngVel;
         public bool isConstantContourOn;
@@ -890,6 +894,24 @@ namespace AgOpenGPS
             // Outside the free drive check, listeners need the track context in both modes
             isobus.SendGuidanceTrackContext();
 
+            // Tree planting mode: override steer angle with tramline distance (only when angle output is ON)
+            if (isTreePlantModeOn && isTreePlantAngleOutputOn && trk.gArr != null && trk.gArr.Count > 0
+                && trk.idx >= 0 && trk.gArr[trk.idx].mode == TrackMode.AB)
+            {
+                ABLine.CalculateTreePlantDistance();
+                double treePlantAngle = -ABLine.treePlantDistance
+                    * Properties.ToolSettings.Default.setTool_treePlantAngleScale;
+                if (treePlantAngle > vehicle.maxSteerAngle) treePlantAngle = vehicle.maxSteerAngle;
+                if (treePlantAngle < -vehicle.maxSteerAngle) treePlantAngle = -vehicle.maxSteerAngle;
+                guidanceLineSteerAngle = (short)(treePlantAngle * 100);
+            }
+            else if (isTreePlantModeOn && trk.gArr != null && trk.gArr.Count > 0
+                && trk.idx >= 0 && trk.gArr[trk.idx].mode == TrackMode.AB)
+            {
+                // Still calculate distance for display even when angle output is off
+                ABLine.CalculateTreePlantDistance();
+            }
+
             // If Drive button off - normal autosteer 
             if (!vehicle.isInFreeDriveMode)
             {
@@ -1001,7 +1023,7 @@ namespace AgOpenGPS
                 }                
 
                 // delay on dead zone.
-                if (p_254.pgn[p_254.status] == 1 && !isReverse
+                if (!(isTreePlantModeOn && isTreePlantAngleOutputOn) && p_254.pgn[p_254.status] == 1 && !isReverse
                     && Math.Abs(guidanceLineSteerAngle - mc.actualSteerAngleDegrees*100) < vehicle.deadZoneHeading)
                 {
                     if (vehicle.deadZoneDelayCounter > vehicle.deadZoneDelay)
@@ -1021,7 +1043,7 @@ namespace AgOpenGPS
                     p_254.pgn[p_254.steerAngleLo] = unchecked((byte)(guidanceLineSteerAngle));
 
                     // Smart WAS sample collection - guidance steer angle in degrees
-                    smartWAS.AddSample(guidanceLineSteerAngle * 0.01);
+                    if (!(isTreePlantModeOn && isTreePlantAngleOutputOn)) smartWAS.AddSample(guidanceLineSteerAngle * 0.01);
                 }
             }
 

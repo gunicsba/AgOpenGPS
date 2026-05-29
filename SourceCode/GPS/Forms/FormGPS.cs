@@ -1412,6 +1412,10 @@ namespace AgOpenGPS
             isBtnAutoSteerOn = false;
             btnAutoSteer.Image = trk.isAutoSnapToPivot ? Properties.Resources.AutoSteerOffSnapToPivot : Properties.Resources.AutoSteerOff;
 
+            //Tree Planting mode
+            isTreePlantModeOn = Properties.ToolSettings.Default.setTool_isTreePlantMode;
+            isTreePlantAngleOutputOn = Properties.ToolSettings.Default.setTool_treePlantAngleOutput;
+
             //auto YouTurn shutdown
             yt.isYouTurnBtnOn = false;
             btnAutoYouTurn.Image = Properties.Resources.YouTurnNo;
