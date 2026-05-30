@@ -856,18 +856,15 @@ namespace AgOpenGPS
             if (recPath.isDrivingRecordedPath) recPath.UpdatePosition();
 
             // Tree planting mode: override steer angle with tramline distance (only when angle output is ON)
-            if (isTreePlantModeOn && isTreePlantAngleOutputOn && trk.gArr != null && trk.gArr.Count > 0
-                && trk.idx >= 0 && trk.gArr[trk.idx].mode == TrackMode.AB)
+            if (isTreePlantModeOn && isTreePlantAngleOutputOn && ABLine.treePlantLines.Count > 0)
             {
                 ABLine.CalculateTreePlantDistance();
-                double treePlantAngle = -ABLine.treePlantDistance
-                    * Properties.ToolSettings.Default.setTool_treePlantAngleScale;
+                double treePlantAngle = -ABLine.treePlantDistance * 20.0;
                 if (treePlantAngle > vehicle.maxSteerAngle) treePlantAngle = vehicle.maxSteerAngle;
                 if (treePlantAngle < -vehicle.maxSteerAngle) treePlantAngle = -vehicle.maxSteerAngle;
                 guidanceLineSteerAngle = (short)(treePlantAngle * 100);
             }
-            else if (isTreePlantModeOn && trk.gArr != null && trk.gArr.Count > 0
-                && trk.idx >= 0 && trk.gArr[trk.idx].mode == TrackMode.AB)
+            else if (isTreePlantModeOn && ABLine.treePlantLines.Count > 0)
             {
                 // Still calculate distance for display even when angle output is off
                 ABLine.CalculateTreePlantDistance();

@@ -389,7 +389,7 @@ namespace AgOpenGPS
                         }
 
                         // Draw tree planting target visualization when mode is active
-                        if (isTreePlantModeOn && trk.idx > -1 && trk.gArr[trk.idx].mode == TrackMode.AB)
+                        if (isTreePlantModeOn)
                             ABLine.DrawTreePlant();
                     }
 
@@ -2364,7 +2364,7 @@ namespace AgOpenGPS
 
         private void DrawTreePlantIndicator()
         {
-            if (!isTreePlantModeOn || trk.idx < 0 || trk.gArr[trk.idx].mode != TrackMode.AB)
+            if (!isTreePlantModeOn || ABLine.treePlantLines.Count == 0)
                 return;
 
             double textSize = (100 + (double)(oglMain.Height - 600)) * 0.0012;

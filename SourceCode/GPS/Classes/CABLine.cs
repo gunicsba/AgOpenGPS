@@ -69,12 +69,20 @@ namespace AgOpenGPS
         public double inty;
         public double pivotErrorTotal;
 
-        // Tree planting: signed distance in meters from nearest perpendicular tramline
+        // Tree planting: signed distance in meters from nearest parallel line
         public double treePlantDistance;
         // Tree planting: smoothed distance for display
         public double avgTreePlantDistance;
-        // Tree planting: center point on the nearest tramline (for drawing target circles)
+        // Tree planting: center point on the nearest parallel line (for drawing target circles)
         public vec2 treePlantTargetPoint = new vec2(0, 0);
+        // Pre-built parallel lines for tree planting. Each inner list = one polyline clipped to boundary.
+        public List<List<vec2>> treePlantLines = new List<List<vec2>>();
+        // Reference track index in gArr (stored at build time)
+        public int treePlantRefIndex = -1;
+        // Reference heading at build time (for distance sign calculation)
+        public double treePlantRefHeading = 0;
+        // Angle scale constant for steer angle output (degrees per meter)
+        private const double treePlantAngleScaleConst = 20.0;
 
         //Color tramColor = Color.YellowGreen;
 
@@ -580,121 +588,187 @@ namespace AgOpenGPS
             }
         }
 
-        public void CalculateTreePlantDistance()
+        public void BuildTreePlantLines(int refIndex, double gridSpacing, int numLines, List<CTrk> gTemp)
         {
-            if (mf.trk.gArr == null || mf.trk.gArr.Count == 0 || mf.trk.idx < 0) return;
+            treePlantLines.Clear();
 
-            CTrk track = mf.trk.gArr[mf.trk.idx];
+            // Guard: validate inputs
+            if (gTemp == null || gTemp.Count == 0 || refIndex < 0 || refIndex >= gTemp.Count)
+                return;
+
+            CTrk track = gTemp[refIndex];
             if (track.mode != TrackMode.AB) return;
 
-            // AB line direction vector
-            double dx = track.endPtB.easting - track.endPtA.easting;
-            double dy = track.endPtB.northing - track.endPtA.northing;
-            double lineLen = Math.Sqrt(dx * dx + dy * dy);
-            if (lineLen < 0.001) return;
+            double abHeading = track.heading;
+            double hsin = Math.Sin(abHeading);
+            double hcos = Math.Cos(abHeading);
 
-            // Unit direction vector along AB line
-            double ux = dx / lineLen;
-            double uy = dy / lineLen;
+            // Extend endpoints far beyond field
+            vec2 endPtA = new vec2(
+                track.ptA.easting - (hsin * mf.maxFieldDistance),
+                track.ptA.northing - (hcos * mf.maxFieldDistance));
 
-            // Vector from ptA to current tool position (antenna is on the implement)
-            double px = mf.toolPos.easting - track.endPtA.easting;
-            double py = mf.toolPos.northing - track.endPtA.northing;
+            vec2 endPtB = new vec2(
+                track.ptB.easting + (hsin * mf.maxFieldDistance),
+                track.ptB.northing + (hcos * mf.maxFieldDistance));
 
-            // Get settings
-            double gridSpacing = Properties.ToolSettings.Default.setTool_treePlantGridSpacing;
-            if (gridSpacing < 0.1) gridSpacing = 0.1;
-            double angleDeg = Properties.ToolSettings.Default.setTool_treePlantAngle;
-            double angleRad = angleDeg * Math.PI / 180.0;
+            double len = glm.Distance(endPtA, endPtB);
 
-            // Tramline direction: rotate AB direction by angle
-            double tDirX = ux * Math.Cos(angleRad) - uy * Math.Sin(angleRad);
-            double tDirY = uy * Math.Cos(angleRad) + ux * Math.Sin(angleRad);
+            // Build reference points along the extended AB line, every 2 meters
+            List<vec2> tramRef = new List<vec2>();
+            for (int i = 0; i < (int)len; i += 2)
+            {
+                tramRef.Add(new vec2(
+                    (hsin * i) + endPtA.easting,
+                    (hcos * i) + endPtA.northing));
+            }
 
-            // Cross-tramline direction (perpendicular to tramline, in the grid direction)
-            double cDirX = -tDirY;
-            double cDirY = tDirX;
+            // Perpendicular direction (heading + 90 degrees)
+            double headingCalc = abHeading + glm.PIBy2;
+            double perpSin = Math.Sin(headingCalc);
+            double perpCos = Math.Cos(headingCalc);
 
-            // Project position onto cross-tramline direction
-            double crossCoord = px * cDirX + py * cDirY;
+            bool isBndExist = mf.bnd.bndList.Count != 0;
 
-            // Modulo gridSpacing, snap to nearest tramline
-            double dist = crossCoord % gridSpacing;
-            if (dist < 0) dist += gridSpacing;
+            // Generate lines on both sides of the reference AB line, including the 0th (reference) line
+            for (int side = -1; side <= 1; side++)
+            {
+                int start = (side == 0) ? 0 : 1;
+                for (int i = start; i <= numLines; i++)
+                {
+                    double offset = i * gridSpacing * side;
 
-            double halfGrid = gridSpacing * 0.5;
-            if (dist > halfGrid) dist -= gridSpacing;
+                    List<vec2> line = new List<vec2>(tramRef.Count);
 
-            // Calculate the target point on the nearest tramline
-            // Project position onto tramline direction to get along-tramline coordinate
-            double alongTram = px * tDirX + py * tDirY;
-            // Target = position - (perpendicular distance) * crossDirection
-            treePlantTargetPoint.easting = mf.toolPos.easting - dist * cDirX;
-            treePlantTargetPoint.northing = mf.toolPos.northing - dist * cDirY;
+                    for (int j = 0; j < tramRef.Count; j++)
+                    {
+                        vec2 pt = new vec2(
+                            perpSin * offset + tramRef[j].easting,
+                            perpCos * offset + tramRef[j].northing);
 
-            // Sign convention: positive = behind (haven't reached it), negative = ahead
-            if (!isHeadingSameWay) dist = -dist;
+                        if (!isBndExist || mf.bnd.bndList[0].fenceLineEar.IsPointInPolygon(pt))
+                        {
+                            line.Add(pt);
+                        }
+                    }
 
-            treePlantDistance = dist;
+                    if (line.Count >= 2)
+                    {
+                        treePlantLines.Add(line);
+                    }
+                }
+            }
+
+            // Find the actual gArr index for this track (for persistence)
+            treePlantRefIndex = -1;
+            for (int i = 0; i < mf.trk.gArr.Count; i++)
+            {
+                if (mf.trk.gArr[i].name == track.name && mf.trk.gArr[i].mode == track.mode)
+                {
+                    treePlantRefIndex = i;
+                    break;
+                }
+            }
+            treePlantRefHeading = abHeading;
+        }
+
+        public void CalculateTreePlantDistance()
+        {
+            if (treePlantLines.Count == 0)
+            {
+                treePlantDistance = 0;
+                return;
+            }
+
+            double toolEast = mf.toolPos.easting;
+            double toolNorth = mf.toolPos.northing;
+
+            double minDistSq = double.MaxValue;
+            vec2 nearestPt = new vec2(toolEast, toolNorth);
+            int nearestLineIdx = -1;
+
+            // Find the nearest point across all stored parallel lines
+            for (int li = 0; li < treePlantLines.Count; li++)
+            {
+                List<vec2> line = treePlantLines[li];
+                for (int i = 0; i < line.Count - 1; i++)
+                {
+                    double ax = line[i].easting, ay = line[i].northing;
+                    double bx = line[i + 1].easting, by = line[i + 1].northing;
+
+                    double dx = bx - ax, dy = by - ay;
+                    double segLenSq = dx * dx + dy * dy;
+                    if (segLenSq < 0.0001) continue;
+
+                    // Parameter t of closest point on segment
+                    double t = ((toolEast - ax) * dx + (toolNorth - ay) * dy) / segLenSq;
+                    if (t < 0) t = 0;
+                    else if (t > 1) t = 1;
+
+                    double closestX = ax + t * dx;
+                    double closestY = ay + t * dy;
+
+                    double distSq = (toolEast - closestX) * (toolEast - closestX)
+                                  + (toolNorth - closestY) * (toolNorth - closestY);
+
+                    if (distSq < minDistSq)
+                    {
+                        minDistSq = distSq;
+                        nearestPt.easting = closestX;
+                        nearestPt.northing = closestY;
+                        nearestLineIdx = li;
+                    }
+                }
+            }
+
+            if (nearestLineIdx < 0)
+            {
+                treePlantDistance = 0;
+                return;
+            }
+
+            treePlantTargetPoint = nearestPt;
+
+            // Calculate signed perpendicular distance using cross-product
+            // Use the reference heading to determine sign
+            double refHsin = Math.Sin(treePlantRefHeading);
+            double refHcos = Math.Cos(treePlantRefHeading);
+
+            // Vector from nearest point on line to the tool position
+            double px = toolEast - nearestPt.easting;
+            double py = toolNorth - nearestPt.northing;
+
+            // Cross product with AB direction gives signed distance
+            double signedDist = px * refHcos - py * refHsin;
+
+            treePlantDistance = signedDist;
         }
 
         public void DrawTreePlant()
         {
-            if (!isABValid) return;
-            if (mf.trk.gArr == null || mf.trk.idx < 0) return;
-            if (mf.trk.gArr[mf.trk.idx].mode != TrackMode.AB) return;
+            if (treePlantLines.Count == 0) return;
 
-            CTrk track = mf.trk.gArr[mf.trk.idx];
-            double gridSpacing = Properties.ToolSettings.Default.setTool_treePlantGridSpacing;
-            if (gridSpacing < 0.1) return;
-
-            double dx = track.endPtB.easting - track.endPtA.easting;
-            double dy = track.endPtB.northing - track.endPtA.northing;
-            double len = Math.Sqrt(dx * dx + dy * dy);
-            if (len < 0.01) return;
-
-            double ux = dx / len;
-            double uy = dy / len;
-
-            // Tramline direction from angle setting
-            double angleDeg = Properties.ToolSettings.Default.setTool_treePlantAngle;
-            double angleRad = angleDeg * Math.PI / 180.0;
-            double tDirX = ux * Math.Cos(angleRad) - uy * Math.Sin(angleRad);
-            double tDirY = uy * Math.Cos(angleRad) + ux * Math.Sin(angleRad);
-
-            double sideExtension = Properties.ToolSettings.Default.setTool_treePlantSideExtension;
-
-            // --- Part A: Draw tramlines at configured angle ---
-            // Tramline crossing points along AB line are at intervals of gridSpacing / sin(angle)
-            double sinAngle = Math.Sin(angleRad);
-            if (Math.Abs(sinAngle) < 0.01) return; // Near-parallel tramlines, skip
-            double spacingAlongAB = gridSpacing / sinAngle;
-
-            double pivotAlong = ((mf.toolPos.easting - track.endPtA.easting) * dx
-                               + (mf.toolPos.northing - track.endPtA.northing) * dy) / (len * len);
-
-            int iStart = Math.Max(0, (int)Math.Floor((pivotAlong - 0.5) * len / spacingAlongAB) - 1);
-            int iEnd = (int)Math.Ceiling((pivotAlong + 0.5) * len / spacingAlongAB) + 1;
-
+            // --- Part A: Draw stored parallel lines ---
             GL.LineWidth(2);
             GL.Color4(0.95f, 0.75f, 0.1f, 0.8f); // Orange-yellow
-            GL.Begin(PrimitiveType.Lines);
-            for (int i = iStart; i <= iEnd; i++)
-            {
-                double distAlong = i * spacingAlongAB;
-                double cx = track.endPtA.easting + ux * distAlong;
-                double cy = track.endPtA.northing + uy * distAlong;
-                GL.Vertex3(cx - tDirX * sideExtension, cy - tDirY * sideExtension, 0);
-                GL.Vertex3(cx + tDirX * sideExtension, cy + tDirY * sideExtension, 0);
-            }
-            GL.End();
 
-            // --- Part B: Target circles (bullseye) ---
+            for (int i = 0; i < treePlantLines.Count; i++)
+            {
+                List<vec2> line = treePlantLines[i];
+                if (line.Count < 2) continue;
+
+                GL.Begin(PrimitiveType.LineStrip);
+                for (int j = 0; j < line.Count; j++)
+                {
+                    GL.Vertex3(line[j].easting, line[j].northing, 0);
+                }
+                GL.End();
+            }
+
+            // --- Part B: Target circles (bullseye) on nearest line ---
             double centerX = treePlantTargetPoint.easting;
             double centerY = treePlantTargetPoint.northing;
 
-            // Inner circle: 5cm radius (1 degree threshold)
-            // Outer circle: 25cm radius (5 degree threshold)
             double innerRadius = 0.05;
             double outerRadius = 0.25;
             const int segments = 36;
@@ -761,7 +835,7 @@ namespace AgOpenGPS
             GL.Vertex3(centerX, centerY, 0);
             GL.End();
 
-            // --- Part C: Direction line from antenna to target center ---
+            // --- Part C: Direction line from tool to target center ---
             GL.LineWidth(1);
             GL.Color4(0.95f, 0.95f, 0.1f, 0.6f); // Yellow dashed
             GL.Enable(EnableCap.LineStipple);
