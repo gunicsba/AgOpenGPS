@@ -114,11 +114,10 @@ namespace AgOpenGPS.Properties
 
         // Tree planting mode
         public bool setTool_isTreePlantMode = false;
-        public double setTool_treePlantAngleScale = 20.0;
-        public double setTool_treePlantAngle = 90.0;
-        public double setTool_treePlantSideExtension = 50.0;
         public double setTool_treePlantGridSpacing = 4.8;
         public bool setTool_treePlantAngleOutput = false;
+        public int setTool_treePlantTramRefIndex = -1;
+        public int setTool_treePlantNumLines = 100;
 
         public int setVehicle_numSections = 3;
         public int setTool_numSectionsMulti = 20;

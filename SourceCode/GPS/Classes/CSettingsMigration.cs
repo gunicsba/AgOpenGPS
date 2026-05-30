@@ -287,11 +287,10 @@ namespace AgOpenGPS
 
             // Tree planting mode
             dest.setTool_isTreePlantMode = source.setTool_isTreePlantMode;
-            dest.setTool_treePlantAngleScale = source.setTool_treePlantAngleScale;
-            dest.setTool_treePlantAngle = source.setTool_treePlantAngle;
-            dest.setTool_treePlantSideExtension = source.setTool_treePlantSideExtension;
             dest.setTool_treePlantGridSpacing = source.setTool_treePlantGridSpacing;
             dest.setTool_treePlantAngleOutput = source.setTool_treePlantAngleOutput;
+            dest.setTool_treePlantTramRefIndex = source.setTool_treePlantTramRefIndex;
+            dest.setTool_treePlantNumLines = source.setTool_treePlantNumLines;
 
             // Sections
             dest.setVehicle_numSections = source.setVehicle_numSections;
