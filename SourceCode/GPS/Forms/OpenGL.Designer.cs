@@ -741,11 +741,11 @@ namespace AgOpenGPS
                 tmrWatchdog.Enabled = false;
                 fileSaveCounter = 0;
 
-                DistanceToFieldOriginCheck();
-
                 //don't save if no gps, and never persist in Easy Drive mode
                 if (isJobStarted && !isEasyDriveMode)
                 {
+                    DistanceToFieldOriginCheck();
+
                     //auto save the field patches, contours accumulated so far
                     FileSaveSections();
                     FileSaveContour();
