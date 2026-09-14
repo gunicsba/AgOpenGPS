@@ -208,11 +208,23 @@ namespace AgIO
             btnStartStopNtrip.Text = "Off";
         }
 
+        //once we have a known caster IP, only re-resolve this often - a blocking DNS
+        //lookup on every single reconnect attempt can freeze the UI thread during
+        //a network/DNS outage
+        private static readonly TimeSpan casterResolveInterval = TimeSpan.FromSeconds(30);
+        private DateTime lastCasterResolveTime = DateTime.MinValue;
+
         // Resolve the caster hostname/URL to an IPv4 address. Updates broadCasterIP (and
         // persists the setting) only when a new address is found; on failure the previous
         // broadCasterIP is left untouched so a temporary DNS hiccup doesn't stop reconnects.
         private bool ResolveCasterIP()
         {
+            if (!string.IsNullOrEmpty(broadCasterIP) && DateTime.UtcNow - lastCasterResolveTime < casterResolveInterval)
+            {
+                return true;
+            }
+
+            lastCasterResolveTime = DateTime.UtcNow;
             string actualIP = Properties.Settings.Default.setNTRIP_casterURL.Trim();
 
             try
@@ -498,13 +510,26 @@ namespace AgIO
             if (isNTRIP_AuthSent && !isNTRIP_Connected && !Properties.Settings.Default.setNTRIP_isTCP)
             {
                 string response = Encoding.ASCII.GetString(data);
+                int headerEnd = response.IndexOf("\r\n\r\n", StringComparison.Ordinal);
+                string headerText = headerEnd >= 0 ? response.Substring(0, headerEnd) : response;
 
-                if (response.Contains("200"))
+                if (headerText.Contains("200"))
                 {
                     isNTRIP_Connected = true;
                     isNTRIP_Connecting = false;
                     bytesSinceConnected = 0;
                     Log.EventWriter("NTRIP - Caster accepted connection");
+                    Log.FileSaveSystemEvents(); //flush immediately for live diagnostics
+
+                    //some casters send the first RTCM data in the same read as the "200 OK"
+                    //header - keep it instead of discarding it below
+                    int bodyStart = headerEnd >= 0 ? headerEnd + 4 : data.Length;
+                    if (bodyStart >= data.Length) return;
+
+                    byte[] body = new byte[data.Length - bodyStart];
+                    Array.Copy(data, bodyStart, body, 0, body.Length);
+                    data = body;
+                    //fall through to process the leftover RTCM bytes below
                 }
                 else
                 {
@@ -512,9 +537,9 @@ namespace AgIO
                     Log.EventWriter("NTRIP - Caster rejected connection: " + firstLine);
                     TimedMessageBox(2500, "NTRIP Connection Rejected", firstLine);
                     ReconnectRequest();
+                    Log.FileSaveSystemEvents(); //flush immediately for live diagnostics
+                    return;
                 }
-                Log.FileSaveSystemEvents(); //flush immediately for live diagnostics
-                return;
             }
 
             //update gui with stats
@@ -697,21 +722,28 @@ namespace AgIO
             }
             catch (Exception ex)
             {
-                Log.EventWriter("Catch -> NTRIP OnConnect: " + ex.ToString());
-                Log.FileSaveSystemEvents(); //flush immediately for live diagnostics
-
                 //only react if this is still the current connection attempt
-                if (sock == clientSocket)
+                bool isCurrent = (sock == clientSocket);
+                if (isCurrent)
                 {
                     try { sock.Close(); } catch { /* already closed/disposed */ }
+                }
 
-                    string message = ex.Message;
-                    BeginInvoke((MethodInvoker)(() =>
+                //marshal logging to the UI thread too - Log.sbEvents is not thread-safe
+                //and is otherwise only ever touched from there
+                string exDetails = ex.ToString();
+                string message = ex.Message;
+                BeginInvoke((MethodInvoker)(() =>
+                {
+                    Log.EventWriter("Catch -> NTRIP OnConnect: " + exDetails);
+                    Log.FileSaveSystemEvents(); //flush immediately for live diagnostics
+
+                    if (isCurrent)
                     {
                         TimedMessageBox(2500, "NTRIP Connection Failed", message);
                         ReconnectRequest();
-                    }));
-                }
+                    }
+                }));
             }
         }
 
@@ -774,8 +806,14 @@ namespace AgIO
             }
             catch (Exception ex)
             {
-                Log.EventWriter("Catch -> NTRIP OnRecievedData: " + ex.ToString());
-                Log.FileSaveSystemEvents(); //flush immediately for live diagnostics
+                //marshal logging to the UI thread - Log.sbEvents is not thread-safe
+                //and is otherwise only ever touched from there
+                string exDetails = ex.ToString();
+                BeginInvoke((MethodInvoker)(() =>
+                {
+                    Log.EventWriter("Catch -> NTRIP OnRecievedData: " + exDetails);
+                    Log.FileSaveSystemEvents(); //flush immediately for live diagnostics
+                }));
             }
         }
 
