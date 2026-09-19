@@ -29,6 +29,7 @@ namespace AgOpenGPS
         private int lastTrackContextCurrent;
         private int lastTrackContextLeft;
         private int lastTrackContextRight;
+        private int lastTrackContextWidth;
         private byte lastTrackContextFlags;
         private DateTimeOffset trackContextTime;
 
@@ -198,7 +199,7 @@ namespace AgOpenGPS
 
         /// <summary>
         /// Send guidance track context (PGN 0xF4) to external applications.
-        /// Provides: reference ID, current track number, left/right track numbers.
+        /// Provides: reference ID, current track number, left/right track numbers, swath width.
         /// </summary>
         public void SendGuidanceTrackContext()
         {
@@ -211,6 +212,7 @@ namespace AgOpenGPS
             short currentTrack = 0;
             short trackLeft = 0;
             short trackRight = 0;
+            ushort swathWidthMm = 0;
             byte flags = 0;
 
             if (hasActiveTrack)
@@ -256,6 +258,10 @@ namespace AgOpenGPS
                     trackRight = (short)(currentTrack - 1);
                 }
 
+                // Track spacing as used for howManyPathsAway in CABLine / CABCurve (widthMinusOverlap)
+                double swathWidth = Math.Round((mf.tool.width - mf.tool.overlap) * 1000.0);
+                swathWidthMm = (ushort)Math.Max(0, Math.Min(65535, swathWidth));
+
                 // Bit 0: data valid
                 flags |= 0x01;
             }
@@ -265,6 +271,7 @@ namespace AgOpenGPS
                 && currentTrack == lastTrackContextCurrent
                 && trackLeft == lastTrackContextLeft
                 && trackRight == lastTrackContextRight
+                && swathWidthMm == lastTrackContextWidth
                 && flags == lastTrackContextFlags)
             {
                 return;
@@ -279,18 +286,19 @@ namespace AgOpenGPS
             lastTrackContextCurrent = currentTrack;
             lastTrackContextLeft = trackLeft;
             lastTrackContextRight = trackRight;
+            lastTrackContextWidth = swathWidthMm;
             lastTrackContextFlags = flags;
             trackContextTime = DateTimeOffset.Now;
 
             byte seq = trackContextSequence++;
 
-            // PGN 0xF4 — Guidance Track Context, 16 bytes total
-            byte[] message = new byte[16];
+            // PGN 0xF4 — Guidance Track Context, 18 bytes total
+            byte[] message = new byte[18];
             message[0] = 0x80; // AOG header
             message[1] = 0x81; // PGN header
             message[2] = 0x7F; // SRC address
             message[3] = 0xF4; // PGN: Guidance Track Context
-            message[4] = 10;   // data payload length
+            message[4] = 12;   // data payload length
 
             message[5] = seq;                                      // sequence counter
             message[6] = flags;                                    // validity / heading / mode flags
@@ -309,7 +317,10 @@ namespace AgOpenGPS
             message[13] = rightBytes[0];                           // track right lo
             message[14] = rightBytes[1];                           // track right hi
 
-            // CRC is computed by SendPgnToLoop into message[15]
+            message[15] = (byte)(swathWidthMm & 0xFF);             // swath width mm lo
+            message[16] = (byte)(swathWidthMm >> 8);               // swath width mm hi
+
+            // CRC is computed by SendPgnToLoop into message[17]
             mf.SendPgnToLoop(message);
         }
 
