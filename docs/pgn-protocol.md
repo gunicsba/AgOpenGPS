@@ -197,7 +197,7 @@ Sent when:
 
 #### PGN 0xF4 (244) - Guidance Track Context (AOG→External)
 
-**Length:** 16 bytes (10 data bytes + header/CRC)
+**Length:** 18 bytes (12 data bytes + header/CRC)
 
 **Direction:** AOG → AgIO → UDP network (broadcast to all external listeners)
 
@@ -211,7 +211,8 @@ Sent when:
 | 9-10 | Current Track Number | int16 (LE) | Signed pass/swath number relative to the guidance reference. `0` = on the reference line, positive = one side, negative = the other. |
 | 11-12 | Track Number Left | int16 (LE) | Track number of the pass immediately to the **left** of the vehicle, relative to its current direction of travel. |
 | 13-14 | Track Number Right | int16 (LE) | Track number of the pass immediately to the **right** of the vehicle, relative to its current direction of travel. |
-| 15 | CRC | byte | Checksum (sum of bytes 2–14) |
+| 15-16 | Swath Width | uint16 (LE) | Distance between adjacent guidance tracks in **millimetres** (tool width minus overlap, the same spacing the track numbers are derived from). `0` when no active track (Valid flag clear). |
+| 17 | CRC | byte | Checksum (sum of bytes 2–16) |
 
 **Flag bits (byte 6):**
 
@@ -224,7 +225,7 @@ Sent when:
 
 **Behaviour and timing:**
 
-- Sent whenever the track context **changes** (pass number, reference ID, heading direction, or validity).
+- Sent whenever the track context **changes** (pass number, reference ID, heading direction, swath width, or validity).
 - Minimum send interval: **100 ms** (rate-limited to avoid flooding).
 - When no guidance track is active (e.g. field just opened, no AB line created), the message is sent with `Flags = 0x00` and `Guidance Reference ID = 0`.
 
@@ -257,6 +258,7 @@ For implementors mapping this to AEF ISOBUS TRACK Generation 1:
 | Actual track number | Current Track Number (bytes 9-10) |
 | Track to the left | Track Number Left (bytes 11-12) |
 | Track to the right | Track Number Right (bytes 13-14) |
+| Guidance line swath width (DDI 512) | Swath Width (bytes 15-16, mm) |
 
 **Decoding example (C#):**
 
@@ -274,10 +276,11 @@ if (data[0] == 0x80 && data[1] == 0x81 && data[3] == 0xF4)
     short currentTrack = BitConverter.ToInt16(data, 9);
     short trackLeft    = BitConverter.ToInt16(data, 11);
     short trackRight   = BitConverter.ToInt16(data, 13);
+    ushort swathWidthMm = BitConverter.ToUInt16(data, 15);
 
     if (isValid)
     {
-        // Use refId, currentTrack, trackLeft, trackRight
+        // Use refId, currentTrack, trackLeft, trackRight, swathWidthMm
     }
 }
 ```
