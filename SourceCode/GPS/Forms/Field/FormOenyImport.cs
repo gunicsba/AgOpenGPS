@@ -541,8 +541,11 @@ namespace AgOpenGPS.Forms.Field
             if (mf.bnd.bndList.Count > 0)
             {
                 DialogResult result = FormDialog.ShowQuestion("Boundary Exists", "A boundary already exists. Replace it with the selected parcel(s)?");
-                if (result != DialogResult.OK) return;
-                mf.bnd.bndList.Clear();
+                if (result == DialogResult.OK)
+                {
+                    mf.bnd.bndList.Clear();
+                }
+                // Cancel: keep the existing outer boundary and add the new parcel(s) as extra inner boundary/boundaries.
             }
 
             var selectedRings = selectedIndices
