@@ -59,6 +59,7 @@ namespace AgOpenGPS.Forms.Config
             this.labelUnits = new System.Windows.Forms.Label();
             this.lblUnits = new System.Windows.Forms.Label();
             this.labelProfileMenuHint = new System.Windows.Forms.Label();
+            this.buttonOpenProfiles = new System.Windows.Forms.Button();
             this.panelVehicle.SuspendLayout();
             this.panelTool.SuspendLayout();
             this.SuspendLayout();
@@ -458,6 +459,21 @@ namespace AgOpenGPS.Forms.Config
     "main menu (top left).";
             this.labelProfileMenuHint.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             //
+            // buttonOpenProfiles
+            //
+            this.buttonOpenProfiles.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.buttonOpenProfiles.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.buttonOpenProfiles.Font = new System.Drawing.Font("Tahoma", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.buttonOpenProfiles.ForeColor = System.Drawing.Color.Black;
+            this.buttonOpenProfiles.Location = new System.Drawing.Point(184, 488);
+            this.buttonOpenProfiles.Name = "buttonOpenProfiles";
+            this.buttonOpenProfiles.Size = new System.Drawing.Size(497, 56);
+            this.buttonOpenProfiles.TabIndex = 541;
+            this.buttonOpenProfiles.Text = "Open Profiles";
+            this.buttonOpenProfiles.UseVisualStyleBackColor = false;
+            this.buttonOpenProfiles.Click += new System.EventHandler(this.buttonOpenProfiles_Click);
+            //
             // ConfigSummaryControl
             //
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 16F);
@@ -467,6 +483,7 @@ namespace AgOpenGPS.Forms.Config
             this.Controls.Add(this.panelTool);
             this.Controls.Add(this.labelUnits);
             this.Controls.Add(this.lblUnits);
+            this.Controls.Add(this.buttonOpenProfiles);
             this.Controls.Add(this.labelProfileMenuHint);
             this.Font = new System.Drawing.Font("Tahoma", 9.75F);
             this.ForeColor = System.Drawing.Color.WhiteSmoke;
@@ -511,5 +528,6 @@ namespace AgOpenGPS.Forms.Config
         private System.Windows.Forms.Label labelUnits;
         private System.Windows.Forms.Label lblUnits;
         private System.Windows.Forms.Label labelProfileMenuHint;
+        private System.Windows.Forms.Button buttonOpenProfiles;
     }
 }

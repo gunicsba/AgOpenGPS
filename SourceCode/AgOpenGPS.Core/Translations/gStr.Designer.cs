@@ -5364,5 +5364,14 @@ namespace AgOpenGPS.Core.Translations {
                 return ResourceManager.GetString("gsWizEnableSteerSwitch", resourceCulture);
             }
         }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Open Profiles.
+        /// </summary>
+        public static string gsOpenProfiles {
+            get {
+                return ResourceManager.GetString("gsOpenProfiles", resourceCulture);
+            }
+        }
     }
 }

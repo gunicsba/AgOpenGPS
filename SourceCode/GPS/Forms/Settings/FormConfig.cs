@@ -20,12 +20,17 @@ namespace AgOpenGPS
 
         private bool isClosing = false;
 
+        /// <summary> The user asked to close the config and go to the profiles </summary>
+        public bool OpenProfilesAfterClose { get; private set; }
+
         //constructor
         public FormConfig(Form callingForm)
         {
             //get copy of the calling main form
             mf = callingForm as FormGPS;
             InitializeComponent();
+
+            configSummaryControl.OpenProfilesRequested += ConfigSummaryControl_OpenProfilesRequested;
 
             tab1.Appearance = TabAppearance.FlatButtons;
             tab1.ItemSize = new Size(0, 1);
@@ -358,6 +363,13 @@ namespace AgOpenGPS
 
             nudTrailingToolToPivotLength.Maximum = Math.Round(nudTrailingToolToPivotLength.Maximum / 2.54M);
             nudTrailingToolToPivotLength.Minimum = Math.Round(nudTrailingToolToPivotLength.Minimum / 2.54M);
+        }
+
+        private void ConfigSummaryControl_OpenProfilesRequested(object sender, EventArgs e)
+        {
+            OpenProfilesAfterClose = true;
+            isClosing = true;
+            Close();
         }
 
         private void btnOK_Click(object sender, EventArgs e)

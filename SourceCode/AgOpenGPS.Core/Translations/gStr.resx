@@ -1944,4 +1944,7 @@ Remember: CPD, Min PWM, and Look Ahead are critical settings. </value>
   <data name="gsWizEnableSteerSwitch" xml:space="preserve">
     <value>Enable Steer Switch</value>
   </data>
+  <data name="gsOpenProfiles" xml:space="preserve">
+    <value>Open Profiles</value>
+  </data>
 </root>

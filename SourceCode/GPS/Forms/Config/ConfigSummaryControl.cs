@@ -14,11 +14,15 @@ namespace AgOpenGPS.Forms.Config
 {
     public partial class ConfigSummaryControl : UserControl
     {
+        /// <summary> Raised when the user wants to leave the config form and open the profiles </summary>
+        public event EventHandler OpenProfilesRequested;
+
         public ConfigSummaryControl()
         {
             InitializeComponent();
 
             labelProfileMenuHint.Text = gStr.gsProfileMenuHint;
+            buttonOpenProfiles.Text = gStr.gsOpenProfiles;
             labelUnits.Text = gStr.gsUnits + ":";
             labelWidth.Text = gStr.gsWidth + ":";
             labelSections.Text = gStr.gsSections + ":";
@@ -59,6 +63,11 @@ namespace AgOpenGPS.Forms.Config
 
             // Buiten panels
             lblUnits.Text = mf.isMetric ? "Metric" : "Imperial";
+        }
+
+        private void buttonOpenProfiles_Click(object sender, EventArgs e)
+        {
+            OpenProfilesRequested?.Invoke(this, EventArgs.Empty);
         }
 
         public void SetSummaryWidth(string widthText)

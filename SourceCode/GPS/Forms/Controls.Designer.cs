@@ -1257,10 +1257,15 @@ namespace AgOpenGPS
         }
         private void btnConfig_Click(object sender, EventArgs e)
         {
+            bool openProfiles;
             using (FormConfig form = new FormConfig(this))
             {
                 form.ShowDialog(this);
+                openProfiles = form.OpenProfilesAfterClose;
             }
+
+            //the summary page sent us here to load the profiles
+            if (openProfiles) loadVehicleToolToolStripMenuItem_Click(this, EventArgs.Empty);
         }
 
         #endregion

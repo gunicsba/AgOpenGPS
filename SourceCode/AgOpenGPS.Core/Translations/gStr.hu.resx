@@ -1016,8 +1016,8 @@ A választott sorrend alapján fognak megjelenni alulról felfelé.</value>
     <value>Környezet</value>
   </data>
   <data name="gsProfileMenuHint" xml:space="preserve">
-    <value>Vehicle, Tool and Environment settings are now stored as separate profiles.
-Load from Config panel &amp; Top Left Menu.</value>
+    <value>A jármű, munkaeszköz és környezeti beállítások mostantól külön profilokban vannak tárolva.
+Betöltés: a Beállítások panelen és a bal felső menüben.</value>
   </data>
   <data name="gsProgramWillExitPleaseRestart" xml:space="preserve">
     <value>A program most kilép, indítsd el újra</value>
@@ -1945,5 +1945,8 @@ Ne feledje: a CPD, a minimális PWM és az előretekintés kritikus beállítás
   </data>
   <data name="gsWizEnableSteerSwitch" xml:space="preserve">
     <value>Kapcsolja be a kormány kapcsolót</value>
+  </data>
+  <data name="gsOpenProfiles" xml:space="preserve">
+    <value>Profilok megnyitása</value>
   </data>
 </root>
