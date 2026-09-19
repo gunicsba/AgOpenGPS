@@ -1647,4 +1647,301 @@ USE AT OWN RISK.</value>
   <data name="v_AboutIntro" xml:space="preserve">
     <value>https://www.youtube.com/watch?v=iN2cZ8avHag</value>
   </data>
+  <data name="gsWizOrPlus5" xml:space="preserve">
+    <value>Or +5</value>
+  </data>
+  <data name="gsWizSet" xml:space="preserve">
+    <value>Set</value>
+  </data>
+  <data name="gsWizLow" xml:space="preserve">
+    <value>Low</value>
+  </data>
+  <data name="gsWizStanley" xml:space="preserve">
+    <value>Stanley</value>
+  </data>
+  <data name="gsWizSidehillComp" xml:space="preserve">
+    <value>Sidehill Deg per Deg of Roll</value>
+  </data>
+  <data name="gsWizPurePursuit" xml:space="preserve">
+    <value>Pure Pursuit</value>
+  </data>
+  <data name="gsWizLookAheadM" xml:space="preserve">
+    <value>Look Ahead (m)</value>
+  </data>
+  <data name="gsWizLookAheadMin" xml:space="preserve">
+    <value>Look Ahead Min</value>
+  </data>
+  <data name="gsWizLookAheadSpeedGain" xml:space="preserve">
+    <value>Look Ahead Speed Gain</value>
+  </data>
+  <data name="gsWizPwmMinMovement" xml:space="preserve">
+    <value>PWM Minimum Movement</value>
+  </data>
+  <data name="gsWizPwmMaximum" xml:space="preserve">
+    <value>PWM Maximum</value>
+  </data>
+  <data name="gsWizCircleRight" xml:space="preserve">
+    <value>Turn steering wheel to RIGHT about 20 degrees.
+While driving in a steady circle, Press Rec and wait.</value>
+  </data>
+  <data name="gsWizDriveStraightZero" xml:space="preserve">
+    <value>Drive straight forward and Touch Zero</value>
+  </data>
+  <data name="gsWizButtonSwitchInfo" xml:space="preserve">
+    <value>Button - Push Release, On.   
+               Push Release, Off
+
+Switch - While Pushed is On. 
+               Released is Off.</value>
+  </data>
+  <data name="gsWizDriveEnableInvertMotor" xml:space="preserve">
+    <value>Drive slowly and enable Auto Steer. Invert Direction if steer motor turns the wrong way.
+Test with Arrows.</value>
+  </data>
+  <data name="gsWizInvertHydraulicEnableRelay" xml:space="preserve">
+    <value>Invert Hydraulic Enable Relay?</value>
+  </data>
+  <data name="gsWizSteerEnableMode" xml:space="preserve">
+    <value>Steer Enable Mode</value>
+  </data>
+  <data name="gsWizMotorDriverStyle" xml:space="preserve">
+    <value>What Style of Motor Driver?</value>
+  </data>
+  <data name="gsWizADConnection" xml:space="preserve">
+    <value>A/D Convertor Connection?</value>
+  </data>
+  <data name="gsWizTurnCounts" xml:space="preserve">
+    <value>Turn Counts</value>
+  </data>
+  <data name="gsWizDanfossQuestion" xml:space="preserve">
+    <value>Do you have use a Danfoss Valve?</value>
+  </data>
+  <data name="gsWizSteerAnglePositive" xml:space="preserve">
+    <value>Steer Angle must be POSITIVE when turning to the RIGHT.
+If not, select the Invert WAS.</value>
+  </data>
+  <data name="gsWizFreeDrive" xml:space="preserve">
+    <value>Free Drive</value>
+  </data>
+  <data name="gsWizStartWizard" xml:space="preserve">
+    <value>Start Wizard</value>
+  </data>
+  <data name="gsWizHighlyRecommended" xml:space="preserve">
+    <value>Highly Recommended</value>
+  </data>
+  <data name="gsWizLoadDefaults" xml:space="preserve">
+    <value>Load Defaults</value>
+  </data>
+  <data name="gsWizSetWheelbase" xml:space="preserve">
+    <value>Set Wheelbase</value>
+  </data>
+  <data name="gsWizSetTrackWidth" xml:space="preserve">
+    <value>Set Track Width</value>
+  </data>
+  <data name="gsWizWheelTrack" xml:space="preserve">
+    <value>Wheel Track</value>
+  </data>
+  <data name="gsWizAntennaPosition" xml:space="preserve">
+    <value>Antenna
+Position</value>
+  </data>
+  <data name="gsWizSetAntennaPivotDist" xml:space="preserve">
+    <value>Set Distance Antenna Is From Pivot Axle</value>
+  </data>
+  <data name="gsWizAntennaHeightLines" xml:space="preserve">
+    <value>Antenna
+Height</value>
+  </data>
+  <data name="gsWizSetAntennaHeight" xml:space="preserve">
+    <value>Set Antenna Height</value>
+  </data>
+  <data name="gsWizZeroIsOff" xml:space="preserve">
+    <value>0 = Off</value>
+  </data>
+  <data name="gsWizSetAntennaOffset" xml:space="preserve">
+    <value>Set Antenna Offset</value>
+  </data>
+  <data name="gsWizADConvertor" xml:space="preserve">
+    <value>A/D Convertor</value>
+  </data>
+  <data name="gsWizMotorDriverBoard" xml:space="preserve">
+    <value>Motor Driver Board</value>
+  </data>
+  <data name="gsWizDriverControlRelay" xml:space="preserve">
+    <value>Driver Control Relay</value>
+  </data>
+  <data name="gsWizDanfossValve" xml:space="preserve">
+    <value>Danfoss Valve</value>
+  </data>
+  <data name="gsWizIfNotInvertRoll" xml:space="preserve">
+    <value>If not Select Invert Roll</value>
+  </data>
+  <data name="gsWizRollPositive" xml:space="preserve">
+    <value>Put vehicle leaning strongly to the right. Roll to the right must be POSITIVE.</value>
+  </data>
+  <data name="gsWizRollFunction" xml:space="preserve">
+    <value>Roll Function</value>
+  </data>
+  <data name="gsWizRoll" xml:space="preserve">
+    <value>Roll</value>
+  </data>
+  <data name="gsWizParkLevel" xml:space="preserve">
+    <value>Park on level surface and touch "Zero Roll"</value>
+  </data>
+  <data name="gsWizRollZero" xml:space="preserve">
+    <value>Roll Zero</value>
+  </data>
+  <data name="gsWizInvertWasDirection" xml:space="preserve">
+    <value>Invert WAS Direction</value>
+  </data>
+  <data name="gsWizCurrentHeading" xml:space="preserve">
+    <value>Current Heading</value>
+  </data>
+  <data name="gsWizWasZeroing" xml:space="preserve">
+    <value>WAS Zeroing</value>
+  </data>
+  <data name="gsWizInvertDirection" xml:space="preserve">
+    <value>Invert Direction</value>
+  </data>
+  <data name="gsWizSteerMotorDirection" xml:space="preserve">
+    <value>Steer Motor Direction</value>
+  </data>
+  <data name="gsWizBeginCalibration" xml:space="preserve">
+    <value>* Begin * Calibration</value>
+  </data>
+  <data name="gsWizWasCalibration" xml:space="preserve">
+    <value>WAS Calibration</value>
+  </data>
+  <data name="gsWizSkipCpdAck" xml:space="preserve">
+    <value>* SKIP *  Counts Per Degree and Ackermann Setting?</value>
+  </data>
+  <data name="gsWizStartAngle" xml:space="preserve">
+    <value>Start Angle</value>
+  </data>
+  <data name="gsWizResetTo100" xml:space="preserve">
+    <value>Reset To 100%</value>
+  </data>
+  <data name="gsWizAckermannValue" xml:space="preserve">
+    <value>Ackermann Value</value>
+  </data>
+  <data name="gsWizCircleLeft" xml:space="preserve">
+    <value>Turn steering wheel to LEFT roughly the same degrees as right.
+While driving in a steady circle, Press Rec and wait.</value>
+  </data>
+  <data name="gsWizTurnToLimit" xml:space="preserve">
+    <value>Turn steering to your desired limit for guidance and touch OK -&gt;</value>
+  </data>
+  <data name="gsWizGuidanceSteerAngleLimit" xml:space="preserve">
+    <value>Guidance Steer Angle Limit</value>
+  </data>
+  <data name="gsWizManualGuidanceLimit" xml:space="preserve">
+    <value>Or Manually Set Guidance Steer Angle Limit</value>
+  </data>
+  <data name="gsWizAutoCancelFeature" xml:space="preserve">
+    <value>Automatic Canceling Feature</value>
+  </data>
+  <data name="gsWizPanicStopSpeed" xml:space="preserve">
+    <value>Panic Stop Speed</value>
+  </data>
+  <data name="gsWizZero" xml:space="preserve">
+    <value>Zero</value>
+  </data>
+  <data name="gsWizMinMovementInfo" xml:space="preserve">
+    <value>Change Setpoint with steer buttons. 
+
+Adjust Minimum Movement as high as possible without steer motor or hydraulics moving steering</value>
+  </data>
+  <data name="gsWizDriveSlowlyStraight" xml:space="preserve">
+    <value>Drive slowly straight forward, Allow system to steer</value>
+  </data>
+  <data name="gsWizMinMovementSetting" xml:space="preserve">
+    <value>Minimum Movement Setting</value>
+  </data>
+  <data name="gsWizZeroOrPlus5" xml:space="preserve">
+    <value>Zero or +5</value>
+  </data>
+  <data name="gsWizSetProportional" xml:space="preserve">
+    <value>Set Proportional for good response. 
+Set PWM Maximum to limit turning speed.</value>
+  </data>
+  <data name="gsWizDriveEnableAutoSteer" xml:space="preserve">
+    <value>Drive forward and enable Auto Steer</value>
+  </data>
+  <data name="gsWizGainSetting" xml:space="preserve">
+    <value>Gain Setting</value>
+  </data>
+  <data name="gsWizFinalNote" xml:space="preserve">
+    <value>Now go drive an AB Line and fine tune settings based on your speed and soil conditions.
+
+Remember: CPD, Min PWM, and Look Ahead are critical settings. </value>
+  </data>
+  <data name="gsWizRestartWizard" xml:space="preserve">
+    <value>Restart Wizard</value>
+  </data>
+  <data name="gsWizFinished" xml:space="preserve">
+    <value>Finished !</value>
+  </data>
+  <data name="gsWizProgress" xml:space="preserve">
+    <value>Progress</value>
+  </data>
+  <data name="gsWizCountsPDeg" xml:space="preserve">
+    <value>Counts P Deg</value>
+  </data>
+  <data name="gsWizWasOffset" xml:space="preserve">
+    <value>WAS Offset</value>
+  </data>
+  <data name="gsWizOffAtPercent" xml:space="preserve">
+    <value>Off at %</value>
+  </data>
+  <data name="gsWizResetToDefault" xml:space="preserve">
+    <value>Reset To Default</value>
+  </data>
+  <data name="gsWizValuesSetToDefault" xml:space="preserve">
+    <value>Values Set to Initial Default</value>
+  </data>
+  <data name="gsWizDriveSteady" xml:space="preserve">
+    <value>Drive Steady</value>
+  </data>
+  <data name="gsWizCpdSetTo" xml:space="preserve">
+    <value>CPD set to: {0}</value>
+  </data>
+  <data name="gsWizCpdError" xml:space="preserve">
+    <value>Error, CPD set to 100</value>
+  </data>
+  <data name="gsWizAckermannSetTo" xml:space="preserve">
+    <value>Ackermann Set to: {0}</value>
+  </data>
+  <data name="gsWizAckermannError" xml:space="preserve">
+    <value>Error, Ackermann set to 100</value>
+  </data>
+  <data name="gsWizDefaultsSet" xml:space="preserve">
+    <value>Defaults Set</value>
+  </data>
+  <data name="gsWizCpdAckDefaults" xml:space="preserve">
+    <value>CPD and Ackermann set to defaults</value>
+  </data>
+  <data name="gsWizPGainChange" xml:space="preserve">
+    <value>P Gain Change</value>
+  </data>
+  <data name="gsWizPGainSetTo1" xml:space="preserve">
+    <value>Proportional Gain set to 1</value>
+  </data>
+  <data name="gsWizExceededRange" xml:space="preserve">
+    <value>Exceeded Range</value>
+  </data>
+  <data name="gsWizExcessiveSteerAngle" xml:space="preserve">
+    <value>Excessive Steer Angle - Cannot Zero</value>
+  </data>
+  <data name="gsWizSteerAngleTooLow" xml:space="preserve">
+    <value>Steer Angle Too Low</value>
+  </data>
+  <data name="gsWizMustBeGreater5" xml:space="preserve">
+    <value>Must be Greater than 5 degrees</value>
+  </data>
+  <data name="gsWizSteeringDisabled" xml:space="preserve">
+    <value>Steering Disabled</value>
+  </data>
+  <data name="gsWizEnableSteerSwitch" xml:space="preserve">
+    <value>Enable Steer Switch</value>
+  </data>
 </root>

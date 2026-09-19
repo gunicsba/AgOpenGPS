@@ -1649,4 +1649,301 @@ HASZNÁLAT SAJÁT FELELŐSSÉGRE.</value>
   <data name="gsTBT" xml:space="preserve">
     <value>Duplakapcsolt</value>
   </data>
+  <data name="gsWizOrPlus5" xml:space="preserve">
+    <value>Vagy +5</value>
+  </data>
+  <data name="gsWizSet" xml:space="preserve">
+    <value>Beállított</value>
+  </data>
+  <data name="gsWizLow" xml:space="preserve">
+    <value>Alacsony</value>
+  </data>
+  <data name="gsWizStanley" xml:space="preserve">
+    <value>Stanley</value>
+  </data>
+  <data name="gsWizSidehillComp" xml:space="preserve">
+    <value>Lejtőkompenzáció fok / dőlésfok</value>
+  </data>
+  <data name="gsWizPurePursuit" xml:space="preserve">
+    <value>Pure Pursuit</value>
+  </data>
+  <data name="gsWizLookAheadM" xml:space="preserve">
+    <value>Előretekintés (m)</value>
+  </data>
+  <data name="gsWizLookAheadMin" xml:space="preserve">
+    <value>Előretekintés min.</value>
+  </data>
+  <data name="gsWizLookAheadSpeedGain" xml:space="preserve">
+    <value>Előretekintés sebességfüggése</value>
+  </data>
+  <data name="gsWizPwmMinMovement" xml:space="preserve">
+    <value>PWM minimális mozgás</value>
+  </data>
+  <data name="gsWizPwmMaximum" xml:space="preserve">
+    <value>PWM maximum</value>
+  </data>
+  <data name="gsWizCircleRight" xml:space="preserve">
+    <value>Fordítsa el a kormányt JOBBRA kb. 20 fokkal.
+Miközben egyenletes körben halad, nyomja meg a Rec gombot és várjon.</value>
+  </data>
+  <data name="gsWizDriveStraightZero" xml:space="preserve">
+    <value>Haladjon egyenesen előre és nyomja meg a Nulla gombot</value>
+  </data>
+  <data name="gsWizButtonSwitchInfo" xml:space="preserve">
+    <value>Button (gomb) - Megnyom, elenged: Be.   
+               Megnyom, elenged: Ki
+
+Switch (kapcsoló) - Nyomva tartva: Be. 
+               Elengedve: Ki.</value>
+  </data>
+  <data name="gsWizDriveEnableInvertMotor" xml:space="preserve">
+    <value>Haladjon lassan és kapcsolja be az automata kormányzást. Ha a kormánymotor rossz irányba fordul, használja az Irány megfordítása opciót.
+Próbálja ki a nyilakkal.</value>
+  </data>
+  <data name="gsWizInvertHydraulicEnableRelay" xml:space="preserve">
+    <value>Hidraulika engedélyező relé invertálása?</value>
+  </data>
+  <data name="gsWizSteerEnableMode" xml:space="preserve">
+    <value>Kormányzás engedélyezés módja</value>
+  </data>
+  <data name="gsWizMotorDriverStyle" xml:space="preserve">
+    <value>Milyen típusú a motor meghajtó?</value>
+  </data>
+  <data name="gsWizADConnection" xml:space="preserve">
+    <value>AD konverter csatlakozása?</value>
+  </data>
+  <data name="gsWizTurnCounts" xml:space="preserve">
+    <value>Impulzusszám</value>
+  </data>
+  <data name="gsWizDanfossQuestion" xml:space="preserve">
+    <value>Danfoss szelepet használ?</value>
+  </data>
+  <data name="gsWizSteerAnglePositive" xml:space="preserve">
+    <value>A kormányszögnek POZITÍVNAK kell lennie jobbra fordulásnál.
+Ha nem, válassza a Szögszenzor invertálása opciót.</value>
+  </data>
+  <data name="gsWizFreeDrive" xml:space="preserve">
+    <value>Szabad kormányzás</value>
+  </data>
+  <data name="gsWizStartWizard" xml:space="preserve">
+    <value>Varázsló indítása</value>
+  </data>
+  <data name="gsWizHighlyRecommended" xml:space="preserve">
+    <value>Nagyon ajánlott</value>
+  </data>
+  <data name="gsWizLoadDefaults" xml:space="preserve">
+    <value>Alapértékek betöltése</value>
+  </data>
+  <data name="gsWizSetWheelbase" xml:space="preserve">
+    <value>Tengelytáv beállítása</value>
+  </data>
+  <data name="gsWizSetTrackWidth" xml:space="preserve">
+    <value>Nyomtáv beállítása</value>
+  </data>
+  <data name="gsWizWheelTrack" xml:space="preserve">
+    <value>Nyomtáv</value>
+  </data>
+  <data name="gsWizAntennaPosition" xml:space="preserve">
+    <value>Antenna
+pozíció</value>
+  </data>
+  <data name="gsWizSetAntennaPivotDist" xml:space="preserve">
+    <value>Adja meg az antenna távolságát a forgástengelytől</value>
+  </data>
+  <data name="gsWizAntennaHeightLines" xml:space="preserve">
+    <value>Antenna
+magasság</value>
+  </data>
+  <data name="gsWizSetAntennaHeight" xml:space="preserve">
+    <value>Antenna magasság beállítása</value>
+  </data>
+  <data name="gsWizZeroIsOff" xml:space="preserve">
+    <value>0 = Ki</value>
+  </data>
+  <data name="gsWizSetAntennaOffset" xml:space="preserve">
+    <value>Antenna eltolás beállítása</value>
+  </data>
+  <data name="gsWizADConvertor" xml:space="preserve">
+    <value>AD konverter</value>
+  </data>
+  <data name="gsWizMotorDriverBoard" xml:space="preserve">
+    <value>Motor meghajtó panel</value>
+  </data>
+  <data name="gsWizDriverControlRelay" xml:space="preserve">
+    <value>Meghajtó vezérlő relé</value>
+  </data>
+  <data name="gsWizDanfossValve" xml:space="preserve">
+    <value>Danfoss szelep</value>
+  </data>
+  <data name="gsWizIfNotInvertRoll" xml:space="preserve">
+    <value>Ha nem, válassza a Dőlés invertálása opciót</value>
+  </data>
+  <data name="gsWizRollPositive" xml:space="preserve">
+    <value>Döntse a járművet erősen jobbra. A jobbra dőlésnek POZITÍVNAK kell lennie.</value>
+  </data>
+  <data name="gsWizRollFunction" xml:space="preserve">
+    <value>Dőlés funkció</value>
+  </data>
+  <data name="gsWizRoll" xml:space="preserve">
+    <value>Dőlés</value>
+  </data>
+  <data name="gsWizParkLevel" xml:space="preserve">
+    <value>Álljon sík felületre és nyomja meg a „Dőlésérzékelő nullázása” gombot</value>
+  </data>
+  <data name="gsWizRollZero" xml:space="preserve">
+    <value>Dőlés nullázása</value>
+  </data>
+  <data name="gsWizInvertWasDirection" xml:space="preserve">
+    <value>Szögszenzor irányának invertálása</value>
+  </data>
+  <data name="gsWizCurrentHeading" xml:space="preserve">
+    <value>Aktuális irány</value>
+  </data>
+  <data name="gsWizWasZeroing" xml:space="preserve">
+    <value>Szögszenzor nullázása</value>
+  </data>
+  <data name="gsWizInvertDirection" xml:space="preserve">
+    <value>Irány megfordítása</value>
+  </data>
+  <data name="gsWizSteerMotorDirection" xml:space="preserve">
+    <value>Kormánymotor iránya</value>
+  </data>
+  <data name="gsWizBeginCalibration" xml:space="preserve">
+    <value>* Kalibrálás * indítása</value>
+  </data>
+  <data name="gsWizWasCalibration" xml:space="preserve">
+    <value>Szögszenzor kalibrálása</value>
+  </data>
+  <data name="gsWizSkipCpdAck" xml:space="preserve">
+    <value>* KIHAGYÁS *  CPD és Ackermann beállítás?</value>
+  </data>
+  <data name="gsWizStartAngle" xml:space="preserve">
+    <value>Kezdő szög</value>
+  </data>
+  <data name="gsWizResetTo100" xml:space="preserve">
+    <value>Visszaállítás 100%-ra</value>
+  </data>
+  <data name="gsWizAckermannValue" xml:space="preserve">
+    <value>Ackermann érték</value>
+  </data>
+  <data name="gsWizCircleLeft" xml:space="preserve">
+    <value>Fordítsa el a kormányt BALRA nagyjából ugyanannyi fokkal, mint jobbra.
+Miközben egyenletes körben halad, nyomja meg a Rec gombot és várjon.</value>
+  </data>
+  <data name="gsWizTurnToLimit" xml:space="preserve">
+    <value>Fordítsa a kormányt a kívánt vezetési határig és nyomja meg az OK gombot -&gt;</value>
+  </data>
+  <data name="gsWizGuidanceSteerAngleLimit" xml:space="preserve">
+    <value>Vezetési kormányszög határ</value>
+  </data>
+  <data name="gsWizManualGuidanceLimit" xml:space="preserve">
+    <value>Vagy állítsa be kézzel a vezetési kormányszög határt</value>
+  </data>
+  <data name="gsWizAutoCancelFeature" xml:space="preserve">
+    <value>Automatikus megszakítás funkció</value>
+  </data>
+  <data name="gsWizPanicStopSpeed" xml:space="preserve">
+    <value>Vészleállítás sebessége</value>
+  </data>
+  <data name="gsWizZero" xml:space="preserve">
+    <value>Nulla</value>
+  </data>
+  <data name="gsWizMinMovementInfo" xml:space="preserve">
+    <value>Változtassa a célértéket a kormány gombokkal. 
+
+Állítsa a minimális mozgást a lehető legmagasabbra úgy, hogy a kormánymotor vagy a hidraulika még ne mozdítsa el a kormányt</value>
+  </data>
+  <data name="gsWizDriveSlowlyStraight" xml:space="preserve">
+    <value>Haladjon lassan egyenesen előre, hagyja hogy a rendszer kormányozzon</value>
+  </data>
+  <data name="gsWizMinMovementSetting" xml:space="preserve">
+    <value>Minimális mozgás beállítása</value>
+  </data>
+  <data name="gsWizZeroOrPlus5" xml:space="preserve">
+    <value>Nulla vagy +5</value>
+  </data>
+  <data name="gsWizSetProportional" xml:space="preserve">
+    <value>Állítsa be a Proporcionálist a jó reakcióhoz. 
+A PWM maximummal korlátozza a kormányzás sebességét.</value>
+  </data>
+  <data name="gsWizDriveEnableAutoSteer" xml:space="preserve">
+    <value>Haladjon előre és kapcsolja be az automata kormányzást</value>
+  </data>
+  <data name="gsWizGainSetting" xml:space="preserve">
+    <value>Erősítés beállítása</value>
+  </data>
+  <data name="gsWizFinalNote" xml:space="preserve">
+    <value>Most hajtson egy AB vonalat és finomhangolja a beállításokat a sebességének és a talajviszonyoknak megfelelően.
+
+Ne feledje: a CPD, a minimális PWM és az előretekintés kritikus beállítások. </value>
+  </data>
+  <data name="gsWizRestartWizard" xml:space="preserve">
+    <value>Varázsló újraindítása</value>
+  </data>
+  <data name="gsWizFinished" xml:space="preserve">
+    <value>Kész !</value>
+  </data>
+  <data name="gsWizProgress" xml:space="preserve">
+    <value>Haladás</value>
+  </data>
+  <data name="gsWizCountsPDeg" xml:space="preserve">
+    <value>Impulzus / fok</value>
+  </data>
+  <data name="gsWizWasOffset" xml:space="preserve">
+    <value>Szögszenzor eltolás</value>
+  </data>
+  <data name="gsWizOffAtPercent" xml:space="preserve">
+    <value>Kikapcsolás %-nál</value>
+  </data>
+  <data name="gsWizResetToDefault" xml:space="preserve">
+    <value>Alapértékre állítás</value>
+  </data>
+  <data name="gsWizValuesSetToDefault" xml:space="preserve">
+    <value>Az értékek visszaálltak az alapértékre</value>
+  </data>
+  <data name="gsWizDriveSteady" xml:space="preserve">
+    <value>Haladjon egyenletesen</value>
+  </data>
+  <data name="gsWizCpdSetTo" xml:space="preserve">
+    <value>CPD beállítva: {0}</value>
+  </data>
+  <data name="gsWizCpdError" xml:space="preserve">
+    <value>Hiba, a CPD értéke 100</value>
+  </data>
+  <data name="gsWizAckermannSetTo" xml:space="preserve">
+    <value>Ackermann beállítva: {0}</value>
+  </data>
+  <data name="gsWizAckermannError" xml:space="preserve">
+    <value>Hiba, az Ackermann értéke 100</value>
+  </data>
+  <data name="gsWizDefaultsSet" xml:space="preserve">
+    <value>Alapértékek beállítva</value>
+  </data>
+  <data name="gsWizCpdAckDefaults" xml:space="preserve">
+    <value>A CPD és az Ackermann alapértékre állt</value>
+  </data>
+  <data name="gsWizPGainChange" xml:space="preserve">
+    <value>P erősítés módosítás</value>
+  </data>
+  <data name="gsWizPGainSetTo1" xml:space="preserve">
+    <value>A proporcionális erősítés 1-re állt</value>
+  </data>
+  <data name="gsWizExceededRange" xml:space="preserve">
+    <value>Tartomány túllépve</value>
+  </data>
+  <data name="gsWizExcessiveSteerAngle" xml:space="preserve">
+    <value>Túl nagy kormányszög - nem nullázható</value>
+  </data>
+  <data name="gsWizSteerAngleTooLow" xml:space="preserve">
+    <value>Túl kicsi kormányszög</value>
+  </data>
+  <data name="gsWizMustBeGreater5" xml:space="preserve">
+    <value>5 foknál nagyobbnak kell lennie</value>
+  </data>
+  <data name="gsWizSteeringDisabled" xml:space="preserve">
+    <value>Kormányzás letiltva</value>
+  </data>
+  <data name="gsWizEnableSteerSwitch" xml:space="preserve">
+    <value>Kapcsolja be a kormány kapcsolót</value>
+  </data>
 </root>

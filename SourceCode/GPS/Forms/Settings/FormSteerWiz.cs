@@ -33,11 +33,129 @@ namespace AgOpenGPS
             nudVehicleTrack.Controls[0].Enabled = false;
             nudWheelbase.Controls[0].Enabled = false;
 
+            ApplyTranslations();
+
             this.label3.Text = gStr.gsAgressiveness;
             this.label5.Text = gStr.gsOvershootReduction;
             this.Text = gStr.gsAutoSteerConfiguration;
             //this.Width = 378;
             //this.Height = 462;
+        }
+
+        private void ApplyTranslations()
+        {
+            label12.Text = gStr.gsWizSet + ":";
+            label13.Text = gStr.gsError + ":";
+            label14.Text = gStr.gsWizOrPlus5;
+            label8.Text = gStr.gsSteerAngle + ":";
+            label106.Text = gStr.gsSteerAngle + ":";
+            label1.Text = gStr.gsDiameter + ":";
+            label111.Text = gStr.gsDiameter + ":";
+            label6.Text = gStr.gsWizLow;
+            label27.Text = gStr.gsIntegral;
+            label24.Text = gStr.gsIntegral;
+            label25.Text = gStr.gsWizStanley;
+            label22.Text = gStr.gsWizSidehillComp;
+            label26.Text = gStr.gsWizPurePursuit;
+            label21.Text = gStr.gsWizLookAheadM;
+            label20.Text = gStr.gsWizLookAheadMin;
+            label19.Text = gStr.gsWizLookAheadSpeedGain;
+            label18.Text = gStr.gsLookAhead;
+            label15.Text = gStr.gsWizPwmMinMovement;
+            label4.Text = gStr.gsWizPwmMaximum;
+            label2.Text = gStr.gsProportionalGain;
+            label7.Text = gStr.gsWizCircleRight;
+            label10.Text = gStr.gsWizDriveStraightZero;
+            label28.Text = gStr.gsWizButtonSwitchInfo;
+            labelPressureTurnSensor.Text = gStr.gsPressureTurnSensor;
+            labelCurrentTurnSensor.Text = gStr.gsCurrentTurnSensor;
+            labelEncoder.Text = gStr.gsTurnSensor;
+            label70.Text = gStr.gsWizDriveEnableInvertMotor;
+            label29.Text = gStr.gsWizInvertHydraulicEnableRelay;
+            label62.Text = gStr.gsWizSteerEnableMode;
+            label63.Text = gStr.gsWizMotorDriverStyle;
+            label64.Text = gStr.gsWizADConnection;
+            label61.Text = gStr.gsWizTurnCounts;
+            label55.Text = gStr.gsWizDanfossQuestion;
+            label30.Text = gStr.gsWizSteerAnglePositive;
+            label35.Text = gStr.gsLeft;
+            label17.Text = gStr.gsLeft;
+            label78.Text = gStr.gsLeft;
+            label84.Text = gStr.gsLeft;
+            label34.Text = gStr.gsRight;
+            label33.Text = gStr.gsRight;
+            label79.Text = gStr.gsRight;
+            label88.Text = gStr.gsRight;
+            label38.Text = gStr.gsWizFreeDrive;
+            btnStartWizard.Text = "  " + gStr.gsWizStartWizard;
+            label81.Text = gStr.gsWizHighlyRecommended;
+            label80.Text = gStr.gsWizLoadDefaults;
+            btnLoadDefaults.Text = gStr.gsWizLoadDefaults;
+            label90.Text = gStr.gsWheelbase;
+            label91.Text = gStr.gsWizSetWheelbase;
+            label95.Text = gStr.gsWizSetTrackWidth;
+            label94.Text = gStr.gsWizWheelTrack;
+            label98.Text = gStr.gsWizAntennaPosition;
+            label99.Text = gStr.gsWizSetAntennaPivotDist;
+            label92.Text = gStr.gsWizAntennaHeightLines;
+            label93.Text = gStr.gsWizSetAntennaHeight;
+            label102.Text = gStr.gsAntennaOffset;
+            label104.Text = gStr.gsWizZeroIsOff;
+            label103.Text = gStr.gsWizSetAntennaOffset;
+            label53.Text = gStr.gsSteerSwitch;
+            label52.Text = gStr.gsWizADConvertor;
+            label43.Text = gStr.gsWizMotorDriverBoard;
+            label59.Text = gStr.gsInvertRelays;
+            label51.Text = gStr.gsWizDriverControlRelay;
+            label50.Text = gStr.gsWizDanfossValve;
+            label115.Text = gStr.gsWizIfNotInvertRoll;
+            label36.Text = gStr.gsWizRollPositive;
+            label46.Text = gStr.gsWizRollFunction;
+            label107.Text = gStr.gsWizRoll + ":";
+            label110.Text = gStr.gsWizRoll + ":";
+            label47.Text = gStr.gsZeroRoll;
+            label57.Text = gStr.gsRemoveOffset;
+            label48.Text = gStr.gsWizParkLevel;
+            label56.Text = gStr.gsWizRollZero;
+            label45.Text = gStr.gsInvertWas;
+            label42.Text = gStr.gsWizInvertWasDirection;
+            label112.Text = gStr.gsReset;
+            label37.Text = gStr.gsWizCurrentHeading + ":";
+            label40.Text = gStr.gsWizWasZeroing;
+            label58.Text = gStr.gsWizInvertDirection;
+            label41.Text = gStr.gsWizSteerMotorDirection;
+            label60.Text = gStr.gsWizBeginCalibration;
+            label74.Text = gStr.gsWizWasCalibration;
+            label75.Text = gStr.gsWizSkipCpdAck;
+            label109.Text = gStr.gsWizStartAngle + ":";
+            label101.Text = gStr.gsWizStartAngle + ":";
+            label39.Text = gStr.gsCountsPerDegree;
+            btnAckReset.Text = gStr.gsWizResetTo100;
+            label32.Text = gStr.gsWizAckermannValue + ":";
+            label105.Text = gStr.gsAckermann;
+            label65.Text = gStr.gsAckermann;
+            label108.Text = gStr.gsWizCircleLeft;
+            label113.Text = gStr.gsWizSet;
+            label73.Text = gStr.gsWizTurnToLimit;
+            label49.Text = gStr.gsWizGuidanceSteerAngleLimit;
+            label23.Text = gStr.gsWizManualGuidanceLimit;
+            label44.Text = gStr.gsWizAutoCancelFeature;
+            label54.Text = gStr.gsWizPanicStopSpeed;
+            label72.Text = gStr.gsWizZero;
+            label77.Text = gStr.gsWizMinMovementInfo;
+            label76.Text = gStr.gsWizDriveSlowlyStraight;
+            label68.Text = gStr.gsWizMinMovementSetting;
+            label83.Text = gStr.gsWizZeroOrPlus5;
+            label85.Text = gStr.gsWizSetProportional;
+            label86.Text = gStr.gsWizDriveEnableAutoSteer;
+            label87.Text = gStr.gsWizGainSetting;
+            label116.Text = gStr.gsWizFinalNote;
+            btnRestartWizard.Text = gStr.gsWizRestartWizard;
+            btnStopWizard.Text = gStr.gsWizRestartWizard;
+            label69.Text = gStr.gsWizFinished;
+            label71.Text = gStr.gsWizProgress + ":";
+            label66.Text = gStr.gsWizCountsPDeg;
+            label67.Text = gStr.gsWizWasOffset;
         }
 
         private void FormSteer_Load(object sender, EventArgs e)
@@ -182,7 +300,7 @@ namespace AgOpenGPS
                 hsbarSensor.Visible = true;
                 lblhsbarSensor.Visible = true;
 
-                label61.Text = "Off at %";
+                label61.Text = gStr.gsWizOffAtPercent;
             }
             else if (cboxCurrentSensor.Checked)
             {
@@ -195,7 +313,7 @@ namespace AgOpenGPS
                 hsbarSensor.Visible = true;
                 lblhsbarSensor.Visible = true;
 
-                label61.Text = "Off at %";
+                label61.Text = gStr.gsWizOffAtPercent;
             }
             else
             {
@@ -282,12 +400,12 @@ namespace AgOpenGPS
                         double cpd = (mf.mc.actualSteerAngleDegrees / steerAngleRight * hsbarCountsPerDegree.Value);
                         cpd *= 0.9;
                         hsbarCountsPerDegree.Value = (int)cpd;
-                        lblCPDError.Text = "CPD set to: " + hsbarCountsPerDegree.Value.ToString();
+                        lblCPDError.Text = string.Format(gStr.gsWizCpdSetTo, hsbarCountsPerDegree.Value);
                     }
                     catch (Exception ed)
                     {
                         hsbarCountsPerDegree.Value = 100;
-                        lblCPDError.Text = "Error, CPD set to 100";
+                        lblCPDError.Text = gStr.gsWizCpdError;
                         Log.EventWriter("Error, CPD set to 100" + ed.ToString());
                     }
                 }
@@ -317,12 +435,12 @@ namespace AgOpenGPS
                     try
                     {
                         hsbarAckerman.Value = (int)((steerAngleLeft / Math.Abs(startAngleLeft)) * 100);
-                        lblAckermannError.Text = "Ackermann Set to: " + hsbarAckerman.Value.ToString();
+                        lblAckermannError.Text = string.Format(gStr.gsWizAckermannSetTo, hsbarAckerman.Value);
                     }
                     catch (Exception eh)
                     {
                         hsbarAckerman.Value = 100;
-                        lblAckermannError.Text = "Error, Ackermann set to 100";
+                        lblAckermannError.Text = gStr.gsWizAckermannError;
                         Log.EventWriter("Error, Ackermann set to 100" + eh.ToString());
                     }
                 }
@@ -547,7 +665,7 @@ namespace AgOpenGPS
 
         private void btnLoadDefaults_Click(object sender, EventArgs e)
         {
-            mf.TimedMessageBox(2000, "Reset To Default", "Values Set to Inital Default");
+            mf.TimedMessageBox(2000, gStr.gsWizResetToDefault, gStr.gsWizValuesSetToDefault);
             Properties.VehicleSettings.Default.setVehicle_maxSteerAngle = mf.vehicle.maxSteerAngle
                 = 45;
 
@@ -740,7 +858,7 @@ namespace AgOpenGPS
                         lblPercentFS.Visible = true;
                         nudMaxCounts.Visible = false;
                         pbarSensor.Visible = true;
-                        label61.Text = "Off at %";
+                        label61.Text = gStr.gsWizOffAtPercent;
                         hsbarSensor.Visible = true;
                         lblhsbarSensor.Visible = true;
                     }
@@ -753,7 +871,7 @@ namespace AgOpenGPS
                         nudMaxCounts.Visible = false;
                         hsbarSensor.Visible = true;
                         pbarSensor.Visible = true;
-                        label61.Text = "Off at %";
+                        label61.Text = gStr.gsWizOffAtPercent;
                         lblhsbarSensor.Visible = true;
                     }
                     else if (checkbox == cboxEncoder)
@@ -832,7 +950,7 @@ namespace AgOpenGPS
 
         private void btnOKNext_CPDSetup_Click(object sender, EventArgs e)
         {
-            mf.TimedMessageBox(3000, "Defaults Set", "CPD and Ackermann set to defaults");
+            mf.TimedMessageBox(3000, gStr.gsWizDefaultsSet, gStr.gsWizCpdAckDefaults);
             hsbarCountsPerDegree.Value = 100;
             hsbarAckerman.Value = 100;
 
@@ -972,7 +1090,7 @@ namespace AgOpenGPS
             int offset = (int)(hsbarCountsPerDegree.Value * -mf.mc.actualSteerAngleDegrees + hsbarWasOffset.Value);
             if (Math.Abs(offset) > 3900)
             {
-                FormDialog.Show("Exceeded Range", "Excessive Steer Angle - Cannot Zero", DialogSeverity.Error);
+                FormDialog.Show(gStr.gsWizExceededRange, gStr.gsWizExcessiveSteerAngle, DialogSeverity.Error);
             }
             else
             {
@@ -996,7 +1114,7 @@ namespace AgOpenGPS
                 cntr = 0;
                 btnStartSA.Image = Properties.Resources.boundaryStop;
                 lblDiameter.Text = "0";
-                lblCalcSteerAngleInner.Text = "Drive Steady";
+                lblCalcSteerAngleInner.Text = gStr.gsWizDriveSteady;
                 lblRightStartAngle.Text = mf.mc.actualSteerAngleDegrees.ToString("N1");
             }
             else
@@ -1022,7 +1140,7 @@ namespace AgOpenGPS
                 cntr = 0;
                 btnStartSA_Left.Image = Properties.Resources.boundaryStop;
                 lblDiameterLeft.Text = "0";
-                lblCalcSteerAngleLeft.Text = "Drive Steady";
+                lblCalcSteerAngleLeft.Text = gStr.gsWizDriveSteady;
                 lblStartAngleLeft.Text = startAngleLeft.ToString("N1") + "\u00B0";
             }
             else
@@ -1087,7 +1205,7 @@ namespace AgOpenGPS
         {
             if (Math.Abs((int)mf.mc.actualSteerAngleDegrees) < 5)
             {
-                FormDialog.Show("Steer Angle Too Low", "Must be Greater than 5 degrees", DialogSeverity.Error);
+                FormDialog.Show(gStr.gsWizSteerAngleTooLow, gStr.gsWizMustBeGreater5, DialogSeverity.Error);
                 return;
             }
 
@@ -1109,7 +1227,7 @@ namespace AgOpenGPS
             if (CheckSteerSwitch())
                 mf.vehicle.driveFreeSteerAngle -= 2;
             else
-                FormDialog.Show("Steering Disabled", "Enable Steer Switch", DialogSeverity.Error);
+                FormDialog.Show(gStr.gsWizSteeringDisabled, gStr.gsWizEnableSteerSwitch, DialogSeverity.Error);
         }
 
         private void btnMinGainRight_Click(object sender, EventArgs e)
@@ -1117,7 +1235,7 @@ namespace AgOpenGPS
             if (CheckSteerSwitch())
                 mf.vehicle.driveFreeSteerAngle += 2;
             else
-                FormDialog.Show("Steering Disabled", "Enable Steer Switch", DialogSeverity.Error);
+                FormDialog.Show(gStr.gsWizSteeringDisabled, gStr.gsWizEnableSteerSwitch, DialogSeverity.Error);
         }
 
         private void btnZeroMinMovementSetting_Click(object sender, EventArgs e)
@@ -1125,14 +1243,14 @@ namespace AgOpenGPS
             if (CheckSteerSwitch())
                 mf.vehicle.driveFreeSteerAngle = 0;
             else
-                FormDialog.Show("Steering Disabled", "Enable Steer Switch", DialogSeverity.Error);
+                FormDialog.Show(gStr.gsWizSteeringDisabled, gStr.gsWizEnableSteerSwitch, DialogSeverity.Error);
         }
 
         private void tab_MinimumGain_Enter(object sender, EventArgs e)
         {
             hsbarProportionalGain.Value = 1;
             FreeDrive(true);
-            mf.TimedMessageBox(2000, "P Gain Change", "Proportional Gain set to 1");
+            mf.TimedMessageBox(2000, gStr.gsWizPGainChange, gStr.gsWizPGainSetTo1);
         }
 
         private void tab_MinimumGain_Leave(object sender, EventArgs e)

@@ -4518,5 +4518,851 @@ namespace AgOpenGPS.Core.Translations {
                 return ResourceManager.GetString("gsFileResult", resourceCulture);
             }
         }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Or +5.
+        /// </summary>
+        public static string gsWizOrPlus5 {
+            get {
+                return ResourceManager.GetString("gsWizOrPlus5", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Set.
+        /// </summary>
+        public static string gsWizSet {
+            get {
+                return ResourceManager.GetString("gsWizSet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Low.
+        /// </summary>
+        public static string gsWizLow {
+            get {
+                return ResourceManager.GetString("gsWizLow", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Stanley.
+        /// </summary>
+        public static string gsWizStanley {
+            get {
+                return ResourceManager.GetString("gsWizStanley", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sidehill Deg per Deg of Roll.
+        /// </summary>
+        public static string gsWizSidehillComp {
+            get {
+                return ResourceManager.GetString("gsWizSidehillComp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Pure Pursuit.
+        /// </summary>
+        public static string gsWizPurePursuit {
+            get {
+                return ResourceManager.GetString("gsWizPurePursuit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Look Ahead (m).
+        /// </summary>
+        public static string gsWizLookAheadM {
+            get {
+                return ResourceManager.GetString("gsWizLookAheadM", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Look Ahead Min.
+        /// </summary>
+        public static string gsWizLookAheadMin {
+            get {
+                return ResourceManager.GetString("gsWizLookAheadMin", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Look Ahead Speed Gain.
+        /// </summary>
+        public static string gsWizLookAheadSpeedGain {
+            get {
+                return ResourceManager.GetString("gsWizLookAheadSpeedGain", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to PWM Minimum Movement.
+        /// </summary>
+        public static string gsWizPwmMinMovement {
+            get {
+                return ResourceManager.GetString("gsWizPwmMinMovement", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to PWM Maximum.
+        /// </summary>
+        public static string gsWizPwmMaximum {
+            get {
+                return ResourceManager.GetString("gsWizPwmMaximum", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Turn steering wheel to RIGHT about 20 degrees. While driving in a steady circle, Press Rec and wait..
+        /// </summary>
+        public static string gsWizCircleRight {
+            get {
+                return ResourceManager.GetString("gsWizCircleRight", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Drive straight forward and Touch Zero.
+        /// </summary>
+        public static string gsWizDriveStraightZero {
+            get {
+                return ResourceManager.GetString("gsWizDriveStraightZero", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Button - Push Release, On.                   Push Release, Off  Switch - While Pushed is On.                 Released is Off..
+        /// </summary>
+        public static string gsWizButtonSwitchInfo {
+            get {
+                return ResourceManager.GetString("gsWizButtonSwitchInfo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Drive slowly and enable Auto Steer. Invert Direction if steer motor turns the wrong way. Test with Arrows..
+        /// </summary>
+        public static string gsWizDriveEnableInvertMotor {
+            get {
+                return ResourceManager.GetString("gsWizDriveEnableInvertMotor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invert Hydraulic Enable Relay?.
+        /// </summary>
+        public static string gsWizInvertHydraulicEnableRelay {
+            get {
+                return ResourceManager.GetString("gsWizInvertHydraulicEnableRelay", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Steer Enable Mode.
+        /// </summary>
+        public static string gsWizSteerEnableMode {
+            get {
+                return ResourceManager.GetString("gsWizSteerEnableMode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to What Style of Motor Driver?.
+        /// </summary>
+        public static string gsWizMotorDriverStyle {
+            get {
+                return ResourceManager.GetString("gsWizMotorDriverStyle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A/D Convertor Connection?.
+        /// </summary>
+        public static string gsWizADConnection {
+            get {
+                return ResourceManager.GetString("gsWizADConnection", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Turn Counts.
+        /// </summary>
+        public static string gsWizTurnCounts {
+            get {
+                return ResourceManager.GetString("gsWizTurnCounts", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do you have use a Danfoss Valve?.
+        /// </summary>
+        public static string gsWizDanfossQuestion {
+            get {
+                return ResourceManager.GetString("gsWizDanfossQuestion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Steer Angle must be POSITIVE when turning to the RIGHT. If not, select the Invert WAS..
+        /// </summary>
+        public static string gsWizSteerAnglePositive {
+            get {
+                return ResourceManager.GetString("gsWizSteerAnglePositive", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Free Drive.
+        /// </summary>
+        public static string gsWizFreeDrive {
+            get {
+                return ResourceManager.GetString("gsWizFreeDrive", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Start Wizard.
+        /// </summary>
+        public static string gsWizStartWizard {
+            get {
+                return ResourceManager.GetString("gsWizStartWizard", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Highly Recommended.
+        /// </summary>
+        public static string gsWizHighlyRecommended {
+            get {
+                return ResourceManager.GetString("gsWizHighlyRecommended", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Load Defaults.
+        /// </summary>
+        public static string gsWizLoadDefaults {
+            get {
+                return ResourceManager.GetString("gsWizLoadDefaults", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Set Wheelbase.
+        /// </summary>
+        public static string gsWizSetWheelbase {
+            get {
+                return ResourceManager.GetString("gsWizSetWheelbase", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Set Track Width.
+        /// </summary>
+        public static string gsWizSetTrackWidth {
+            get {
+                return ResourceManager.GetString("gsWizSetTrackWidth", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Wheel Track.
+        /// </summary>
+        public static string gsWizWheelTrack {
+            get {
+                return ResourceManager.GetString("gsWizWheelTrack", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Antenna Position.
+        /// </summary>
+        public static string gsWizAntennaPosition {
+            get {
+                return ResourceManager.GetString("gsWizAntennaPosition", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Set Distance Antenna Is From Pivot Axle.
+        /// </summary>
+        public static string gsWizSetAntennaPivotDist {
+            get {
+                return ResourceManager.GetString("gsWizSetAntennaPivotDist", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Antenna Height.
+        /// </summary>
+        public static string gsWizAntennaHeightLines {
+            get {
+                return ResourceManager.GetString("gsWizAntennaHeightLines", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Set Antenna Height.
+        /// </summary>
+        public static string gsWizSetAntennaHeight {
+            get {
+                return ResourceManager.GetString("gsWizSetAntennaHeight", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 0 = Off.
+        /// </summary>
+        public static string gsWizZeroIsOff {
+            get {
+                return ResourceManager.GetString("gsWizZeroIsOff", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Set Antenna Offset.
+        /// </summary>
+        public static string gsWizSetAntennaOffset {
+            get {
+                return ResourceManager.GetString("gsWizSetAntennaOffset", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A/D Convertor.
+        /// </summary>
+        public static string gsWizADConvertor {
+            get {
+                return ResourceManager.GetString("gsWizADConvertor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Motor Driver Board.
+        /// </summary>
+        public static string gsWizMotorDriverBoard {
+            get {
+                return ResourceManager.GetString("gsWizMotorDriverBoard", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Driver Control Relay.
+        /// </summary>
+        public static string gsWizDriverControlRelay {
+            get {
+                return ResourceManager.GetString("gsWizDriverControlRelay", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Danfoss Valve.
+        /// </summary>
+        public static string gsWizDanfossValve {
+            get {
+                return ResourceManager.GetString("gsWizDanfossValve", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to If not Select Invert Roll.
+        /// </summary>
+        public static string gsWizIfNotInvertRoll {
+            get {
+                return ResourceManager.GetString("gsWizIfNotInvertRoll", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Put vehicle leaning strongly to the right. Roll to the right must be POSITIVE..
+        /// </summary>
+        public static string gsWizRollPositive {
+            get {
+                return ResourceManager.GetString("gsWizRollPositive", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Roll Function.
+        /// </summary>
+        public static string gsWizRollFunction {
+            get {
+                return ResourceManager.GetString("gsWizRollFunction", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Roll.
+        /// </summary>
+        public static string gsWizRoll {
+            get {
+                return ResourceManager.GetString("gsWizRoll", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Park on level surface and touch "Zero Roll".
+        /// </summary>
+        public static string gsWizParkLevel {
+            get {
+                return ResourceManager.GetString("gsWizParkLevel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Roll Zero.
+        /// </summary>
+        public static string gsWizRollZero {
+            get {
+                return ResourceManager.GetString("gsWizRollZero", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invert WAS Direction.
+        /// </summary>
+        public static string gsWizInvertWasDirection {
+            get {
+                return ResourceManager.GetString("gsWizInvertWasDirection", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Current Heading.
+        /// </summary>
+        public static string gsWizCurrentHeading {
+            get {
+                return ResourceManager.GetString("gsWizCurrentHeading", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to WAS Zeroing.
+        /// </summary>
+        public static string gsWizWasZeroing {
+            get {
+                return ResourceManager.GetString("gsWizWasZeroing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invert Direction.
+        /// </summary>
+        public static string gsWizInvertDirection {
+            get {
+                return ResourceManager.GetString("gsWizInvertDirection", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Steer Motor Direction.
+        /// </summary>
+        public static string gsWizSteerMotorDirection {
+            get {
+                return ResourceManager.GetString("gsWizSteerMotorDirection", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to * Begin * Calibration.
+        /// </summary>
+        public static string gsWizBeginCalibration {
+            get {
+                return ResourceManager.GetString("gsWizBeginCalibration", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to WAS Calibration.
+        /// </summary>
+        public static string gsWizWasCalibration {
+            get {
+                return ResourceManager.GetString("gsWizWasCalibration", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to * SKIP *  Counts Per Degree and Ackermann Setting?.
+        /// </summary>
+        public static string gsWizSkipCpdAck {
+            get {
+                return ResourceManager.GetString("gsWizSkipCpdAck", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Start Angle.
+        /// </summary>
+        public static string gsWizStartAngle {
+            get {
+                return ResourceManager.GetString("gsWizStartAngle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Reset To 100%.
+        /// </summary>
+        public static string gsWizResetTo100 {
+            get {
+                return ResourceManager.GetString("gsWizResetTo100", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ackermann Value.
+        /// </summary>
+        public static string gsWizAckermannValue {
+            get {
+                return ResourceManager.GetString("gsWizAckermannValue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Turn steering wheel to LEFT roughly the same degrees as right. While driving in a steady circle, Press Rec and wait..
+        /// </summary>
+        public static string gsWizCircleLeft {
+            get {
+                return ResourceManager.GetString("gsWizCircleLeft", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Turn steering to your desired limit for guidance and touch OK -&gt;.
+        /// </summary>
+        public static string gsWizTurnToLimit {
+            get {
+                return ResourceManager.GetString("gsWizTurnToLimit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Guidance Steer Angle Limit.
+        /// </summary>
+        public static string gsWizGuidanceSteerAngleLimit {
+            get {
+                return ResourceManager.GetString("gsWizGuidanceSteerAngleLimit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Or Manually Set Guidance Steer Angle Limit.
+        /// </summary>
+        public static string gsWizManualGuidanceLimit {
+            get {
+                return ResourceManager.GetString("gsWizManualGuidanceLimit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Automatic Canceling Feature.
+        /// </summary>
+        public static string gsWizAutoCancelFeature {
+            get {
+                return ResourceManager.GetString("gsWizAutoCancelFeature", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Panic Stop Speed.
+        /// </summary>
+        public static string gsWizPanicStopSpeed {
+            get {
+                return ResourceManager.GetString("gsWizPanicStopSpeed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Zero.
+        /// </summary>
+        public static string gsWizZero {
+            get {
+                return ResourceManager.GetString("gsWizZero", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Change Setpoint with steer buttons.   Adjust Minimum Movement as high as possible without steer motor or hydraulics moving steering.
+        /// </summary>
+        public static string gsWizMinMovementInfo {
+            get {
+                return ResourceManager.GetString("gsWizMinMovementInfo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Drive slowly straight forward, Allow system to steer.
+        /// </summary>
+        public static string gsWizDriveSlowlyStraight {
+            get {
+                return ResourceManager.GetString("gsWizDriveSlowlyStraight", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Minimum Movement Setting.
+        /// </summary>
+        public static string gsWizMinMovementSetting {
+            get {
+                return ResourceManager.GetString("gsWizMinMovementSetting", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Zero or +5.
+        /// </summary>
+        public static string gsWizZeroOrPlus5 {
+            get {
+                return ResourceManager.GetString("gsWizZeroOrPlus5", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Set Proportional for good response.  Set PWM Maximum to limit turning speed..
+        /// </summary>
+        public static string gsWizSetProportional {
+            get {
+                return ResourceManager.GetString("gsWizSetProportional", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Drive forward and enable Auto Steer.
+        /// </summary>
+        public static string gsWizDriveEnableAutoSteer {
+            get {
+                return ResourceManager.GetString("gsWizDriveEnableAutoSteer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Gain Setting.
+        /// </summary>
+        public static string gsWizGainSetting {
+            get {
+                return ResourceManager.GetString("gsWizGainSetting", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Now go drive an AB Line and fine tune settings based on your speed and soil conditions.  Remember: CPD, Min PWM, and Look Ahead are critical settings. .
+        /// </summary>
+        public static string gsWizFinalNote {
+            get {
+                return ResourceManager.GetString("gsWizFinalNote", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Restart Wizard.
+        /// </summary>
+        public static string gsWizRestartWizard {
+            get {
+                return ResourceManager.GetString("gsWizRestartWizard", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Finished !.
+        /// </summary>
+        public static string gsWizFinished {
+            get {
+                return ResourceManager.GetString("gsWizFinished", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Progress.
+        /// </summary>
+        public static string gsWizProgress {
+            get {
+                return ResourceManager.GetString("gsWizProgress", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Counts P Deg.
+        /// </summary>
+        public static string gsWizCountsPDeg {
+            get {
+                return ResourceManager.GetString("gsWizCountsPDeg", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to WAS Offset.
+        /// </summary>
+        public static string gsWizWasOffset {
+            get {
+                return ResourceManager.GetString("gsWizWasOffset", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Off at %.
+        /// </summary>
+        public static string gsWizOffAtPercent {
+            get {
+                return ResourceManager.GetString("gsWizOffAtPercent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Reset To Default.
+        /// </summary>
+        public static string gsWizResetToDefault {
+            get {
+                return ResourceManager.GetString("gsWizResetToDefault", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Values Set to Initial Default.
+        /// </summary>
+        public static string gsWizValuesSetToDefault {
+            get {
+                return ResourceManager.GetString("gsWizValuesSetToDefault", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Drive Steady.
+        /// </summary>
+        public static string gsWizDriveSteady {
+            get {
+                return ResourceManager.GetString("gsWizDriveSteady", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to CPD set to: {0}.
+        /// </summary>
+        public static string gsWizCpdSetTo {
+            get {
+                return ResourceManager.GetString("gsWizCpdSetTo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Error, CPD set to 100.
+        /// </summary>
+        public static string gsWizCpdError {
+            get {
+                return ResourceManager.GetString("gsWizCpdError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ackermann Set to: {0}.
+        /// </summary>
+        public static string gsWizAckermannSetTo {
+            get {
+                return ResourceManager.GetString("gsWizAckermannSetTo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Error, Ackermann set to 100.
+        /// </summary>
+        public static string gsWizAckermannError {
+            get {
+                return ResourceManager.GetString("gsWizAckermannError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Defaults Set.
+        /// </summary>
+        public static string gsWizDefaultsSet {
+            get {
+                return ResourceManager.GetString("gsWizDefaultsSet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to CPD and Ackermann set to defaults.
+        /// </summary>
+        public static string gsWizCpdAckDefaults {
+            get {
+                return ResourceManager.GetString("gsWizCpdAckDefaults", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to P Gain Change.
+        /// </summary>
+        public static string gsWizPGainChange {
+            get {
+                return ResourceManager.GetString("gsWizPGainChange", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Proportional Gain set to 1.
+        /// </summary>
+        public static string gsWizPGainSetTo1 {
+            get {
+                return ResourceManager.GetString("gsWizPGainSetTo1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Exceeded Range.
+        /// </summary>
+        public static string gsWizExceededRange {
+            get {
+                return ResourceManager.GetString("gsWizExceededRange", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Excessive Steer Angle - Cannot Zero.
+        /// </summary>
+        public static string gsWizExcessiveSteerAngle {
+            get {
+                return ResourceManager.GetString("gsWizExcessiveSteerAngle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Steer Angle Too Low.
+        /// </summary>
+        public static string gsWizSteerAngleTooLow {
+            get {
+                return ResourceManager.GetString("gsWizSteerAngleTooLow", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Must be Greater than 5 degrees.
+        /// </summary>
+        public static string gsWizMustBeGreater5 {
+            get {
+                return ResourceManager.GetString("gsWizMustBeGreater5", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Steering Disabled.
+        /// </summary>
+        public static string gsWizSteeringDisabled {
+            get {
+                return ResourceManager.GetString("gsWizSteeringDisabled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enable Steer Switch.
+        /// </summary>
+        public static string gsWizEnableSteerSwitch {
+            get {
+                return ResourceManager.GetString("gsWizEnableSteerSwitch", resourceCulture);
+            }
+        }
     }
 }
