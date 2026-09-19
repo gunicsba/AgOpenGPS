@@ -879,6 +879,42 @@ The order you push them will be the order they appear on the menu from bottom up
   <data name="gsNudgeRefTrack" xml:space="preserve">
     <value>Move Reference Track</value>
   </data>
+  <data name="gsOenyAddSelected" xml:space="preserve">
+    <value>Add Selected as Boundary</value>
+  </data>
+  <data name="gsOenyBoundaryExists" xml:space="preserve">
+    <value>Boundary Exists</value>
+  </data>
+  <data name="gsOenyFetchFailed" xml:space="preserve">
+    <value>Failed to fetch parcels: {0}</value>
+  </data>
+  <data name="gsOenyFoundParcels" xml:space="preserve">
+    <value>Found {0} parcel(s). Check the ones to import (or tap them on the map).</value>
+  </data>
+  <data name="gsOenyImport" xml:space="preserve">
+    <value>OENY Import</value>
+  </data>
+  <data name="gsOenyImportTitle" xml:space="preserve">
+    <value>Import Boundary from OENY (HRSZ)</value>
+  </data>
+  <data name="gsOenyNoParcels" xml:space="preserve">
+    <value>No parcels found in this area.</value>
+  </data>
+  <data name="gsOenyReplaceBoundary" xml:space="preserve">
+    <value>A boundary already exists. Replace it with the selected parcel(s)?</value>
+  </data>
+  <data name="gsOenySearchHere" xml:space="preserve">
+    <value>Search Here</value>
+  </data>
+  <data name="gsOenySearching" xml:space="preserve">
+    <value>Searching...</value>
+  </data>
+  <data name="gsOenySearchSize" xml:space="preserve">
+    <value>Search size (km):</value>
+  </data>
+  <data name="gsOenySelectParcel" xml:space="preserve">
+    <value>Select at least one parcel first.</value>
+  </data>
   <data name="gsOff" xml:space="preserve">
     <value>Off</value>
   </data>

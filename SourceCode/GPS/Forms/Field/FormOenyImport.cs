@@ -8,6 +8,7 @@ using System.Windows.Forms;
 using AgLibrary.Logging;
 using AgOpenGPS.Classes.Oeny;
 using AgOpenGPS.Core.Models;
+using AgOpenGPS.Core.Translations;
 
 namespace AgOpenGPS.Forms.Field
 {
@@ -60,7 +61,7 @@ namespace AgOpenGPS.Forms.Field
 
         private void BuildUi()
         {
-            Text = "Import Boundary from OENY (HRSZ)";
+            Text = gStr.gsOenyImportTitle;
             FormBorderStyle = FormBorderStyle.Sizable;
             MaximizeBox = true;
             MinimizeBox = false;
@@ -68,7 +69,7 @@ namespace AgOpenGPS.Forms.Field
             ClientSize = new Size(960, 680);
             MinimumSize = new Size(700, 480);
 
-            var lblRadius = new Label { Text = "Search size (km):", Left = 12, Top = 18, Width = 110, AutoSize = true };
+            var lblRadius = new Label { Text = gStr.gsOenySearchSize, Left = 12, Top = 18, Width = 110, AutoSize = true };
             nudRadiusKm = new NumericUpDown
             {
                 Left = 130,
@@ -81,7 +82,7 @@ namespace AgOpenGPS.Forms.Field
                 Value = 0.3M
             };
 
-            btnSearch = new Button { Text = "Search Here", Left = 200, Top = 11, Width = 130, Height = 30 };
+            btnSearch = new Button { Text = gStr.gsOenySearchHere, Left = 200, Top = 11, Width = 130, Height = 30 };
             btnSearch.Click += async (s, e) => await SearchAsync();
 
             lblStatus = new Label { Left = 340, Top = 18, Width = 600, AutoSize = false, Height = 20, Text = string.Empty, Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right };
@@ -138,7 +139,7 @@ namespace AgOpenGPS.Forms.Field
 
             btnAddSelected = new Button
             {
-                Text = "Add Selected as Boundary",
+                Text = gStr.gsOenyAddSelected,
                 Left = 12,
                 Width = 240,
                 Height = 40,
@@ -149,7 +150,7 @@ namespace AgOpenGPS.Forms.Field
 
             btnCancel = new Button
             {
-                Text = "Cancel",
+                Text = gStr.gsCancel,
                 Width = 172,
                 Height = 40,
                 Anchor = AnchorStyles.Bottom | AnchorStyles.Right
@@ -212,7 +213,7 @@ namespace AgOpenGPS.Forms.Field
 
             btnSearch.Enabled = false;
             btnAddSelected.Enabled = false;
-            lblStatus.Text = "Searching...";
+            lblStatus.Text = gStr.gsOenySearching;
             clbParcels.Items.Clear();
             _parcels = new List<ParcelEntry>();
             pnlPreview.Invalidate();
@@ -234,7 +235,7 @@ namespace AgOpenGPS.Forms.Field
 
                 if (rawParcels.Count == 0)
                 {
-                    lblStatus.Text = "No parcels found in this area.";
+                    lblStatus.Text = gStr.gsOenyNoParcels;
                     return;
                 }
 
@@ -295,15 +296,15 @@ namespace AgOpenGPS.Forms.Field
 
                 ResetView();
 
-                lblStatus.Text = $"Found {_parcels.Count} parcel(s). Check the ones to import (or tap them on the map).";
+                lblStatus.Text = string.Format(gStr.gsOenyFoundParcels, _parcels.Count);
                 btnAddSelected.Enabled = _parcels.Count > 0;
                 pnlPreview.Invalidate();
             }
             catch (Exception ex)
             {
                 Log.EventWriter("OENY import error: " + ex);
-                lblStatus.Text = "Error: " + ex.Message;
-                FormDialog.Show("OENY Import", "Failed to fetch parcels: " + ex.Message, DialogSeverity.Error);
+                lblStatus.Text = gStr.gsError + ": " + ex.Message;
+                FormDialog.Show(gStr.gsOenyImport, string.Format(gStr.gsOenyFetchFailed, ex.Message), DialogSeverity.Error);
             }
             finally
             {
@@ -534,13 +535,13 @@ namespace AgOpenGPS.Forms.Field
             List<int> selectedIndices = clbParcels.CheckedIndices.Cast<int>().ToList();
             if (selectedIndices.Count == 0)
             {
-                FormDialog.Show("OENY Import", "Select at least one parcel first.", DialogSeverity.Error);
+                FormDialog.Show(gStr.gsOenyImport, gStr.gsOenySelectParcel, DialogSeverity.Error);
                 return;
             }
 
             if (mf.bnd.bndList.Count > 0)
             {
-                DialogResult result = FormDialog.ShowQuestion("Boundary Exists", "A boundary already exists. Replace it with the selected parcel(s)?");
+                DialogResult result = FormDialog.ShowQuestion(gStr.gsOenyBoundaryExists, gStr.gsOenyReplaceBoundary);
                 if (result == DialogResult.OK)
                 {
                     mf.bnd.bndList.Clear();

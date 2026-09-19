@@ -2641,6 +2641,114 @@ namespace AgOpenGPS.Core.Translations {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add Selected as Boundary.
+        /// </summary>
+        public static string gsOenyAddSelected {
+            get {
+                return ResourceManager.GetString("gsOenyAddSelected", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Boundary Exists.
+        /// </summary>
+        public static string gsOenyBoundaryExists {
+            get {
+                return ResourceManager.GetString("gsOenyBoundaryExists", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Failed to fetch parcels: {0}.
+        /// </summary>
+        public static string gsOenyFetchFailed {
+            get {
+                return ResourceManager.GetString("gsOenyFetchFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Found {0} parcel(s). Check the ones to import (or tap them on the map)..
+        /// </summary>
+        public static string gsOenyFoundParcels {
+            get {
+                return ResourceManager.GetString("gsOenyFoundParcels", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to OENY Import.
+        /// </summary>
+        public static string gsOenyImport {
+            get {
+                return ResourceManager.GetString("gsOenyImport", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Import Boundary from OENY (HRSZ).
+        /// </summary>
+        public static string gsOenyImportTitle {
+            get {
+                return ResourceManager.GetString("gsOenyImportTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No parcels found in this area..
+        /// </summary>
+        public static string gsOenyNoParcels {
+            get {
+                return ResourceManager.GetString("gsOenyNoParcels", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A boundary already exists. Replace it with the selected parcel(s)?.
+        /// </summary>
+        public static string gsOenyReplaceBoundary {
+            get {
+                return ResourceManager.GetString("gsOenyReplaceBoundary", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Search Here.
+        /// </summary>
+        public static string gsOenySearchHere {
+            get {
+                return ResourceManager.GetString("gsOenySearchHere", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Searching....
+        /// </summary>
+        public static string gsOenySearching {
+            get {
+                return ResourceManager.GetString("gsOenySearching", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Search size (km):.
+        /// </summary>
+        public static string gsOenySearchSize {
+            get {
+                return ResourceManager.GetString("gsOenySearchSize", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select at least one parcel first..
+        /// </summary>
+        public static string gsOenySelectParcel {
+            get {
+                return ResourceManager.GetString("gsOenySelectParcel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Off.
         /// </summary>
         public static string gsOff {

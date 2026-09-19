@@ -507,6 +507,9 @@ A választott sorrend alapján fognak megjelenni alulról felfelé.</value>
   <data name="gsEast" xml:space="preserve">
     <value>Kelet</value>
   </data>
+  <data name="gsEasyDriveInfo" xml:space="preserve">
+    <value>Gyors indulás GPS vezetéssel. Állítsa be a munkaszélességet és a forgópont távolságot, majd hozzon létre AB vonalat vagy görbét. Semmi sem kerül mentésre a lemezre.</value>
+  </data>
   <data name="gsEditABLine" xml:space="preserve">
     <value>AB vonal szerkesztése</value>
   </data>
@@ -841,6 +844,9 @@ A választott sorrend alapján fognak megjelenni alulról felfelé.</value>
   <data name="gsNewFromDefault" xml:space="preserve">
     <value>Új alapértelmezésből</value>
   </data>
+  <data name="gsNext" xml:space="preserve">
+    <value>Tovább</value>
+  </data>
   <data name="gsNextGuidanceLine" xml:space="preserve">
     <value>Következő nyomvonal</value>
   </data>
@@ -876,6 +882,42 @@ A választott sorrend alapján fognak megjelenni alulról felfelé.</value>
   </data>
   <data name="gsNudgeRefTrack" xml:space="preserve">
     <value>Referencia vonal elmozgatása</value>
+  </data>
+  <data name="gsOenyAddSelected" xml:space="preserve">
+    <value>Kijelöltek hozzáadása határként</value>
+  </data>
+  <data name="gsOenyBoundaryExists" xml:space="preserve">
+    <value>Már van határ</value>
+  </data>
+  <data name="gsOenyFetchFailed" xml:space="preserve">
+    <value>A földrészletek lekérése sikertelen: {0}</value>
+  </data>
+  <data name="gsOenyFoundParcels" xml:space="preserve">
+    <value>{0} földrészlet található. Jelölje be az importálandókat (vagy koppintson rájuk a térképen).</value>
+  </data>
+  <data name="gsOenyImport" xml:space="preserve">
+    <value>OENY import</value>
+  </data>
+  <data name="gsOenyImportTitle" xml:space="preserve">
+    <value>Határ importálása az OENY-ből (HRSZ)</value>
+  </data>
+  <data name="gsOenyNoParcels" xml:space="preserve">
+    <value>Ezen a területen nem található földrészlet.</value>
+  </data>
+  <data name="gsOenyReplaceBoundary" xml:space="preserve">
+    <value>Már van határ. Lecseréli a kijelölt földrészlet(ek)re?</value>
+  </data>
+  <data name="gsOenySearchHere" xml:space="preserve">
+    <value>Keresés itt</value>
+  </data>
+  <data name="gsOenySearching" xml:space="preserve">
+    <value>Keresés...</value>
+  </data>
+  <data name="gsOenySearchSize" xml:space="preserve">
+    <value>Keresési méret (km):</value>
+  </data>
+  <data name="gsOenySelectParcel" xml:space="preserve">
+    <value>Először jelöljön ki legalább egy földrészletet.</value>
   </data>
   <data name="gsOff" xml:space="preserve">
     <value>Ki</value>
