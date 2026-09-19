@@ -1,4 +1,4 @@
-; Inno Setup script for AgOpenGPS.
+﻿; Inno Setup script for AgOpenGPS.
 ; Build the app first (dotnet publish, PublishDir = ..\AgOpenGPS per the .csproj files),
 ; then compile with: ISCC.exe /DMyAppVersion=1.2.3 AgOpenGPS.iss
 
@@ -34,22 +34,33 @@ ArchitecturesInstallIn64BitMode=x64compatible
 
 [Languages]
 Name: "english"; MessagesFile: "compiler:Default.isl"
+Name: "hungarian"; MessagesFile: "compiler:Languages\Hungarian.isl"
+
+[CustomMessages]
+english.PinTaskbar=Pin {#MyAppName} to the taskbar (Windows 7/8 only)
+english.BackupData=Back up my existing Documents\AgOpenGPS folder (fields, settings) before installing
+english.BackupGroup=Backup:
+english.PinTaskbarNote=Note: Windows 10/11 no longer allows installers to pin apps to the taskbar automatically. After launching {#MyAppName}, right-click its taskbar icon and choose 'Pin to taskbar'.
+hungarian.PinTaskbar={#MyAppName} rögzítése a tálcán (csak Windows 7/8)
+hungarian.BackupData=A meglévő Dokumentumok\AgOpenGPS mappa (táblák, beállítások) biztonsági mentése telepítés előtt
+hungarian.BackupGroup=Biztonsági mentés:
+hungarian.PinTaskbarNote=Megjegyzés: a Windows 10/11 már nem engedi, hogy a telepítők automatikusan a tálcára rögzítsenek alkalmazásokat. Az {#MyAppName} elindítása után kattintson jobb gombbal a tálcán lévő ikonjára, és válassza a „Rögzítés a tálcán” lehetőséget.
 
 [Tasks]
-Name: "desktopicon"; Description: "Create a &desktop icon"; GroupDescription: "Additional icons:"; Flags: checkedonce
-Name: "pintaskbar"; Description: "Pin {#MyAppName} to the taskbar (Windows 7/8 only)"; GroupDescription: "Additional icons:"; Flags: checkedonce
-Name: "backupdata"; Description: "Back up my existing Documents\AgOpenGPS folder (fields, settings) before installing"; GroupDescription: "Backup:"; Flags: checkedonce
+Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: checkedonce
+Name: "pintaskbar"; Description: "{cm:PinTaskbar}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: checkedonce
+Name: "backupdata"; Description: "{cm:BackupData}"; GroupDescription: "{cm:BackupGroup}"; Flags: checkedonce
 
 [Files]
 Source: "{#MyPublishDir}\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
 
 [Icons]
 Name: "{group}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"
-Name: "{group}\Uninstall {#MyAppName}"; Filename: "{uninstallexe}"
+Name: "{group}\{cm:UninstallProgram,{#MyAppName}}"; Filename: "{uninstallexe}"
 Name: "{autodesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; Tasks: desktopicon
 
 [Run]
-Filename: "{app}\{#MyAppExeName}"; Description: "Launch {#MyAppName}"; Flags: nowait postinstall skipifsilent
+Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#MyAppName}}"; Flags: nowait postinstall skipifsilent
 
 [Code]
 // The app stores fields/settings in Documents\AgOpenGPS regardless of where it is installed.
@@ -94,7 +105,8 @@ begin
       // Verb names carry an accelerator ampersand (e.g. 'Pin to Tas&kbar'), so strip it before matching.
       VerbName := Verb.Name;
       StringChangeEx(VerbName, '&', '', True);
-      if Pos('taskbar', Lowercase(VerbName)) > 0 then
+      // English 'taskbar' or Hungarian 'tálcá(n)' - the verb name is localized with Windows.
+      if (Pos('taskbar', Lowercase(VerbName)) > 0) or (Pos('tálc', Lowercase(VerbName)) > 0) then
       begin
         Verb.DoIt;
         Break;
@@ -117,6 +129,5 @@ procedure CurPageChanged(CurPageID: Integer);
 begin
   if (CurPageID = wpFinished) and IsTaskSelected('pintaskbar') then
     WizardForm.FinishedLabel.Caption := WizardForm.FinishedLabel.Caption + #13#10#13#10 +
-      'Note: Windows 10/11 no longer allows installers to pin apps to the taskbar automatically. ' +
-      'After launching {#MyAppName}, right-click its taskbar icon and choose ''Pin to taskbar''.';
+      CustomMessage('PinTaskbarNote');
 end;
