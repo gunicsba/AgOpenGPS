@@ -11,17 +11,32 @@
 
 ### U-kanyar (forduló)
 - **Spirál forduló** – az U / K stílus mellett új harmadik stílus. Mindig a jelölő nyila szerinti irányba fordul, és minden fordulónál változtatja a kihagyást: balra fordulva eggyel többet hagy ki, jobbra fordulva eggyel kevesebbet. A számláló a kihagyás-mezőben beállított értékről indul.
+<img width="312" height="117" alt="image" src="https://github.com/user-attachments/assets/588261ff-86d1-45f1-8198-3b4c6a9814cd" />
+
 - **Kihagyás gomb (bal alsó sarok)** – most mutatja a következő kihagyást és a fordulás irányát (nyíl). Spirálnál a számlálót, a váltakozó kihagyásnál az „N / N-1" párost (a következő kiemelve), a munkált nyomok módnál a kiválasztott kihagyást. A számok ugyanazok, mint a kihagyás-mezőben (0 = a szomszédos nyom). Spirálnál a gombra koppintva újraindul a spirál.
+<img width="195" height="85" alt="image" src="https://github.com/user-attachments/assets/18d52f74-6136-42db-ad5c-cff986f65d8f" /><img width="222" height="91" alt="image" src="https://github.com/user-attachments/assets/3ea21da5-1e98-4732-aa5b-ce1c8f74460d" /><img width="195" height="87" alt="image" src="https://github.com/user-attachments/assets/064533d7-45dc-47dc-88f2-d39efddc9777" />
+
 - **Automatikus kihagyás a már megművelt nyomokra** – a program most a festett (lefedett) terület alapján dönt: egy nyom „megművelt", ha a lefedési cél (legalább 50%, legfeljebb 95%) szerint le van fedve. Így akkor is működik, ha a tábla felét kézzel vezetted végig. Minden forduló megjelöli a nyomot, amit elhagy, a kézi fordulás gomb is. A lefedettségi térkép háttérszálon készül, az első ilyen fordulóvonal a táblán kicsit később jelenhet meg.
+<img width="195" height="80" alt="image" src="https://github.com/user-attachments/assets/fd5e609b-8734-4800-a4f6-201fd4200732" />
+
 - **Munkaeszköz-eltolás a fordulóvonalon** – az eltolt munkaeszköz kilóg a jármű egyik oldalán. A fordulóvonal mostantól a forduló irányától függően eltolódik (a jármű szélességét a „nyomtáv" beállításból veszi), így a kilógó oldal nem éri el a kerítést.
+<img width="400" height="300" alt="image" src="https://github.com/user-attachments/assets/c4b94115-f7cf-473a-b15f-c1ed9ae057c0" />
+<img width="437" height="322" alt="image" src="https://github.com/user-attachments/assets/f9823595-d97d-4f2e-adc2-cce13de4e008" />
+
 
 ### Egyéb
-- **Irány szűrő (VTG)** – új csúszka az Irány beállításoknál (egyantennás csoport), 0–98%. Azt adja meg, hogy az előző irányból mennyi marad meg: 0% = az új értéket használja változtatás nélkül, 30% = 30% régi + 70% új. Körkörösen számol (359° és 1° átlaga ≈ 0°), és megállás után újraindul. Könnyűsávos (lightbar) traktoroknál a hepehupás talajon ugráló irányt nyugtatja. Alapértéke 0, tehát semmi sem változik, amíg nem használod. Csak a VTG-alapú irányra hat.
+- **Irány szűrő (VTG)** – új csúszka az Irány beállításoknál (egyantennás csoport), 0–98%. Azt adja meg, hogy az előző irányból mennyi marad meg: 0% = az új értéket használja változtatás nélkül, 30% = 30% régi + 70% új. Körkörösen számol (359° és 1° átlaga ≈ 0°), és megállás után újraindul. **Sorvezetős** (lightbar) traktoroknál a hepehupás talajon ugráló irányt nyugtatja. Alapértéke 0, tehát semmi sem változik, amíg nem használod. Csak a VTG-alapú irányra hat.
+<img width="1232" height="692" alt="image" src="https://github.com/user-attachments/assets/0381f00a-f12b-4088-9dea-6ec93666d2be" />
+
 - **Régi profilok automatikus átalakítása** – ha nincs új típusú Jármű/Eszköz profil, de vannak régi (`Vehicles` mappa) profilok, az első indításkor mindet átalakítja, az utoljára használtat kiválasztja, a környezeti beállításokat egyszer átveszi, és értesítést mutat.
 - **OENY (HRSZ) parcella import** – a Határ ablakban új „HRSZ (OENY)" gomb: a jelenlegi pozíció körüli magyar kataszteri parcellákat keresi meg, térképen kiválaszthatók, és Művelési határként használhatók. Ha már van határ, rákérdez a cserére; a „Mégsem" megtartja a meglévőt, és a parcellákat belső határként adja hozzá. Internet kell hozzá, és csak Magyarországon működik.
+
+<img width="1082" height="661" alt="image" src="https://github.com/user-attachments/assets/6942efaa-5bf1-4351-8f79-661ef14a1184" />
+
 - **ISOBUS nyomok PGN** – új PGN a nyomok ISOBUS felé küldéséhez (lásd `docs/pgn-protocol.md`).
 - **Windows telepítő** – első ízben van telepítő (`AgOpenGPS_<verzió>_Setup.exe`), magyar és angol nyelvvel. Felhasználónként telepít, választható az asztali ikon és a `Dokumentumok\AgOpenGPS` mappa (táblák, beállítások) telepítés előtti mentése.
-- **Magyar fordítások** – az OENY ablak, az Easy Drive szövegei, az új beállítások és a telepítő magyarul is elérhető.
+- **Kormányzás varázsló** – az „Alapértékek betöltése” most gombos (Button) kormányzás-engedélyezést, bekapcsolt áramérzékelős (Current Turn Sensor) automatikus megszakítást 40%-on és 15-ös proporcionális erősítést állít be. A varázsló összes felirata, gombja és üzenete lefordítható, magyarul már elérhető.
+- **Magyar fordítások** – az OENY ablak, az Easy Drive szövegei, az új beállítások, a kormányzás varázsló és a telepítő magyarul is elérhető.
 
 ## Javítások
 - **Webkamera ablak** – a tábla váltását már nem akadályozza, nyitva maradhat. Bezáráskor leállítja a kamerát; korábban a kamera és az AgOpenGPS folyamat is életben maradt a program bezárása után.
@@ -30,9 +45,10 @@
 - **Hamis „Field Origin" távolság-figyelmeztetés** a tábla bezárása után. *Köszönet: Richard Klasens.*
 
 ## Frissítés előtt olvasd el
-- **Munkaeszköz-eltolás:** ha eddig kézzel adtad hozzá az eltolást a fordulótávolsághoz, most kétszer számít. Csökkentsd a fordulótávolságot.
-- **Régi profilok:** az automatikus átalakítás csak akkor fut, ha még egyetlen új típusú Jármű/Eszköz profil sincs. A régi fájlokat nem törli.
-- **Irány szűrő:** magas érték késleltetést okoz (kb. 1/(1−szűrő) mérésnyit). Autosteerhez nem javasolt.
+- **Munkaeszköz-eltolás:** ha eddig kézzel adtad hozzá az eltolást a fordulótávolsághoz, hogy a kasza ne vigye ki a kerítést most ez kétszer számít. Állítsd újra a fordulótávolságot.
+- **Régi profilok:** az automatikus konvertálás automatikusan lefut, ha még egyetlen új típusú Jármű/Eszköz profil sincs. A régi fájlokat nem törli.
+- **Irány szűrő:** magas érték késleltetést okoz (kb. 1/(1−szűrő) mérésnyit). Autosteerhez nem javasolt. Sorvezetőhöz igen.
+- **Kormányzás varázsló:** az „Alapértékek betöltése” új értékeket ír (Button, áramérzékelő 40%, P erősítés 15). Ha a saját beállításaidat használod, ne nyomd meg.
 - **Telepítő:** a „rögzítés a tálcán" opció csak Windows 7/8-on működik; Windows 10/11-en jobb gombbal rögzítsd kézzel.
 
 ## Ismert korlátok
@@ -66,7 +82,8 @@ Marek (#1221), aortner (#1219), Richard Klasens, valamint a Weblate fordítók �
 - **OENY (HRSZ) parcel import** – a new "HRSZ (OENY)" button in the Boundary window finds the Hungarian cadastral parcels around the current position, you pick them on the map and use them as the boundary. If a boundary already exists it asks about replacing it; "Cancel" keeps the existing one and adds the parcels as an inner boundary. Needs internet and works in Hungary only.
 - **ISOBUS Tracks PGN** – a new PGN for sending tracks to ISOBUS (see `docs/pgn-protocol.md`).
 - **Windows installer** – first time there is an installer (`AgOpenGPS_<version>_Setup.exe`), in English and Hungarian. It installs per user, with optional desktop icon and an optional backup of `Documents\AgOpenGPS` (fields, settings) before installing.
-- **Hungarian translations** – the OENY window, the Easy Drive texts, the new settings and the installer.
+- **Steer Wizard** – "Load Defaults" now selects the Button steer enable mode, turns on the Current Turn Sensor automatic cancelling at 40% and starts the proportional gain at 15. Every label, button and message of the wizard can now be translated; Hungarian is included.
+- **Hungarian translations** – the OENY window, the Easy Drive texts, the new settings, the Steer Wizard and the installer.
 
 ## Fixes
 - **Webcam window** – it no longer blocks changing fields and can stay open. It stops the camera when it closes; before, the camera and the AgOpenGPS process stayed alive after closing the program.
@@ -78,6 +95,7 @@ Marek (#1221), aortner (#1219), Richard Klasens, valamint a Weblate fordítók �
 - **Implement offset:** if you used to add the offset to the U-turn distance by hand, it now counts twice. Reduce the turn distance.
 - **Old profiles:** the automatic conversion only runs when there is not a single new style Vehicle/Tool profile yet. It does not delete the old files.
 - **Heading filter:** a high value adds lag (about 1/(1−filter) fixes). Not recommended for autosteer.
+- **Steer Wizard:** "Load Defaults" writes new values (Button, current sensor 40%, P gain 15). If you use your own settings, do not press it.
 - **Installer:** the "pin to taskbar" option only works on Windows 7/8; on Windows 10/11 pin it by hand with a right click.
 
 ## Known limitations
@@ -87,3 +105,4 @@ Marek (#1221), aortner (#1219), Richard Klasens, valamint a Weblate fordítók �
 
 ## Credits
 Marek (#1221), aortner (#1219), Richard Klasens, plus the Weblate translators and the AgOpenGPS community.
+
