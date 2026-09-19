@@ -51,6 +51,9 @@ namespace AgOpenGPS
         // Indicates if migration from legacy single profile is needed
         public static bool NeedsMigration { get; private set; }
 
+        // Number of old format profiles that were converted automatically during this startup
+        public static int autoConvertedProfileCount = 0;
+
         public static void Load()
         {
             try
@@ -137,6 +140,8 @@ namespace AgOpenGPS
 
             Log.CheckLogSize(Path.Combine(logsDirectory, "AgOpenGPS_Events_Log.txt"));
 
+            AutoConvertOldProfiles();
+
             // Load Environment settings
             Properties.Settings.Default.Load();
 
@@ -161,6 +166,43 @@ namespace AgOpenGPS
                 }
             }
             else toolProfileLoadResult = LoadResult.MissingFile;
+        }
+
+        // No new style Vehicle/Tool profile exists at all but old format ones do: convert all of them.
+        // This must run before the profiles are loaded below, otherwise loading the profile named in the
+        // registry silently migrates just that single old file and hides all the others.
+        private static void AutoConvertOldProfiles()
+        {
+            try
+            {
+                if (HasProfileFiles(vehiclesDirectory) || HasProfileFiles(toolsDirectory)) return;
+                if (CSettingsMigration.GetConvertibleFiles().Length == 0) return;
+
+                Log.EventWriter("No new style profiles found, converting all old profiles automatically");
+                var result = CSettingsMigration.MigrateAllVehicles();
+                autoConvertedProfileCount = result.Converted.Count;
+
+                // Keep the profile already chosen in the registry if it was converted, otherwise use the
+                // one that was in use in the old version. With neither, the user picks in the profile form.
+                string active = result.Converted.Contains(vehicleProfileName) ? vehicleProfileName
+                    : result.Converted.Contains(legacyVehicleFileName) ? legacyVehicleFileName
+                    : null;
+
+                if (active != null)
+                {
+                    Save(RegKeys.vehicleProfileName, active);
+                    Save(RegKeys.toolProfileName, active);
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.EventWriter("Auto convert of old profiles failed: " + ex);
+            }
+        }
+
+        private static bool HasProfileFiles(string directory)
+        {
+            return Directory.Exists(directory) && Directory.GetFiles(directory, "*.xml").Length > 0;
         }
 
         public static void Save(string name, string value)

@@ -508,23 +508,52 @@ namespace AgOpenGPS
             }
         }
 
-        public static void MigrateAllVehicles()
+        public class AutoConvertResult
         {
-            string[] files = GetConvertibleFiles();
+            public readonly System.Collections.Generic.List<string> Converted = new System.Collections.Generic.List<string>();
+            public bool EnvironmentMigrated;
+        }
 
-            foreach (string fileName in files)
+        /// <summary>
+        /// Converts every old format profile into a new Vehicle + Tool profile (same name), including files
+        /// already marked as converted - the caller only uses this when no new style profile exists at all.
+        /// The environment is migrated once, from the last used legacy profile (or the newest file).
+        /// </summary>
+        public static AutoConvertResult MigrateAllVehicles()
+        {
+            var result = new AutoConvertResult();
+
+            foreach (string fileName in GetConvertibleFiles())
             {
-                // Migrate vehicle settings
-                var vehicleSettings = new VehicleSettings();
-                MigrateVehicle(fileName, fileName, vehicleSettings);
+                var vehicleResult = MigrateVehicle(fileName, fileName, new VehicleSettings());
+                var toolResult = MigrateTool(fileName, fileName, new ToolSettings());
 
-                // Migrate tool settings
-                var toolSettings = new ToolSettings();
-                MigrateTool(fileName, fileName, toolSettings);
-
-                // Mark old file as converted
-                MarkAsConverted(fileName);
+                if (vehicleResult == LoadResult.Ok && toolResult == LoadResult.Ok)
+                {
+                    MarkAsConverted(fileName);
+                    result.Converted.Add(fileName);
+                }
+                else
+                {
+                    Log.EventWriter($"Auto convert failed for '{fileName}': Vehicle {vehicleResult}, Tool {toolResult}");
+                }
             }
+
+            string envPath = Path.Combine(RegistrySettings.environmentDirectory, "environment.xml");
+            if (result.Converted.Count > 0 && !File.Exists(envPath))
+            {
+                string envSource = result.Converted.Contains(RegistrySettings.legacyVehicleFileName)
+                    ? RegistrySettings.legacyVehicleFileName
+                    : result.Converted.OrderByDescending(f =>
+                        File.GetLastWriteTime(Path.Combine(RegistrySettings.baseDirectory, "Vehicles", f + ".xml"))).First();
+
+                var envResult = MigrateEnvironment(envSource, "environment");
+                result.EnvironmentMigrated = envResult == LoadResult.Ok;
+                if (!result.EnvironmentMigrated)
+                    Log.EventWriter($"Auto convert: environment migration from '{envSource}' failed ({envResult})");
+            }
+
+            return result;
         }
     }
 }

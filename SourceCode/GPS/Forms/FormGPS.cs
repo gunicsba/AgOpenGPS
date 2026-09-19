@@ -577,6 +577,12 @@ namespace AgOpenGPS
                     recovered + " profile was recovered from .last backup because the main file was unreadable.");
             }
 
+            if (RegistrySettings.autoConvertedProfileCount > 0)
+            {
+                TimedMessageBox(4000, gStr.gsConversionComplete,
+                    string.Format(gStr.gsAutoConvertedProfiles, RegistrySettings.autoConvertedProfileCount));
+            }
+
             // Check if any profile is missing (registry empty OR file doesn't exist)
             bool missingVehicle = string.IsNullOrEmpty(RegistrySettings.vehicleProfileName) ||
                                    !File.Exists(Path.Combine(RegistrySettings.vehiclesDirectory, RegistrySettings.vehicleProfileName + ".xml"));

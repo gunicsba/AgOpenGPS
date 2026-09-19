@@ -261,6 +261,9 @@ A választott sorrend alapján fognak megjelenni alulról felfelé.</value>
   <data name="gsAuto" xml:space="preserve">
     <value>Automata</value>
   </data>
+  <data name="gsAutoConvertedProfiles" xml:space="preserve">
+    <value>{0} régi profil automatikusan átalakítva.</value>
+  </data>
   <data name="gsAutoOffAgIO" xml:space="preserve">
     <value>AgIO automatikus leállítása</value>
   </data>

@@ -398,6 +398,15 @@ namespace AgOpenGPS.Core.Translations {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to {0} old profile(s) were converted automatically..
+        /// </summary>
+        public static string gsAutoConvertedProfiles {
+            get {
+                return ResourceManager.GetString("gsAutoConvertedProfiles", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Auto Off AgIO.
         /// </summary>
         public static string gsAutoOffAgIO {
