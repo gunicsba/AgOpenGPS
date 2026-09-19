@@ -465,6 +465,7 @@ namespace AgOpenGPS
             isLateralOn = Properties.Settings.Default.setFeatures.isLateralOn;
             cboxpRowWidth.SelectedIndex = (Properties.Settings.Default.set_youSkipWidth - 1);
             btnYouSkipEnable.Image = Resources.YouSkipOff;
+            UpdateSkipButton();
             isNudgeOn = Properties.Settings.Default.setFeatures.isABLineOn;
 
             isSectionlinesOn = Properties.Settings.Default.setDisplay_isSectionLinesOn;
@@ -1234,12 +1235,13 @@ namespace AgOpenGPS
                                 return;
                             }
 
-                            //k turn or u turn
+                            //u turn, k turn or spiral turn
                             middle += 140;
                             if (point.X > middle - 25 && point.X < middle + 25)
                             {
                                 yt.uTurnStyle++;
-                                if (yt.uTurnStyle > 1) yt.uTurnStyle = 0;
+                                if (yt.uTurnStyle > 2) yt.uTurnStyle = 0;
+                                yt.ResetSpiralSkips();
                                 yt.ResetCreatedYouTurn();
 
                                 Properties.Settings.Default.set_uTurnStyle = yt.uTurnStyle;
@@ -1459,6 +1461,7 @@ namespace AgOpenGPS
             {
                 yt.isTurnLeft = !yt.isTurnLeft;
                 yt.ResetCreatedYouTurn();
+                UpdateSkipButton();
             }
             else if (yt.isYouTurnBtnOn)
                 btnAutoYouTurn.PerformClick();

@@ -23,6 +23,7 @@ namespace AgOpenGPS.Classes
         private Texture2D _turnManuel;
         private Texture2D _uTurnU;
         private Texture2D _uTurnH;
+        private Texture2D _uTurnSpiral;
         private Texture2D _questionMark;
         private Texture2D _zoomIn;
         private Texture2D _zoomOut;
@@ -192,6 +193,15 @@ namespace AgOpenGPS.Classes
             {
                 if (_uTurnH == null) _uTurnH = new Texture2D(Resources.YouTurnH);
                 return _uTurnH;
+            }
+        }
+
+        public Texture2D UTurnSpiral
+        {
+            get
+            {
+                if (_uTurnSpiral == null) _uTurnSpiral = new Texture2D(Resources.YouTurnSpiral);
+                return _uTurnSpiral;
             }
         }
 

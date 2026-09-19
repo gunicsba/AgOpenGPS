@@ -110,6 +110,9 @@ namespace AgOpenGPS
         //    }
         //}
 
+        //true when bndList[].turnLine is the one made for a left turn
+        public bool isTurnLineForLeftTurn = true;
+
         public void BuildTurnLines()
         {
             if (bndList.Count == 0)
@@ -121,16 +124,47 @@ namespace AgOpenGPS
             //update the GUI values for boundaries
             mf.fd.UpdateFieldBoundaryGUIAreas();
 
+            //determine how wide a headland space, an implement offset sticks out to one side of the vehicle
+            //so the turn line is moved for the direction we turn to
+            double leftWidth = Math.Max(0.2, mf.yt.uturnDistanceFromBoundary + mf.yt.GetToolOffsetTurnDistance(true));
+            double rightWidth = Math.Max(0.2, mf.yt.uturnDistanceFromBoundary + mf.yt.GetToolOffsetTurnDistance(false));
+
+            BuildTurnLinesForWidth(leftWidth);
+            for (int j = 0; j < bndList.Count; j++) bndList[j].turnLineLeft = bndList[j].turnLine;
+
+            if (rightWidth == leftWidth)
+            {
+                for (int j = 0; j < bndList.Count; j++) bndList[j].turnLineRight = bndList[j].turnLineLeft;
+            }
+            else
+            {
+                BuildTurnLinesForWidth(rightWidth);
+                for (int j = 0; j < bndList.Count; j++) bndList[j].turnLineRight = bndList[j].turnLine;
+            }
+
+            SelectTurnLines(mf.yt.isTurnLeft);
+        }
+
+        /// <summary> Use the turn lines that belong to the direction of the next turn </summary>
+        public void SelectTurnLines(bool isTurnLeft)
+        {
+            for (int j = 0; j < bndList.Count; j++)
+            {
+                bndList[j].turnLine = isTurnLeft ? bndList[j].turnLineLeft : bndList[j].turnLineRight;
+            }
+            isTurnLineForLeftTurn = isTurnLeft;
+        }
+
+        private void BuildTurnLinesForWidth(double totalHeadWidth)
+        {
             //to fill the list of line points
             vec3 point = new vec3();
 
-            //determine how wide a headland space
-            double totalHeadWidth = mf.yt.uturnDistanceFromBoundary;
 
             //inside boundaries
             for (int j = 0; j < bndList.Count; j++)
             {
-                bndList[j].turnLine.Clear();
+                bndList[j].turnLine = new List<vec3>(128);
                 if (bndList[j].isDriveThru) continue;
 
                 int ptCount = bndList[j].fenceLine.Count;

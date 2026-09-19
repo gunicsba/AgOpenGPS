@@ -1035,6 +1035,10 @@ namespace AgOpenGPS
                 }
                 else //Youturn is on
                 {
+                    //use the turn line made for the direction of the next turn, not while a turn is being driven
+                    if (!yt.isYouTurnTriggered && bnd.isTurnLineForLeftTurn != yt.isTurnLeft)
+                        bnd.SelectTurnLines(yt.isTurnLeft);
+
                     bool isInTurnBounds = bnd.IsPointInsideTurnArea(pivotAxlePos) != -1;
                     //Are we inside outer and outside inner all turn boundaries, no turn creation problems
                     //if we are too much off track > 1.3m, kill the diagnostic creation, start again
@@ -1058,7 +1062,7 @@ namespace AgOpenGPS
                                 else yt.BuildCurveDubinsYouTurn();
                             }
 
-                            if (yt.uTurnStyle == 0 && yt.youTurnPhase == 10)
+                            if (yt.uTurnStyle != 1 && yt.youTurnPhase == 10)
                             {
                                 yt.SmoothYouTurn(6);
                             }

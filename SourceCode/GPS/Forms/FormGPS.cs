@@ -197,6 +197,9 @@ namespace AgOpenGPS
         /// </summary>
         public CYouTurn yt;
 
+        /// <summary> how much of a track is already painted </summary>
+        public CCoverageMap coverage;
+
         /// <summary>
         /// Our vehicle only
         /// </summary>
@@ -367,6 +370,7 @@ namespace AgOpenGPS
 
             ////new instance of auto headland turn
             yt = new CYouTurn(this);
+            coverage = new CCoverageMap(this);
 
             //module communication
             mc = new CModuleComm(this);
@@ -1404,6 +1408,9 @@ namespace AgOpenGPS
             btnABDraw.Visible = false;
 
             yt.ResetYouTurn();
+            //a new field starts the spiral turn over from the chosen skip width
+            if (yt.IsSpiralTurn) yt.ResetSpiralSkips();
+            coverage.Reset();
             DisableYouTurnButtons();
 
             //reset acre and distance counters

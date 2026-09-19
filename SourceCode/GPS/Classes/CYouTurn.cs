@@ -54,7 +54,11 @@ namespace AgOpenGPS
         //if we continue on the same line or change to the next one after the uTurn
         public bool isOutSameCurve;
 
+        /// <summary> 0 = U turn, 1 = K turn, 2 = spiral turn </summary>
         public int uTurnStyle = 0;
+
+        /// <summary> Spiral turn: always turn the same way and skip one more track every turn </summary>
+        public bool IsSpiralTurn => uTurnStyle == 2;
 
         //is UTurn pattern in or out of bounds
         public bool isOutOfBounds = false;
@@ -109,10 +113,61 @@ namespace AgOpenGPS
             uTurnSmoothing = (int)Properties.Settings.Default.setAS_uTurnSmoothing;
         }
 
+        //the track we are on counts as worked when the sections are on
+        private void MarkCurrentTrackWorked()
+        {
+            if (mf.trk.idx < 0 || mf.trk.idx >= mf.trk.gArr.Count) return;
+            if (mf.autoBtnState != btnStates.Auto && mf.manualBtnState != btnStates.On) return;
+
+            CTrk track = mf.trk.gArr[mf.trk.idx];
+            track.workedTracks.Add(track.mode == TrackMode.AB ? mf.ABLine.howManyPathsAway : mf.curve.howManyPathsAway);
+        }
+
+        /// <summary>
+        /// A track is worked when it is marked, or when the painted area covers as much of it as the coverage target says
+        /// (never more than 95%, the ends of a track never get painted completely, and never less than 50%). What we find out
+        /// is added to the marks, so a track is only measured once.
+        /// </summary>
+        private bool IsTrackWorked(int paths)
+        {
+            CTrk track = mf.trk.gArr[mf.trk.idx];
+            if (track.workedTracks.Contains(paths)) return true;
+
+            //the grid is built by a thread, or we already had our share of measuring this time, come back on the next fix
+            if (isCoveragePending) return false;
+            if (coverageState == CoverageState.Unavailable) return false;
+            if (coverageState == CoverageState.Building || coverageChecks >= 8)
+            {
+                isCoveragePending = true;
+                return false;
+            }
+            coverageChecks++;
+
+            //where the middle of the implement runs, the guidance line is moved by the implement offset
+            double distAway = ((mf.tool.width - mf.tool.overlap) * (paths + 0.5)) + track.nudgeDistance;
+            double coverage = mf.coverage.GetLineCoverage(mf.curve.BuildNewOffsetList(distAway, track));
+
+            if (coverage >= Math.Max(50, Math.Min(mf.tool.minCoverage, 95)))
+            {
+                track.workedTracks.Add(paths);
+                return true;
+            }
+            return false;
+        }
+
+        //true when the coverage is not known yet and the turn has to wait for it
+        private bool isCoveragePending;
+        private int coverageChecks;
+        private CoverageState coverageState;
+
         //find next not worked lane after the defined lanes to skip
         private int GetNextNotWorkedTrack(bool isTurnLeft, int rowSkipsWidth, bool isAB)
         {
             int goalLane;
+
+            isCoveragePending = false;
+            coverageChecks = 0;
+            coverageState = mf.coverage.GetState();
 
             if (isAB)
             {
@@ -122,7 +177,7 @@ namespace AgOpenGPS
                 else
                     goalLane = mf.ABLine.howManyPathsAway - rowSkipsWidth;
 
-                while (mf.trk.gArr[mf.trk.idx].workedTracks.Contains(goalLane))
+                while (IsTrackWorked(goalLane))
                 {
                     rowSkipsWidth++;
                     if ((isTurnLeft && !mf.ABLine.isHeadingSameWay) || (!isTurnLeft && mf.ABLine.isHeadingSameWay))
@@ -138,7 +193,7 @@ namespace AgOpenGPS
                 else
                     goalLane = mf.curve.howManyPathsAway - rowSkipsWidth;
 
-                while (mf.trk.gArr[mf.trk.idx].workedTracks.Contains(goalLane))
+                while (IsTrackWorked(goalLane))
                 {
                     rowSkipsWidth++;
                     if ((isTurnLeft && !mf.curve.isHeadingSameWay) || (!isTurnLeft && mf.curve.isHeadingSameWay))
@@ -156,18 +211,18 @@ namespace AgOpenGPS
         public bool BuildCurveDubinsYouTurn()
         {
             //if mode is skip workedTracks -> mark current track as worked if sections were on, then find next
-            if (skipMode == SkipMode.IgnoreWorkedTracks)
+            if (skipMode == SkipMode.IgnoreWorkedTracks && !IsSpiralTurn)
             {
                 // Mark the current track as worked only if sections were actually on
-                if (mf.trk.idx >= 0 && mf.trk.idx < mf.trk.gArr.Count)
-                {
-                    if (mf.autoBtnState == btnStates.Auto || mf.manualBtnState == btnStates.On)
-                    {
-                        mf.trk.gArr[mf.trk.idx].workedTracks.Add(mf.curve.howManyPathsAway);
-                    }
-                }
+                MarkCurrentTrackWorked();
 
                 rowSkipsWidth = GetNextNotWorkedTrack(isTurnLeft, Properties.Settings.Default.set_youSkipWidth, false);
+                if (isCoveragePending)
+                {
+                    youTurnPhase = 0;
+                    return true;
+                }
+                mf.UpdateSkipButton();
             }
 
             //TODO: is calculated many taimes after the priveous turn is complete
@@ -175,7 +230,7 @@ namespace AgOpenGPS
             double turnOffset = (mf.tool.width - mf.tool.overlap) * rowSkipsWidth + (isTurnLeft ? -mf.tool.offset * 2.0 : mf.tool.offset * 2.0);
             pointSpacing = youTurnRadius * 0.1;
 
-            if (uTurnStyle == 0)
+            if (uTurnStyle == 0 || IsSpiralTurn)
             {
                 //Albin turn
                 if (turnOffset > (youTurnRadius * 2.0))
@@ -201,18 +256,18 @@ namespace AgOpenGPS
         public bool BuildABLineDubinsYouTurn()
         {
             //if mode is skip workedTracks -> mark current track as worked if sections were on, then find next
-            if (skipMode == SkipMode.IgnoreWorkedTracks)
+            if (skipMode == SkipMode.IgnoreWorkedTracks && !IsSpiralTurn)
             {
                 // Mark the current track as worked only if sections were actually on
-                if (mf.trk.idx >= 0 && mf.trk.idx < mf.trk.gArr.Count)
-                {
-                    if (mf.autoBtnState == btnStates.Auto || mf.manualBtnState == btnStates.On)
-                    {
-                        mf.trk.gArr[mf.trk.idx].workedTracks.Add(mf.ABLine.howManyPathsAway);
-                    }
-                }
+                MarkCurrentTrackWorked();
 
                 rowSkipsWidth = GetNextNotWorkedTrack(isTurnLeft, Properties.Settings.Default.set_youSkipWidth, true);
+                if (isCoveragePending)
+                {
+                    youTurnPhase = 0;
+                    return true;
+                }
+                mf.UpdateSkipButton();
             }
 
             double turnOffset = (mf.tool.width - mf.tool.overlap) * rowSkipsWidth
@@ -220,7 +275,7 @@ namespace AgOpenGPS
 
             pointSpacing = youTurnRadius * 0.1;
 
-            if (uTurnStyle == 0)
+            if (uTurnStyle == 0 || IsSpiralTurn)
             {
 
                 //Wide turn
@@ -2372,6 +2427,10 @@ namespace AgOpenGPS
             //countExit the reference list of original curve
             int cnt = ytList.Count;
 
+            //an even number of points, and not more than the points we have
+            smPts = Math.Min(smPts, cnt - 2) & ~1;
+            if (smPts < 2) return;
+
             //the temp array
             vec3[] arr = new vec3[cnt];
 
@@ -2432,13 +2491,22 @@ namespace AgOpenGPS
                 savedTurnSkips = turnSkips;
                 savedPreviousBigSkip = previousBigSkip;
 
+                if (skipMode == SkipMode.IgnoreWorkedTracks) MarkCurrentTrackWorked();
+
                 mf.curve.howManyPathsAway += (isTurnLeft ^ mf.curve.isHeadingSameWay) ? rowSkipsWidth : -rowSkipsWidth;
                 mf.curve.isHeadingSameWay = !mf.curve.isHeadingSameWay;
 
                 mf.ABLine.howManyPathsAway += (isTurnLeft ^ mf.ABLine.isHeadingSameWay) ? rowSkipsWidth : -rowSkipsWidth;
                 mf.ABLine.isHeadingSameWay = !mf.ABLine.isHeadingSameWay;
 
-                if (skipMode == SkipMode.Alternative && rowSkipsWidth2 > 1)
+                if (IsSpiralTurn)
+                {
+                    //spiral: keep the turn direction, turning left skips one more track on the next turn
+                    //and turning right one less
+                    if (isTurnLeft) { if (rowSkipsWidth < 50) rowSkipsWidth++; }
+                    else if (rowSkipsWidth > 1) rowSkipsWidth--;
+                }
+                else if (skipMode == SkipMode.Alternative && rowSkipsWidth2 > 1)
                 {
                     if (--turnSkips == 0)
                     {
@@ -2451,6 +2519,8 @@ namespace AgOpenGPS
                         rowSkipsWidth = rowSkipsWidth2;
                 }
                 else isTurnLeft = !isTurnLeft;
+
+                mf.UpdateSkipButton();
             }
         }
 
@@ -2467,6 +2537,7 @@ namespace AgOpenGPS
             rowSkipsWidth = savedRowSkipsWidth;
             turnSkips = savedTurnSkips;
             previousBigSkip = savedPreviousBigSkip;
+            mf.UpdateSkipButton();
         }
 
         //Normal copmpletion of youturn
@@ -2475,6 +2546,31 @@ namespace AgOpenGPS
             isYouTurnTriggered = false;
             ResetCreatedYouTurn();
             mf.sounds.isBoundAlarming = false;
+        }
+
+        /// <summary>
+        /// Extra distance from the boundary for a turn in the given direction because the implement is offset to
+        /// one side. Positive when the implement sticks out further than what the distance was set for on the
+        /// outside of the turn (the turn line moves inwards). Negative when the outside of the turn is the side where
+        /// the implement stays inside the vehicle width (the turn line moves outwards, never past the vehicle width).
+        /// </summary>
+        public double GetToolOffsetTurnDistance(bool turnLeft)
+        {
+            //tool offset is positive to the right and the outside of a left turn is the right side
+            double outerOffset = turnLeft ? mf.tool.offset : -mf.tool.offset;
+
+            //how much wider the vehicle is than the implement on one side, positive when the vehicle is the wider one
+            double vehicleWider = (mf.vehicle.VehicleConfig.TrackWidth - mf.tool.width) * 0.5;
+
+            return Math.Max(vehicleWider, outerOffset) - Math.Max(vehicleWider, 0);
+        }
+
+        /// <summary> Back to the skip width chosen by the user, the spiral starts over from it </summary>
+        public void ResetSpiralSkips()
+        {
+            rowSkipsWidth = Properties.Settings.Default.set_youSkipWidth;
+            Set_Alternate_skips();
+            mf.UpdateSkipButton();
         }
 
         public void Set_Alternate_skips()
@@ -2570,6 +2666,17 @@ namespace AgOpenGPS
                 }
             }
             else return;
+
+            //skip the worked tracks like the automatic turn does
+            if (skipMode == SkipMode.IgnoreWorkedTracks && !IsSpiralTurn)
+            {
+                MarkCurrentTrackWorked();
+                rowSkipsWidth = GetNextNotWorkedTrack(!isTurnRight, Properties.Settings.Default.set_youSkipWidth,
+                    mf.trk.gArr[mf.trk.idx].mode == TrackMode.AB);
+
+                //a button press can't wait for the coverage, use what is known
+                if (isCoveragePending) rowSkipsWidth = Properties.Settings.Default.set_youSkipWidth;
+            }
 
             //grab the vehicle widths and offsets
             double turnOffset = (mf.tool.width - mf.tool.overlap) * rowSkipsWidth + (isTurnRight ? mf.tool.offset * 2.0 : -mf.tool.offset * 2.0);

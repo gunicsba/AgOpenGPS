@@ -271,6 +271,10 @@ namespace AgOpenGPS
             //reload all the settings
             mf.LoadSettings();
 
+            //the headland distance depends on the tool offset
+            mf.bnd.BuildTurnLines();
+            mf.yt.ResetCreatedYouTurn();
+
             //save current vehicle
             Properties.VehicleSettings.Default.Save();
             Properties.ToolSettings.Default.Save();

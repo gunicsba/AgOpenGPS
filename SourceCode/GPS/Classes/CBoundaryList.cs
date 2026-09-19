@@ -12,6 +12,10 @@ namespace AgOpenGPS
         public List<vec3> hdLine = new List<vec3>(128);
         public List<vec3> turnLine = new List<vec3>(128);
 
+        //the turn line for a left and for a right turn, an implement offset moves them differently. turnLine is one of these
+        public List<vec3> turnLineLeft = new List<vec3>(128);
+        public List<vec3> turnLineRight = new List<vec3>(128);
+
         //constructor
         public CBoundaryList()
         {

@@ -1800,7 +1800,8 @@ namespace AgOpenGPS
 
             GL.Color3(1.0f, 1.0f, 1.0f);
 
-            Texture2D uTurnTexture = yt.uTurnStyle == 0 ? ScreenTextures.UTurnU : ScreenTextures.UTurnH;
+            Texture2D uTurnTexture = yt.uTurnStyle == 0 ? ScreenTextures.UTurnU
+                : yt.uTurnStyle == 1 ? ScreenTextures.UTurnH : ScreenTextures.UTurnSpiral;
             XyCoord uTurnTextureCenter = new XyCoord(two3, 130);
             uTurnTexture.DrawCentered(uTurnTextureCenter, new XyDelta(32, 30));
 

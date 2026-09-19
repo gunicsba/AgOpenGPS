@@ -12,6 +12,7 @@ using AgOpenGPS.Properties;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -1887,13 +1888,113 @@ namespace AgOpenGPS
 
             isPatchesChangingColor = true;
         }
+        private Bitmap skipIconBitmap;
+        private string skipIconShown = "";
+
+        //the icon of the skip button, it shows the skip of the next turn(s) and the direction we turn to
+        public void UpdateSkipButton()
+        {
+            if (InvokeRequired)
+            {
+                BeginInvoke(new Action(UpdateSkipButton));
+                return;
+            }
+
+            if (yt == null) return;
+
+            //numbers are the same as in the skip box, 0 is the next track
+            Image baseImage;
+            int first = yt.rowSkipsWidth - 1, second = -1;
+            bool firstIsNext = true;
+
+            if (yt.IsSpiralTurn)
+            {
+                baseImage = Resources.YouSkipSpiral;
+            }
+            else if (yt.skipMode == SkipMode.Alternative && yt.rowSkipsWidth2 > 1)
+            {
+                //the skip alternates between the big and the small one
+                baseImage = Resources.YouSkipOn;
+                first = yt.rowSkipsWidth2 - 1;
+                second = yt.rowSkipsWidth2 - 2;
+                firstIsNext = yt.rowSkipsWidth == yt.rowSkipsWidth2;
+            }
+            else if (yt.skipMode == SkipMode.IgnoreWorkedTracks)
+            {
+                baseImage = Resources.YouSkipWorkedTracks;
+            }
+            else
+            {
+                btnYouSkipEnable.Image = yt.skipMode == SkipMode.Alternative ? Resources.YouSkipOn : Resources.YouSkipOff;
+                return;
+            }
+
+            string key = yt.uTurnStyle + "|" + yt.skipMode + "|" + first + "|" + second + "|" + firstIsNext + "|" + yt.isTurnLeft;
+            if (skipIconBitmap == null || key != skipIconShown)
+            {
+                Bitmap bmp = new Bitmap(baseImage);
+                using (Graphics g = Graphics.FromImage(bmp))
+                {
+                    g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+
+                    if (second < 0)
+                    {
+                        DrawSkipNumber(g, first.ToString(), 32, 20f, Brushes.White);
+                    }
+                    else
+                    {
+                        DrawSkipNumber(g, first.ToString(), 18, 18f, firstIsNext ? Brushes.Yellow : Brushes.White);
+                        DrawSkipNumber(g, "/", 32, 18f, Brushes.White);
+                        DrawSkipNumber(g, second.ToString(), 46, 18f, firstIsNext ? Brushes.White : Brushes.Yellow);
+                    }
+
+                    //arrow on the side we turn to
+                    Point[] arrow = yt.isTurnLeft
+                        ? new[] { new Point(1, 50), new Point(9, 44), new Point(9, 56) }
+                        : new[] { new Point(63, 50), new Point(55, 44), new Point(55, 56) };
+                    g.FillPolygon(Brushes.Yellow, arrow);
+                    g.DrawPolygon(Pens.Black, arrow);
+                }
+
+                Bitmap old = skipIconBitmap;
+                skipIconBitmap = bmp;
+                skipIconShown = key;
+                btnYouSkipEnable.Image = bmp;
+                old?.Dispose();
+            }
+            else btnYouSkipEnable.Image = skipIconBitmap;
+        }
+
+        private static void DrawSkipNumber(Graphics g, string text, float centerX, float size, Brush fill)
+        {
+            using (var path = new System.Drawing.Drawing2D.GraphicsPath())
+            using (var format = new StringFormat { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center })
+            using (var outline = new Pen(Color.Black, 4) { LineJoin = System.Drawing.Drawing2D.LineJoin.Round })
+            {
+                path.AddString(text, new FontFamily("Tahoma"), (int)FontStyle.Bold, size,
+                    new RectangleF(centerX - 16, 40, 32, 20), format);
+                g.DrawPath(outline, path);
+                g.FillPath(fill, path);
+            }
+        }
+
         private void btnYouSkipEnable_Click(object sender, EventArgs e)
         {
+            if (yt.IsSpiralTurn)
+            {
+                //spiral turn: tapping the icon starts the spiral over
+                if (!yt.isYouTurnTriggered)
+                {
+                    yt.ResetSpiralSkips();
+                    yt.ResetCreatedYouTurn();
+                }
+                return;
+            }
+
             yt.rowSkipsWidth = Properties.Settings.Default.set_youSkipWidth;
             switch (yt.skipMode)
             {
                 case SkipMode.Normal:
-                    btnYouSkipEnable.Image = Resources.YouSkipOn;
                     yt.skipMode = SkipMode.Alternative;
                     //make sure at least 1
                     if (yt.rowSkipsWidth < 2)
@@ -1904,7 +2005,6 @@ namespace AgOpenGPS
                     yt.Set_Alternate_skips();
                     break;
                 case SkipMode.Alternative:
-                    btnYouSkipEnable.Image = Resources.YouSkipWorkedTracks;
                     yt.skipMode = SkipMode.IgnoreWorkedTracks;
                     //make sure at least 1
                     if (yt.rowSkipsWidth < 2)
@@ -1914,13 +2014,12 @@ namespace AgOpenGPS
                     }
                     break;
                 case SkipMode.IgnoreWorkedTracks:
-                    btnYouSkipEnable.Image = Resources.YouSkipOff;
                     yt.skipMode = SkipMode.Normal;
                     break;
             }
 
             yt.ResetCreatedYouTurn();
-
+            UpdateSkipButton();
         }
 
 
@@ -1928,6 +2027,7 @@ namespace AgOpenGPS
         {
             yt.rowSkipsWidth = cboxpRowWidth.SelectedIndex + 1;
             yt.Set_Alternate_skips();
+            UpdateSkipButton();
             if (!yt.isYouTurnTriggered) yt.ResetCreatedYouTurn();
             Properties.Settings.Default.set_youSkipWidth = yt.rowSkipsWidth;
             Properties.Settings.Default.Save();
@@ -2087,6 +2187,7 @@ namespace AgOpenGPS
                         {
                             TrackItem.workedTracks.Clear();
                         }
+                        coverage.Reset();
 
                         FileCreateContour();
                         FileCreateSections();

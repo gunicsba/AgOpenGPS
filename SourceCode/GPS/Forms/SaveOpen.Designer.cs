@@ -100,6 +100,7 @@ namespace AgOpenGPS
                 if (triStrip != null && triStrip.Count > 0 && triStrip[0] != null)
                 {
                     triStrip[0].patchList = new List<List<vec3>>();
+                    coverage.Reset();
                     foreach (var patch in sections)
                     {
                         triStrip[0].triangleList = new List<vec3>(patch);
