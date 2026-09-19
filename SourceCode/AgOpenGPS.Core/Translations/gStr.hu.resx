@@ -654,6 +654,9 @@ A választott sorrend alapján fognak megjelenni alulról felfelé.</value>
   <data name="gsHeadingChart" xml:space="preserve">
     <value>Irány grafikon</value>
   </data>
+  <data name="gsHeadingFilter" xml:space="preserve">
+    <value>Irány szűrő</value>
+  </data>
   <data name="gsHeadingOffset" xml:space="preserve">
     <value>Irány eltérés</value>
   </data>

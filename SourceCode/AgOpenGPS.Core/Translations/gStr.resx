@@ -651,6 +651,9 @@ The order you push them will be the order they appear on the menu from bottom up
   <data name="gsHeadingChart" xml:space="preserve">
     <value>Heading Chart</value>
   </data>
+  <data name="gsHeadingFilter" xml:space="preserve">
+    <value>Heading Filter</value>
+  </data>
   <data name="gsHeadingOffset" xml:space="preserve">
     <value>Heading Offset</value>
   </data>

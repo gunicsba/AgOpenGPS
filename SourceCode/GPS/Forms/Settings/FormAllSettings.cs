@@ -160,6 +160,7 @@ namespace AgOpenGPS
             AddRow(right, "Dual Hdg Offset", vsDefault.setGPS_dualHeadingOffset, vs.setGPS_dualHeadingOffset);
             AddRow(right, "Dual Rev. Dist.", vsDefault.setGPS_dualReverseDetectionDistance, vs.setGPS_dualReverseDetectionDistance);
             AddRow(right, "Min Step Limit", vsDefault.setGPS_minimumStepLimit, vs.setGPS_minimumStepLimit);
+            AddRow(right, "Heading Filter", vsDefault.setGPS_headingFilter, vs.setGPS_headingFilter);
 
             AddHeader(right, "── IMU");
             AddRow(right, "Roll Zero", vsDefault.setIMU_rollZero, vs.setIMU_rollZero);

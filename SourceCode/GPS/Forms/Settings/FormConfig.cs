@@ -185,6 +185,7 @@ namespace AgOpenGPS
             labelLess.Text = gStr.gsLess;
             labelMore.Text = gStr.gsMore;
             labelRollFilter.Text = gStr.gsRollFilter;
+            labelHeadingFilter.Text = gStr.gsHeadingFilter;
             //uturnconfig
             labelUturnExtend.Text = gStr.gsUturnExtension;
             labelUturnSmooth.Text = gStr.gsUturnSmooth;

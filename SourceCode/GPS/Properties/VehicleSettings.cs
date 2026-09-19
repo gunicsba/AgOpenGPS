@@ -47,6 +47,9 @@ namespace AgOpenGPS.Properties
 
         // GPS settings
         public string setGPS_headingFromWhichSource = "Fix";
+
+        // How much of the previous VTG heading is kept, 0 uses the new heading as it is, 0.3 is 30% old and 70% new
+        public double setGPS_headingFilter = 0.0;
         public double setGPS_forwardComp = 0.15;
         public double setGPS_reverseComp = 0.3;
         public double setGPS_dualHeadingOffset = 0.0;

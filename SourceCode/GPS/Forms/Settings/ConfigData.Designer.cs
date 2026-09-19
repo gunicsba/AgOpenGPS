@@ -38,6 +38,10 @@ namespace AgOpenGPS
                 labelGboxDual.Enabled = false;
             }
 
+            hsbarHeadingFilter.Value = Math.Max(hsbarHeadingFilter.Minimum, Math.Min(hsbarHeadingFilter.Maximum,
+                (int)Math.Round(Properties.VehicleSettings.Default.setGPS_headingFilter * 100)));
+            lblHeadingFilterPercent.Text = hsbarHeadingFilter.Value + "%";
+
             cboxMinGPSStep.Checked = (Properties.Settings.Default.setF_minHeadingStepDistance == 1.0);
             UpdateStepDistanceUI();
 
@@ -107,6 +111,8 @@ namespace AgOpenGPS
 
         private void tabDHeading_Leave(object sender, EventArgs e)
         {
+            Properties.VehicleSettings.Default.setGPS_headingFilter = hsbarHeadingFilter.Value * 0.01;
+
             Properties.VehicleSettings.Default.setIMU_fusionWeight2 = (double)hsbarFusion.Value * 0.002;
             mf.ahrs.fusionWeight = (double)hsbarFusion.Value * 0.002;
 
@@ -171,6 +177,11 @@ namespace AgOpenGPS
         //        mf.udpWatchLimit = Properties.Settings.Default.SetGPS_udpWatchMsec;
         //    }
         //}
+
+        private void hsbarHeadingFilter_ValueChanged(object sender, EventArgs e)
+        {
+            lblHeadingFilterPercent.Text = hsbarHeadingFilter.Value + "%";
+        }
 
         private void hsbarFusion_ValueChanged(object sender, EventArgs e)
         {

@@ -66,6 +66,33 @@ namespace AgOpenGPS
         public vec2 prevGridPos = new vec2(0, 0);
         public int patchCounter = 0;
 
+        private double smoothedVtgHeading;
+        private bool isVtgHeadingSmoothed;
+
+        /// <summary>
+        /// The heading filter setting is how much of the previous heading we keep: 0 uses the new heading as it is,
+        /// 0.3 is 30% previous and 70% new. Done the shortest way around the circle so 359 and 1 average to 0.
+        /// </summary>
+        private double SmoothVtgHeading(double newHeading)
+        {
+            double keepOld = Properties.VehicleSettings.Default.setGPS_headingFilter;
+
+            if (keepOld > 0 && isVtgHeadingSmoothed)
+            {
+                double delta = newHeading - smoothedVtgHeading;
+                if (delta > Math.PI) delta -= glm.twoPI;
+                else if (delta < -Math.PI) delta += glm.twoPI;
+
+                newHeading = smoothedVtgHeading + (delta * (1.0 - keepOld));
+                if (newHeading >= glm.twoPI) newHeading -= glm.twoPI;
+                else if (newHeading < 0) newHeading += glm.twoPI;
+            }
+
+            smoothedVtgHeading = newHeading;
+            isVtgHeadingSmoothed = true;
+            return newHeading;
+        }
+
         public vec2 prevBoundaryPos = new vec2(0, 0);
 
         //Everything is so wonky at the start
@@ -600,9 +627,14 @@ namespace AgOpenGPS
                         if (avgSpeed > 1)
                         {
                             //use NMEA headings for camera and tractor graphic
-                            fixHeading = glm.toRadians(pn.headingTrue);
-                            camHeading = pn.headingTrue;
+                            fixHeading = SmoothVtgHeading(glm.toRadians(pn.headingTrue));
+                            camHeading = glm.toDegrees(fixHeading);
                             gpsHeading = fixHeading;
+                        }
+                        else
+                        {
+                            //standing still, the next heading starts fresh
+                            isVtgHeadingSmoothed = false;
                         }
 
                         //grab the most current fix to last fix distance

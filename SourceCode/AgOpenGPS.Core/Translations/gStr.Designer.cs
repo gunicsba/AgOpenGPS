@@ -805,6 +805,15 @@ namespace AgOpenGPS.Core.Translations {
         }
 
         /// <summary>
+        ///   Looks up a localized string similar to Heading Filter.
+        /// </summary>
+        public static string gsHeadingFilter {
+            get {
+                return ResourceManager.GetString("gsHeadingFilter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Load Vehicle/Tool.
         /// </summary>
         public static string gsLoadVehicleTool {

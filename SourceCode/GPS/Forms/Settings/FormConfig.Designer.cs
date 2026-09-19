@@ -284,6 +284,9 @@ namespace AgOpenGPS
             this.lblRollFilterPercent = new System.Windows.Forms.Label();
             this.labelRollFilter = new System.Windows.Forms.Label();
             this.hsbarRollFilter = new System.Windows.Forms.HScrollBar();
+            this.labelHeadingFilter = new System.Windows.Forms.Label();
+            this.hsbarHeadingFilter = new System.Windows.Forms.HScrollBar();
+            this.lblHeadingFilterPercent = new System.Windows.Forms.Label();
             this.btnResetIMU = new System.Windows.Forms.Button();
             this.btnZeroRoll = new System.Windows.Forms.Button();
             this.btnRemoveZeroOffset = new System.Windows.Forms.Button();
@@ -4519,6 +4522,9 @@ namespace AgOpenGPS
             this.labelGboxSingle.Controls.Add(this.cboxIsReverseOn);
             this.labelGboxSingle.Controls.Add(this.labelFix2Fix);
             this.labelGboxSingle.Controls.Add(this.labelGpsStep);
+            this.labelGboxSingle.Controls.Add(this.labelHeadingFilter);
+            this.labelGboxSingle.Controls.Add(this.hsbarHeadingFilter);
+            this.labelGboxSingle.Controls.Add(this.lblHeadingFilterPercent);
             this.labelGboxSingle.Font = new System.Drawing.Font("Tahoma", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelGboxSingle.Location = new System.Drawing.Point(394, 116);
             this.labelGboxSingle.Name = "labelGboxSingle";
@@ -4648,7 +4654,7 @@ namespace AgOpenGPS
             this.cboxIsReverseOn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.cboxIsReverseOn.Font = new System.Drawing.Font("Tahoma", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cboxIsReverseOn.ForeColor = System.Drawing.Color.Black;
-            this.cboxIsReverseOn.Location = new System.Drawing.Point(118, 372);
+            this.cboxIsReverseOn.Location = new System.Drawing.Point(118, 384);
             this.cboxIsReverseOn.Name = "cboxIsReverseOn";
             this.cboxIsReverseOn.Size = new System.Drawing.Size(226, 52);
             this.cboxIsReverseOn.TabIndex = 465;
@@ -4949,8 +4955,43 @@ namespace AgOpenGPS
             this.labelRollFilter.Text = "Roll Filter";
             this.labelRollFilter.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
             // 
+            // labelHeadingFilter
+            //
+            this.labelHeadingFilter.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.labelHeadingFilter.Font = new System.Drawing.Font("Tahoma", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelHeadingFilter.ForeColor = System.Drawing.Color.Black;
+            this.labelHeadingFilter.Location = new System.Drawing.Point(109, 324);
+            this.labelHeadingFilter.Name = "labelHeadingFilter";
+            this.labelHeadingFilter.Size = new System.Drawing.Size(235, 23);
+            this.labelHeadingFilter.TabIndex = 600;
+            this.labelHeadingFilter.Text = "Heading Filter";
+            this.labelHeadingFilter.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+            //
+            // hsbarHeadingFilter
+            //
+            this.hsbarHeadingFilter.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.hsbarHeadingFilter.LargeChange = 1;
+            this.hsbarHeadingFilter.Location = new System.Drawing.Point(109, 348);
+            this.hsbarHeadingFilter.Maximum = 98;
+            this.hsbarHeadingFilter.Name = "hsbarHeadingFilter";
+            this.hsbarHeadingFilter.Size = new System.Drawing.Size(235, 30);
+            this.hsbarHeadingFilter.TabIndex = 601;
+            this.hsbarHeadingFilter.ValueChanged += new System.EventHandler(this.hsbarHeadingFilter_ValueChanged);
+            //
+            // lblHeadingFilterPercent
+            //
+            this.lblHeadingFilterPercent.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.lblHeadingFilterPercent.AutoSize = true;
+            this.lblHeadingFilterPercent.Font = new System.Drawing.Font("Tahoma", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblHeadingFilterPercent.ForeColor = System.Drawing.Color.Black;
+            this.lblHeadingFilterPercent.Location = new System.Drawing.Point(349, 340);
+            this.lblHeadingFilterPercent.Name = "lblHeadingFilterPercent";
+            this.lblHeadingFilterPercent.Size = new System.Drawing.Size(95, 39);
+            this.lblHeadingFilterPercent.TabIndex = 602;
+            this.lblHeadingFilterPercent.Text = "0%";
+            //
             // hsbarRollFilter
-            // 
+            //
             this.hsbarRollFilter.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.hsbarRollFilter.LargeChange = 1;
             this.hsbarRollFilter.Location = new System.Drawing.Point(55, 454);
@@ -8809,6 +8850,9 @@ namespace AgOpenGPS
         private System.Windows.Forms.Label lblRollFilterPercent;
         private System.Windows.Forms.Label labelRollFilter;
         private System.Windows.Forms.HScrollBar hsbarRollFilter;
+        private System.Windows.Forms.Label labelHeadingFilter;
+        private System.Windows.Forms.HScrollBar hsbarHeadingFilter;
+        private System.Windows.Forms.Label lblHeadingFilterPercent;
         private System.Windows.Forms.RadioButton rbtnTBT;
         private System.Windows.Forms.RadioButton rbtnFixedRear;
         private System.Windows.Forms.RadioButton rbtnFront;
