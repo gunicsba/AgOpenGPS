@@ -37,6 +37,7 @@ Name: "english"; MessagesFile: "compiler:Default.isl"
 
 [Tasks]
 Name: "desktopicon"; Description: "Create a &desktop icon"; GroupDescription: "Additional icons:"; Flags: checkedonce
+Name: "pintaskbar"; Description: "Pin {#MyAppName} to the taskbar (Windows 7/8 only)"; GroupDescription: "Additional icons:"; Flags: checkedonce
 Name: "backupdata"; Description: "Back up my existing Documents\AgOpenGPS folder (fields, settings) before installing"; GroupDescription: "Backup:"; Flags: checkedonce
 
 [Files]
@@ -73,8 +74,45 @@ begin
   end;
 end;
 
+// Windows 10 (1607+) and 11 removed the ability for installers to pin apps to the
+// taskbar, so this only actually does anything on Windows 7/8. It fails silently
+// otherwise; the wizard's final page reminds the user to pin it manually instead.
+procedure TryPinToTaskbar(const ExePath: String);
+var
+  ShellObj, Folder, FolderItem, Verbs, Verb: Variant;
+  i: Integer;
+begin
+  try
+    ShellObj := CreateOleObject('Shell.Application');
+    Folder := ShellObj.NameSpace(ExtractFileDir(ExePath));
+    FolderItem := Folder.ParseName(ExtractFileName(ExePath));
+    Verbs := FolderItem.Verbs;
+    for i := 0 to Verbs.Count - 1 do
+    begin
+      Verb := Verbs.Item(i);
+      if Pos('taskbar', Lowercase(Verb.Name)) > 0 then
+      begin
+        Verb.DoIt;
+        Break;
+      end;
+    end;
+  except
+    // Verb not available on this Windows version - nothing we can do programmatically.
+  end;
+end;
+
 procedure CurStepChanged(CurStep: TSetupStep);
 begin
   if (CurStep = ssInstall) and IsTaskSelected('backupdata') then
     BackupExistingData();
+  if (CurStep = ssPostInstall) and IsTaskSelected('pintaskbar') then
+    TryPinToTaskbar(ExpandConstant('{app}\{#MyAppExeName}'));
+end;
+
+procedure CurPageChanged(CurPageID: Integer);
+begin
+  if (CurPageID = wpFinished) and IsTaskSelected('pintaskbar') then
+    WizardForm.FinishedLabel.Caption := WizardForm.FinishedLabel.Caption + #13#10#13#10 +
+      'Note: Windows 10/11 no longer allows installers to pin apps to the taskbar automatically. ' +
+      'After launching {#MyAppName}, right-click its taskbar icon and choose ''Pin to taskbar''.';
 end;
