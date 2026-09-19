@@ -80,6 +80,7 @@ end;
 procedure TryPinToTaskbar(const ExePath: String);
 var
   ShellObj, Folder, FolderItem, Verbs, Verb: Variant;
+  VerbName: String;
   i: Integer;
 begin
   try
@@ -90,7 +91,10 @@ begin
     for i := 0 to Verbs.Count - 1 do
     begin
       Verb := Verbs.Item(i);
-      if Pos('taskbar', Lowercase(Verb.Name)) > 0 then
+      // Verb names carry an accelerator ampersand (e.g. 'Pin to Tas&kbar'), so strip it before matching.
+      VerbName := Verb.Name;
+      StringChangeEx(VerbName, '&', '', True);
+      if Pos('taskbar', Lowercase(VerbName)) > 0 then
       begin
         Verb.DoIt;
         Break;
