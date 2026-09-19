@@ -58,6 +58,21 @@ jobs:
       shell: powershell
       run: Compress-Archive -Path "${{env.PUBLISH_DIR}}/*" -DestinationPath "AgOpenGPS_${{ env.GitVersion_SemVer }}.zip"
 
+    - name: Install Inno Setup
+      run: choco install innosetup -y --no-progress
+
+    - name: Build installer
+      shell: powershell
+      run: |
+        & "C:\Program Files (x86)\Inno Setup 6\ISCC.exe" /DMyAppVersion=${{ env.GitVersion_SemVer }} Installer\AgOpenGPS.iss
+
+    - name: Locate installer
+      id: installer
+      shell: powershell
+      run: |
+        $path = Get-ChildItem -Path "Installer\Output" -Filter "*.exe" | Select-Object -First 1 -ExpandProperty FullName
+        echo "path=$path" >> $env:GITHUB_OUTPUT
+
     - name: Create Release
       uses: softprops/action-gh-release@v2
       with:
@@ -68,4 +83,6 @@ jobs:
           Automated Release by GitHub Action CI
         draft: ${{ github.ref_name == 'master' }}
         prerelease: ${{ contains(github.ref_name, 'release/') }}
-        files: AgOpenGPS_${{ env.GitVersion_SemVer }}.zip
+        files: |
+          AgOpenGPS_${{ env.GitVersion_SemVer }}.zip
+          ${{ steps.installer.outputs.path }}

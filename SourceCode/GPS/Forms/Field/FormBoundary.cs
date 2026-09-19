@@ -433,6 +433,21 @@ namespace AgOpenGPS
             isClosing = true;
         }
 
+        private void btnOenyImport_Click(object sender, EventArgs e)
+        {
+            using (var form = new FormOenyImport(mf))
+            {
+                form.ShowDialog(this);
+            }
+
+            panelMain.Visible = true;
+            panelChoose.Visible = false;
+            panelKML.Visible = false;
+            this.Size = new Size(600, 300);
+
+            UpdateChart();
+        }
+
         private void btnBuildBoundaryFromTracks_Click(object sender, EventArgs e)
         {
             if (mf.bnd.bndList.Count > 0)
