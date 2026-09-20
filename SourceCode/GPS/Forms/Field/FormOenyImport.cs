@@ -26,6 +26,28 @@ namespace AgOpenGPS.Forms.Field
             public string DisplayName => string.IsNullOrEmpty(TownName) ? Hrsz : $"{TownName} - {Hrsz}";
         }
 
+        // Panel.DoubleBuffered is protected, so a tiny subclass is needed to stop the map from flickering on repaint.
+        private class BufferedPanel : Panel
+        {
+            public BufferedPanel()
+            {
+                DoubleBuffered = true;
+                ResizeRedraw = true;
+                SetStyle(ControlStyles.OptimizedDoubleBuffer | ControlStyles.AllPaintingInWmPaint | ControlStyles.UserPaint, true);
+            }
+
+            // WS_EX_COMPOSITED paints the child buttons (zoom / pan) in the same buffered pass as the map.
+            protected override CreateParams CreateParams
+            {
+                get
+                {
+                    CreateParams cp = base.CreateParams;
+                    cp.ExStyle |= 0x02000000;
+                    return cp;
+                }
+            }
+        }
+
         private readonly FormGPS mf;
         private readonly OenyClient _oenyClient = new OenyClient();
         private readonly EhtTransformationClient _ehtClient = new EhtTransformationClient();
@@ -41,7 +63,10 @@ namespace AgOpenGPS.Forms.Field
         private Point _dragStartMouse;
         private double _dragStartPanEasting, _dragStartPanNorthing;
 
-        private readonly Timer _vehicleTimer = new Timer { Interval = 500 };
+        // Vehicle position/heading snapshot taken when a search starts (the marker is static, no live updates).
+        private bool _hasVehicleSnapshot;
+        private vec2 _vehiclePos;
+        private double _vehicleHeadingRad;
 
         private NumericUpDown nudRadiusKm;
         private Button btnSearch;
@@ -98,7 +123,7 @@ namespace AgOpenGPS.Forms.Field
             };
             clbParcels.ItemCheck += (s, e) => BeginInvoke((Action)(() => pnlPreview.Invalidate()));
 
-            pnlPreview = new Panel
+            pnlPreview = new BufferedPanel
             {
                 Left = 284,
                 Top = 50,
@@ -168,10 +193,6 @@ namespace AgOpenGPS.Forms.Field
 
             LayoutFixedControls();
             Resize += (s, e) => LayoutFixedControls();
-
-            _vehicleTimer.Tick += (s, e) => pnlPreview.Invalidate();
-            _vehicleTimer.Start();
-            FormClosed += (s, e) => _vehicleTimer.Stop();
         }
 
         // Positions everything that depends on the current client size (bottom buttons, map overlay buttons).
@@ -210,6 +231,12 @@ namespace AgOpenGPS.Forms.Field
         private async Task SearchAsync()
         {
             if (mf == null) return;
+
+            // The search is centered on the current position, so the marker snapshot matches it.
+            GeoCoord vehicleGeo = mf.AppModel.LocalPlane.ConvertWgs84ToGeoCoord(mf.AppModel.CurrentLatLon);
+            _vehiclePos = new vec2(vehicleGeo.Easting, vehicleGeo.Northing);
+            _vehicleHeadingRad = mf.AppModel.FixHeading.AngleInRadians;
+            _hasVehicleSnapshot = true;
 
             btnSearch.Enabled = false;
             btnAddSelected.Enabled = false;
@@ -499,14 +526,13 @@ namespace AgOpenGPS.Forms.Field
             DrawVehicleMarker(g);
         }
 
-        // Draws the tractor's live position + heading as a yellow arrow on top of the parcels.
+        // Draws the tractor's position + heading (as of the search) as a yellow arrow on top of the parcels.
         private void DrawVehicleMarker(Graphics g)
         {
-            if (mf == null) return;
+            if (!_hasVehicleSnapshot) return;
 
-            GeoCoord geo = mf.AppModel.LocalPlane.ConvertWgs84ToGeoCoord(mf.AppModel.CurrentLatLon);
-            PointF center = ToScreen(new vec2(geo.Easting, geo.Northing));
-            double headingRad = mf.AppModel.FixHeading.AngleInRadians;
+            PointF center = ToScreen(_vehiclePos);
+            double headingRad = _vehicleHeadingRad;
 
             const float size = 12f;
             PointF tip = new PointF(
