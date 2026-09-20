@@ -42,6 +42,7 @@
 - **Webkamera ablak** – a tábla váltását már nem akadályozza, nyitva maradhat. Bezáráskor leállítja a kamerát; korábban a kamera és az AgOpenGPS folyamat is életben maradt a program bezárása után.
 - **AgIO – Task Controller napló** – a TC kimenete már nem blokkolhatja az AgIO felületét (bővítve a hibakimenet olvasásával is; tesztekkel). *Köszönet: Marek, #1221.*
 - **NTRIP kapcsolat** – az ügyfél már nem fogadja el csendben az elutasított kapcsolatot: ellenőrzi a caster válaszát, felismeri azt a casztert, amely „200 OK"-t küld de RTCM adat nélkül lezár, újraoldja a caster nevét (dinamikus DNS), és látható hibaüzenetet ad. *Köszönet: aortner, #1219.*
+- **NTRIP – VRS / legközelebbi bázis (Centipede NEAR)** – a fenti javítás mellékhatásaként az a mountpoint, amelyik először csak a fejlécet küldi és RTCM adatot csak GGA után, egy másodperccel a csatlakozás után lebontásra került, és a kliens végtelen újracsatlakozási körbe esett. A figyelő (watchdog) most már akkor is nullázódik, amikor a caster elfogadja a kapcsolatot, a GGA azonnal kimegy, a „SOURCETABLE 200 OK” (ismeretlen mountpoint) válasz pedig elutasításként jelenik meg. *#1225.*
 - **Hamis „Field Origin" távolság-figyelmeztetés** a tábla bezárása után. *Köszönet: Richard Klasens.*
 
 ## Frissítés előtt olvasd el
@@ -89,6 +90,7 @@ Marek (#1221), aortner (#1219), Richard Klasens, valamint a Weblate fordítók �
 - **Webcam window** – it no longer blocks changing fields and can stay open. It stops the camera when it closes; before, the camera and the AgOpenGPS process stayed alive after closing the program.
 - **AgIO – Task Controller log** – TC output can no longer block the AgIO UI (also reads the error output now; with tests). *Thanks: Marek, #1221.*
 - **NTRIP connection** – the client no longer silently accepts a rejected connection: it checks the caster's response, detects casters that answer "200 OK" but close without RTCM data, re-resolves the caster name (dynamic DNS) and shows a visible error message. *Thanks: aortner, #1219.*
+- **NTRIP – VRS / nearest-base mount points (Centipede NEAR)** – a side effect of the fix above: a mount point that sends only the header first, and no RTCM until it gets a GGA, was torn down one second after connecting, leaving the client in an endless reconnect loop. The watchdog is now reset when the caster accepts, a GGA is sent straight away, and “SOURCETABLE 200 OK” (an unknown mount point) is reported as a rejection. *#1225.*
 - **False "Field Origin" distance warning** after closing a field. *Thanks: Richard Klasens.*
 
 ## Read before upgrading
