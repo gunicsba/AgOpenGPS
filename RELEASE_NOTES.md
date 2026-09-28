@@ -45,6 +45,7 @@
 - **NTRIP – VRS / legközelebbi bázis (Centipede NEAR)** – a fenti javítás mellékhatásaként az a mountpoint, amelyik először csak a fejlécet küldi és RTCM adatot csak GGA után, egy másodperccel a csatlakozás után lebontásra került, és a kliens végtelen újracsatlakozási körbe esett. A figyelő (watchdog) most már akkor is nullázódik, amikor a caster elfogadja a kapcsolatot, a GGA azonnal kimegy, a „SOURCETABLE 200 OK” (ismeretlen mountpoint) válasz pedig elutasításként jelenik meg. *#1225.*
 - **Hamis „Field Origin" távolság-figyelmeztetés** a tábla bezárása után. *Köszönet: Richard Klasens.*
 - **OENY térkép villogása** – a parcellatérkép már nem villog. Korábban másodpercenként kétszer újrarajzolta magát, sok kis szomszédos parcellánál különösen zavaróan; a jármű jelölője most a keresés pillanatában rögzített pozíciót mutatja, és a térkép csak húzáskor, nagyításkor vagy kijelöléskor rajzolódik újra.
+- **ISOBUS nyomok PGN U-kanyarnál** – bekapcsolt U-kanyarnál a PGN már a forduló indításakor a következő nyom számát küldte, miközben a munkaeszköz még az aktuális nyomon dolgozott. Most a forduló végéig az aktuális nyomot küldi, és csak utána vált a következőre. Megszakított fordulónál az eredeti nyom marad.
 
 ## Frissítés előtt olvasd el
 - **Munkaeszköz-eltolás:** ha eddig kézzel adtad hozzá az eltolást a fordulótávolsághoz, hogy a kasza ne vigye ki a kerítést most ez kétszer számít. Állítsd újra a fordulótávolságot.
@@ -94,6 +95,7 @@ Marek (#1221), aortner (#1219), Richard Klasens, valamint a Weblate fordítók �
 - **NTRIP – VRS / nearest-base mount points (Centipede NEAR)** – a side effect of the fix above: a mount point that sends only the header first, and no RTCM until it gets a GGA, was torn down one second after connecting, leaving the client in an endless reconnect loop. The watchdog is now reset when the caster accepts, a GGA is sent straight away, and “SOURCETABLE 200 OK” (an unknown mount point) is reported as a rejection. *#1225.*
 - **False "Field Origin" distance warning** after closing a field. *Thanks: Richard Klasens.*
 - **OENY map flicker** – the parcel map no longer blinks. It used to redraw itself twice a second, which was especially noticeable with many small neighbouring parcels; the vehicle marker now shows the position at the moment of the search, and the map only redraws when you pan, zoom or select.
+- **ISOBUS Tracks PGN during U-turns** – with U-turn enabled, the PGN switched to the next track number as soon as the turn was triggered, while the implement was still working the current pass. It now keeps sending the current pass until the turn completes, then switches to the next one. A cancelled turn keeps the original pass.
 
 ## Read before upgrading
 - **Implement offset:** if you used to add the offset to the U-turn distance by hand, it now counts twice. Reduce the turn distance.

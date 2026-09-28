@@ -89,6 +89,22 @@ namespace AgOpenGPS
         private bool savedIsTurnLeft;
         private int savedRowSkipsWidth, savedTurnSkips;
         private bool savedPreviousBigSkip;
+
+        // True while howManyPathsAway / isHeadingSameWay already point at the next pass (set by YouTurnTrigger)
+        private bool isPathAdvancedForTurn;
+
+        /// <summary>
+        /// True from YouTurnTrigger until the turn completes or is cancelled. During this window
+        /// ABLine/curve howManyPathsAway and isHeadingSameWay already describe the pass after the turn,
+        /// while the vehicle and implement are still finishing the current pass or are in the headland.
+        /// </summary>
+        public bool IsPathAdvancedForTurn => isYouTurnTriggered && isPathAdvancedForTurn;
+
+        // Pass the vehicle was on when the turn was triggered
+        public int PreTriggerABLinePathsAway => savedABLinePathsAway;
+        public bool PreTriggerABLineHeadingSameWay => savedABLineHeadingSameWay;
+        public int PreTriggerCurvePathsAway => savedCurvePathsAway;
+        public bool PreTriggerCurveHeadingSameWay => savedCurveHeadingSameWay;
         #endregion
 
         //constructor
@@ -2490,6 +2506,7 @@ namespace AgOpenGPS
                 savedRowSkipsWidth = rowSkipsWidth;
                 savedTurnSkips = turnSkips;
                 savedPreviousBigSkip = previousBigSkip;
+                isPathAdvancedForTurn = true;
 
                 if (skipMode == SkipMode.IgnoreWorkedTracks) MarkCurrentTrackWorked();
 
@@ -2537,6 +2554,7 @@ namespace AgOpenGPS
             rowSkipsWidth = savedRowSkipsWidth;
             turnSkips = savedTurnSkips;
             previousBigSkip = savedPreviousBigSkip;
+            isPathAdvancedForTurn = false;
             mf.UpdateSkipButton();
         }
 
@@ -2544,6 +2562,7 @@ namespace AgOpenGPS
         public void CompleteYouTurn()
         {
             isYouTurnTriggered = false;
+            isPathAdvancedForTurn = false;
             ResetCreatedYouTurn();
             mf.sounds.isBoundAlarming = false;
         }
@@ -2585,6 +2604,7 @@ namespace AgOpenGPS
         {
             //fix you turn
             isYouTurnTriggered = false;
+            isPathAdvancedForTurn = false;
             mf.makeUTurnCounter = 0;
             ytList?.Clear();
             ResetCreatedYouTurn();

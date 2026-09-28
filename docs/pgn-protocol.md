@@ -227,6 +227,7 @@ Sent when:
 
 - Sent whenever the track context **changes** (pass number, reference ID, heading direction, swath width, or validity).
 - Minimum send interval: **100 ms** (rate-limited to avoid flooding).
+- **U-turn:** AOG switches to the next pass internally when the U-turn is triggered, before the vehicle leaves the current pass. PGN 0xF4 keeps reporting the pass being finished (track number and heading) until the U-turn completes, then switches to the new pass. A cancelled U-turn keeps the original pass throughout.
 - When no guidance track is active (e.g. field just opened, no AB line created), the message is sent with `Flags = 0x00` and `Guidance Reference ID = 0`.
 
 **Guidance Reference ID stability:**
