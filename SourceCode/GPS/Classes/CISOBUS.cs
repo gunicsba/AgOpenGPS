@@ -238,6 +238,23 @@ namespace AgOpenGPS
                     isHeadingSameWay = mf.curve.isHeadingSameWay;
                 }
 
+                // YouTurnTrigger switches howManyPathsAway / isHeadingSameWay to the next pass
+                // before the turn starts. Keep reporting the pass being finished until the turn
+                // completes, otherwise the implement gets the future track while still working.
+                if (mf.yt.IsPathAdvancedForTurn)
+                {
+                    if (track.mode == TrackMode.AB)
+                    {
+                        pathsAway = mf.yt.PreTriggerABLinePathsAway;
+                        isHeadingSameWay = mf.yt.PreTriggerABLineHeadingSameWay;
+                    }
+                    else
+                    {
+                        pathsAway = mf.yt.PreTriggerCurvePathsAway;
+                        isHeadingSameWay = mf.yt.PreTriggerCurveHeadingSameWay;
+                    }
+                }
+
                 // Bit 1: heading same way
                 if (isHeadingSameWay)
                     flags |= 0x02;
