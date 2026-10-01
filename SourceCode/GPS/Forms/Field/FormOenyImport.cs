@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using AgLibrary.Logging;
 using AgOpenGPS.Classes.Oeny;
+using AgOpenGPS.Controls;
 using AgOpenGPS.Core.Models;
 using AgOpenGPS.Core.Translations;
 
@@ -68,7 +69,14 @@ namespace AgOpenGPS.Forms.Field
         private vec2 _vehiclePos;
         private double _vehicleHeadingRad;
 
-        private NumericUpDown nudRadiusKm;
+        // Touch-sized layout: top row and bottom buttons are twice the old 30/40 px height
+        private const int TopRowTop = 10;
+        private const int TopRowHeight = 60;
+        private const int ContentTop = TopRowTop + TopRowHeight + 10;
+        private const int BottomButtonHeight = 80;
+
+        private NudlessNumericUpDown nudRadiusKm;
+        private Button btnRadiusDown, btnRadiusUp;
         private Button btnSearch;
         private Button btnAddSelected;
         private Button btnCancel;
@@ -92,30 +100,52 @@ namespace AgOpenGPS.Forms.Field
             MinimizeBox = false;
             StartPosition = FormStartPosition.CenterParent;
             ClientSize = new Size(960, 680);
-            MinimumSize = new Size(700, 480);
+            MinimumSize = new Size(900, 520);
 
-            var lblRadius = new Label { Text = gStr.gsOenySearchSize, Left = 12, Top = 18, Width = 110, AutoSize = true };
-            nudRadiusKm = new NumericUpDown
+            // Top row is touch-sized: the stock NumericUpDown arrows can't be scaled, so the spinner is
+            // hidden (tap the value for the keypad) and replaced by two big step buttons.
+            var buttonFont = new Font("Tahoma", 14F, FontStyle.Bold);
+
+            var lblRadius = new Label { Text = gStr.gsOenySearchSize, Font = new Font("Tahoma", 12F), AutoSize = true };
+            lblRadius.Left = 12;
+            lblRadius.Top = TopRowTop + (TopRowHeight - lblRadius.PreferredHeight) / 2;
+
+            btnRadiusDown = new Button { Text = "▼", Font = buttonFont, Width = TopRowHeight, Height = TopRowHeight, Top = TopRowTop };
+            btnRadiusDown.Left = lblRadius.Left + lblRadius.PreferredWidth + 8;
+
+            nudRadiusKm = new NudlessNumericUpDown
             {
-                Left = 130,
-                Top = 14,
-                Width = 60,
+                Font = new Font("Tahoma", 18F, FontStyle.Bold),
+                Width = 90,
                 Minimum = 0.1M,
                 Maximum = 10M,
                 DecimalPlaces = 1,
                 Increment = 0.1M,
-                Value = 0.3M
+                Value = 0.3M,
+                TextAlign = HorizontalAlignment.Center
             };
+            nudRadiusKm.Left = btnRadiusDown.Right + 4;
+            nudRadiusKm.Top = TopRowTop + (TopRowHeight - nudRadiusKm.PreferredHeight) / 2;
+            nudRadiusKm.Click += (s, e) => nudRadiusKm.ShowKeypad(this);
 
-            btnSearch = new Button { Text = gStr.gsOenySearchHere, Left = 200, Top = 11, Width = 130, Height = 30 };
+            btnRadiusUp = new Button { Text = "▲", Font = buttonFont, Width = TopRowHeight, Height = TopRowHeight, Top = TopRowTop };
+            btnRadiusUp.Left = nudRadiusKm.Right + 4;
+
+            btnRadiusDown.Click += (s, e) => nudRadiusKm.DownButton();
+            btnRadiusUp.Click += (s, e) => nudRadiusKm.UpButton();
+
+            btnSearch = new Button { Text = gStr.gsOenySearchHere, Font = buttonFont, Width = 260, Height = TopRowHeight, Top = TopRowTop };
+            btnSearch.Left = btnRadiusUp.Right + 12;
             btnSearch.Click += async (s, e) => await SearchAsync();
 
-            lblStatus = new Label { Left = 340, Top = 18, Width = 600, AutoSize = false, Height = 20, Text = string.Empty, Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right };
+            lblStatus = new Label { AutoSize = false, AutoEllipsis = true, Height = 20, Text = string.Empty };
+            lblStatus.Left = btnSearch.Right + 12;
+            lblStatus.Top = TopRowTop + (TopRowHeight - lblStatus.Height) / 2;
 
             clbParcels = new CheckedListBox
             {
                 Left = 12,
-                Top = 50,
+                Top = ContentTop,
                 Width = 260,
                 Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left,
                 CheckOnClick = true,
@@ -126,7 +156,7 @@ namespace AgOpenGPS.Forms.Field
             pnlPreview = new BufferedPanel
             {
                 Left = 284,
-                Top = 50,
+                Top = ContentTop,
                 BackColor = Color.White,
                 BorderStyle = BorderStyle.FixedSingle,
                 Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right
@@ -165,9 +195,10 @@ namespace AgOpenGPS.Forms.Field
             btnAddSelected = new Button
             {
                 Text = gStr.gsOenyAddSelected,
+                Font = buttonFont,
                 Left = 12,
-                Width = 240,
-                Height = 40,
+                Width = 400,
+                Height = BottomButtonHeight,
                 Enabled = false,
                 Anchor = AnchorStyles.Bottom | AnchorStyles.Left
             };
@@ -176,14 +207,17 @@ namespace AgOpenGPS.Forms.Field
             btnCancel = new Button
             {
                 Text = gStr.gsCancel,
-                Width = 172,
-                Height = 40,
+                Font = buttonFont,
+                Width = 240,
+                Height = BottomButtonHeight,
                 Anchor = AnchorStyles.Bottom | AnchorStyles.Right
             };
             btnCancel.Click += (s, e) => Close();
 
             Controls.Add(lblRadius);
+            Controls.Add(btnRadiusDown);
             Controls.Add(nudRadiusKm);
+            Controls.Add(btnRadiusUp);
             Controls.Add(btnSearch);
             Controls.Add(lblStatus);
             Controls.Add(clbParcels);
@@ -198,7 +232,9 @@ namespace AgOpenGPS.Forms.Field
         // Positions everything that depends on the current client size (bottom buttons, map overlay buttons).
         private void LayoutFixedControls()
         {
-            int bottomButtonsTop = ClientSize.Height - 48;
+            lblStatus.Width = Math.Max(0, ClientSize.Width - lblStatus.Left - 12);
+
+            int bottomButtonsTop = ClientSize.Height - BottomButtonHeight - 8;
             clbParcels.Height = bottomButtonsTop - 10 - clbParcels.Top;
             pnlPreview.Width = ClientSize.Width - pnlPreview.Left - 12;
             pnlPreview.Height = bottomButtonsTop - 10 - pnlPreview.Top;
