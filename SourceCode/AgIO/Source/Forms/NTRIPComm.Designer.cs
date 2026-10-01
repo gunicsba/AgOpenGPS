@@ -477,7 +477,11 @@ namespace AgIO
 
             //Thinks is connected but not receiving anything
             if (NTRIP_Watchdog++ > 30 && isNTRIP_Connected)
+            {
+                Log.EventWriter("NTRIP - No data from caster for 30 s, reconnecting");
+                Log.FileSaveSystemEvents(); //flush immediately for live diagnostics
                 ReconnectRequest();
+            }
 
             //Once all connected set the timer GGA to NTRIP Settings
             if (sendGGAInterval > 0 && ntripCounter == 40) tmr.Interval = sendGGAInterval * 1000;
@@ -785,7 +789,8 @@ namespace AgIO
                     Log.EventWriter("Catch -> NTRIP OnConnect: " + exDetails);
                     Log.FileSaveSystemEvents(); //flush immediately for live diagnostics
 
-                    if (isCurrent)
+                    //re-check here - a newer attempt may have replaced clientSocket since the callback ran
+                    if (isCurrent && sock == clientSocket)
                     {
                         TimedMessageBox(2500, "NTRIP Connection Failed", message);
                         ReconnectRequest();
@@ -810,7 +815,11 @@ namespace AgIO
                     byte[] localMsg = new byte[nBytesRec];
                     Array.Copy(casterRecBuffer, localMsg, nBytesRec);
 
-                    BeginInvoke((MethodInvoker)(() => OnAddMessage(localMsg)));
+                    BeginInvoke((MethodInvoker)(() =>
+                    {
+                        //drop data from a socket a newer connection attempt has replaced meanwhile
+                        if (sock == clientSocket) OnAddMessage(localMsg);
+                    }));
                     sock.BeginReceive(casterRecBuffer, 0, casterRecBuffer.Length, SocketFlags.None, new AsyncCallback(OnRecievedData), sock);
                 }
                 else
@@ -826,6 +835,11 @@ namespace AgIO
                     //(e.g. a rejection response that arrived just before this close notification)
                     BeginInvoke((MethodInvoker)(() =>
                     {
+                        //StartNTRIP() shuts the previous socket down itself, which completes its pending
+                        //receive with 0 bytes while it is still clientSocket. By the time this runs a new
+                        //attempt is already connecting - it must not be torn down by the old socket's close.
+                        if (sock != clientSocket) return;
+
                         //this attempt was already handled by another event (typically the caster's
                         //rejection text, processed a moment before this close notification)
                         if (!isNTRIP_Connecting && !isNTRIP_Connected)
