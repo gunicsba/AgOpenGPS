@@ -105,8 +105,10 @@ namespace AgOpenGPS.Forms.Field
             // Top row is touch-sized: the stock NumericUpDown arrows can't be scaled, so the spinner is
             // hidden (tap the value for the keypad) and replaced by two big step buttons.
             var buttonFont = new Font("Tahoma", 14F, FontStyle.Bold);
+            // 1.5x the default 8.25 pt for the label, status, result list and map arrows
+            var textFont = new Font("Tahoma", 12F);
 
-            var lblRadius = new Label { Text = gStr.gsOenySearchSize, Font = new Font("Tahoma", 12F), AutoSize = true };
+            var lblRadius = new Label { Text = gStr.gsOenySearchSize, Font = textFont, AutoSize = true };
             lblRadius.Left = 12;
             lblRadius.Top = TopRowTop + (TopRowHeight - lblRadius.PreferredHeight) / 2;
 
@@ -138,7 +140,8 @@ namespace AgOpenGPS.Forms.Field
             btnSearch.Left = btnRadiusUp.Right + 12;
             btnSearch.Click += async (s, e) => await SearchAsync();
 
-            lblStatus = new Label { AutoSize = false, AutoEllipsis = true, Height = 20, Text = string.Empty };
+            lblStatus = new Label { Font = textFont, AutoSize = false, AutoEllipsis = true, Text = string.Empty };
+            lblStatus.Height = lblStatus.PreferredHeight;
             lblStatus.Left = btnSearch.Right + 12;
             lblStatus.Top = TopRowTop + (TopRowHeight - lblStatus.Height) / 2;
 
@@ -146,7 +149,8 @@ namespace AgOpenGPS.Forms.Field
             {
                 Left = 12,
                 Top = ContentTop,
-                Width = 260,
+                Width = 390,
+                Font = textFont,
                 Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left,
                 CheckOnClick = true,
                 IntegralHeight = false
@@ -155,7 +159,7 @@ namespace AgOpenGPS.Forms.Field
 
             pnlPreview = new BufferedPanel
             {
-                Left = 284,
+                Left = 12 + 390 + 12,
                 Top = ContentTop,
                 BackColor = Color.White,
                 BorderStyle = BorderStyle.FixedSingle,
@@ -175,10 +179,10 @@ namespace AgOpenGPS.Forms.Field
             btnZoomOut.Click += (s, e) => ZoomBy(0.8);
 
             // Touch-friendly pan (D-pad), top-left of the map
-            btnPanUp = new Button { Text = "\u25B2", Width = 60, Height = 60, Anchor = AnchorStyles.Top | AnchorStyles.Left };
-            btnPanDown = new Button { Text = "\u25BC", Width = 60, Height = 60, Anchor = AnchorStyles.Top | AnchorStyles.Left };
-            btnPanLeft = new Button { Text = "\u25C4", Width = 60, Height = 60, Anchor = AnchorStyles.Top | AnchorStyles.Left };
-            btnPanRight = new Button { Text = "\u25BA", Width = 60, Height = 60, Anchor = AnchorStyles.Top | AnchorStyles.Left };
+            btnPanUp = new Button { Font = textFont, Text = "\u25B2", Width = 60, Height = 60, Anchor = AnchorStyles.Top | AnchorStyles.Left };
+            btnPanDown = new Button { Font = textFont, Text = "\u25BC", Width = 60, Height = 60, Anchor = AnchorStyles.Top | AnchorStyles.Left };
+            btnPanLeft = new Button { Font = textFont, Text = "\u25C4", Width = 60, Height = 60, Anchor = AnchorStyles.Top | AnchorStyles.Left };
+            btnPanRight = new Button { Font = textFont, Text = "\u25BA", Width = 60, Height = 60, Anchor = AnchorStyles.Top | AnchorStyles.Left };
             btnPanUp.Click += (s, e) => PanBy(0, 1);
             btnPanDown.Click += (s, e) => PanBy(0, -1);
             // Left/right are inverted relative to dx because the view center moves opposite the arrow's intent.

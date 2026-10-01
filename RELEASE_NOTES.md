@@ -46,7 +46,7 @@
 - **NTRIP internet nélkül** – a caster nevének feloldása (DNS) a háttérben fut. Internet nélkül eddig az újracsatlakozási kísérletek néhány másodpercre megakaszthatták az AgIO-t, és vele az összes modulkommunikációt – erre az időre az automata kormányzás is leállt.
 - **Hamis „Field Origin" távolság-figyelmeztetés** a tábla bezárása után. *Köszönet: Richard Klasens.*
 - **OENY térkép villogása** – a parcellatérkép már nem villog. Korábban másodpercenként kétszer újrarajzolta magát, sok kis szomszédos parcellánál különösen zavaróan; a jármű jelölője most a keresés pillanatában rögzített pozíciót mutatja, és a térkép csak húzáskor, nagyításkor vagy kijelöléskor rajzolódik újra.
-- **OENY ablak érintőképernyőn** – a keresési méret melletti fel/le nyilak, a „Keresés itt” és az alsó gombok kétszer akkorák lettek. A méret értékére koppintva számbillentyűzet nyílik.
+- **OENY ablak érintőképernyőn** – a keresési méret melletti fel/le nyilak, a „Keresés itt” és az alsó gombok kétszer akkorák lettek. A méret értékére koppintva számbillentyűzet nyílik. A találati lista és a többi szöveg másfélszer nagyobb.
 - **ISOBUS nyomok PGN U-kanyarnál** – bekapcsolt U-kanyarnál a PGN már a forduló indításakor a következő nyom számát küldte, miközben a munkaeszköz még az aktuális nyomon dolgozott. Most a forduló végéig az aktuális nyomot küldi, és csak utána vált a következőre. Megszakított fordulónál az eredeti nyom marad.
 
 ## Frissítés előtt olvasd el
@@ -98,7 +98,7 @@ Marek (#1221), aortner (#1219), Richard Klasens, valamint a Weblate fordítók �
 - **NTRIP without internet** – the caster name (DNS) is now looked up in the background. Without internet, reconnect attempts could freeze AgIO for a few seconds, and with it all module communication – autosteer stopped for that time.
 - **False "Field Origin" distance warning** after closing a field. *Thanks: Richard Klasens.*
 - **OENY map flicker** – the parcel map no longer blinks. It used to redraw itself twice a second, which was especially noticeable with many small neighbouring parcels; the vehicle marker now shows the position at the moment of the search, and the map only redraws when you pan, zoom or select.
-- **OENY window on touch screens** – the up/down arrows next to the search size, "Search Here" and the bottom buttons are now twice as big. Tapping the size value opens the number keypad.
+- **OENY window on touch screens** – the up/down arrows next to the search size, "Search Here" and the bottom buttons are now twice as big. Tapping the size value opens the number keypad. The result list and the other text are 1.5 times larger.
 - **ISOBUS Tracks PGN during U-turns** – with U-turn enabled, the PGN switched to the next track number as soon as the turn was triggered, while the implement was still working the current pass. It now keeps sending the current pass until the turn completes, then switches to the next one. A cancelled turn keeps the original pass.
 
 ## Read before upgrading
