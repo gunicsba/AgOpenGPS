@@ -35,6 +35,7 @@
 
 - **ISOBUS nyomok PGN** – új PGN a nyomok ISOBUS felé küldéséhez (lásd `docs/pgn-protocol.md`).
 - **Windows telepítő** – első ízben van telepítő (`AgOpenGPS_<verzió>_Setup.exe`), magyar és angol nyelvvel. Felhasználónként telepít, választható az asztali ikon és a `Dokumentumok\AgOpenGPS` mappa (táblák, beállítások) telepítés előtti mentése.
+- **Telepítő – automatikus indítás és tűzfal** – új opció: az AgOpenGPS a Windows-zal együtt indul (az AgIO-t ő maga indítja). A régebbi AgOpenGPS / AgIO / GPS_Out verziók automatikus indítását kikapcsolja, hogy ne induljon el egy régi példány is. Egy másik opció az AgIO-t és a GPS_Out-ot engedélyezi a Windows tűzfalon magán- és nyilvános hálózatokon is.
 - **Kormányzás varázsló** – az „Alapértékek betöltése” most gombos (Button) kormányzás-engedélyezést, bekapcsolt áramérzékelős (Current Turn Sensor) automatikus megszakítást 40%-on és 15-ös proporcionális erősítést állít be. A varázsló összes felirata, gombja és üzenete lefordítható, magyarul már elérhető.
 - **Magyar fordítások** – az OENY ablak, az Easy Drive szövegei, az új beállítások, a kormányzás varázsló és a telepítő magyarul is elérhető.
 
@@ -48,6 +49,7 @@
 - **OENY térkép villogása** – a parcellatérkép már nem villog. Korábban másodpercenként kétszer újrarajzolta magát, sok kis szomszédos parcellánál különösen zavaróan; a jármű jelölője most a keresés pillanatában rögzített pozíciót mutatja, és a térkép csak húzáskor, nagyításkor vagy kijelöléskor rajzolódik újra.
 - **OENY ablak érintőképernyőn** – a keresési méret melletti fel/le nyilak, a „Keresés itt” és az alsó gombok kétszer akkorák lettek. A méret értékére koppintva számbillentyűzet nyílik. A találati lista és a többi szöveg másfélszer nagyobb.
 - **ISOBUS nyomok PGN U-kanyarnál** – bekapcsolt U-kanyarnál a PGN már a forduló indításakor a következő nyom számát küldte, miközben a munkaeszköz még az aktuális nyomon dolgozott. Most a forduló végéig az aktuális nyomot küldi, és csak utána vált a következőre. Megszakított fordulónál az eredeti nyom marad.
+- **Régi (v5) táblák AB- és görbe vonalai** – a v5 a vonalakat az `ABLines.txt` és `CurveLines.txt` fájlban tárolta. A 6.3/6.4 még átalakította ezeket, a későbbi verziók azonban nem, így egy v5-ös tábla vonalak nélkül nyílt meg. Indításkor (a profilok automatikus átalakítása után) a program most minden ilyen táblát átalakít `TrackLines.txt`-re, és a tábla megnyitásakor is. A régi fájlok megmaradnak.
 
 ## Frissítés előtt olvasd el
 - **Munkaeszköz-eltolás:** ha eddig kézzel adtad hozzá az eltolást a fordulótávolsághoz, hogy a kasza ne vigye ki a kerítést most ez kétszer számít. Állítsd újra a fordulótávolságot.
@@ -55,6 +57,8 @@
 - **Irány szűrő:** magas érték késleltetést okoz (kb. 1/(1−szűrő) mérésnyit). Autosteerhez nem javasolt. Sorvezetőhöz igen.
 - **Kormányzás varázsló:** az „Alapértékek betöltése” új értékeket ír (Button, áramérzékelő 40%, P erősítés 15). Ha a saját beállításaidat használod, ne nyomd meg.
 - **Telepítő:** a „rögzítés a tálcán" opció csak Windows 7/8-on működik; Windows 10/11-en jobb gombbal rögzítsd kézzel.
+- **Telepítő – tűzfal:** a tűzfalszabályokhoz rendszergazdai jóváhagyás kell, ezért a telepítő egyszer rákérdez (UAC). Ha elutasítod, a telepítés folytatódik, és leírja, hogyan engedélyezd kézzel.
+- **Telepítő – automatikus indítás:** a régi verziók indítási bejegyzéseit csak kikapcsolja, nem törli; a Feladatkezelő > Indítási alkalmazások alatt visszakapcsolhatók.
 
 ## Ismert korlátok
 - A spirál forduló, a lefedettség-alapú automatikus kihagyás és az eltolás-alapú fordulóvonal **még nem járt éles terepen**, csak szimulátorban lett kipróbálva. Kérjük, jelezd a tapasztalatokat.
@@ -87,6 +91,7 @@ Marek (#1221), aortner (#1219), Richard Klasens, valamint a Weblate fordítók �
 - **OENY (HRSZ) parcel import** – a new "HRSZ (OENY)" button in the Boundary window finds the Hungarian cadastral parcels around the current position, you pick them on the map and use them as the boundary. If a boundary already exists it asks about replacing it; "Cancel" keeps the existing one and adds the parcels as an inner boundary. Needs internet and works in Hungary only.
 - **ISOBUS Tracks PGN** – a new PGN for sending tracks to ISOBUS (see `docs/pgn-protocol.md`).
 - **Windows installer** – first time there is an installer (`AgOpenGPS_<version>_Setup.exe`), in English and Hungarian. It installs per user, with optional desktop icon and an optional backup of `Documents\AgOpenGPS` (fields, settings) before installing.
+- **Installer – auto-start and firewall** – a new option starts AgOpenGPS with Windows (it starts AgIO itself). Startup entries of older AgOpenGPS / AgIO / GPS_Out versions are disabled, so an old copy does not start as well. Another option allows AgIO and GPS_Out through Windows Firewall on both private and public networks.
 - **Steer Wizard** – "Load Defaults" now selects the Button steer enable mode, turns on the Current Turn Sensor automatic cancelling at 40% and starts the proportional gain at 15. Every label, button and message of the wizard can now be translated; Hungarian is included.
 - **Hungarian translations** – the OENY window, the Easy Drive texts, the new settings, the Steer Wizard and the installer.
 
@@ -100,6 +105,7 @@ Marek (#1221), aortner (#1219), Richard Klasens, valamint a Weblate fordítók �
 - **OENY map flicker** – the parcel map no longer blinks. It used to redraw itself twice a second, which was especially noticeable with many small neighbouring parcels; the vehicle marker now shows the position at the moment of the search, and the map only redraws when you pan, zoom or select.
 - **OENY window on touch screens** – the up/down arrows next to the search size, "Search Here" and the bottom buttons are now twice as big. Tapping the size value opens the number keypad. The result list and the other text are 1.5 times larger.
 - **ISOBUS Tracks PGN during U-turns** – with U-turn enabled, the PGN switched to the next track number as soon as the turn was triggered, while the implement was still working the current pass. It now keeps sending the current pass until the turn completes, then switches to the next one. A cancelled turn keeps the original pass.
+- **AB and curve lines of old (v5) fields** – v5 stored lines in `ABLines.txt` and `CurveLines.txt`. 6.3/6.4 still converted them, but later versions did not, so a v5 field opened without any lines. On startup (after the automatic profile conversion) every such field is now converted to `TrackLines.txt`, and also when the field is opened. The old files are kept.
 
 ## Read before upgrading
 - **Implement offset:** if you used to add the offset to the U-turn distance by hand, it now counts twice. Reduce the turn distance.
@@ -107,6 +113,8 @@ Marek (#1221), aortner (#1219), Richard Klasens, valamint a Weblate fordítók �
 - **Heading filter:** a high value adds lag (about 1/(1−filter) fixes). Not recommended for autosteer.
 - **Steer Wizard:** "Load Defaults" writes new values (Button, current sensor 40%, P gain 15). If you use your own settings, do not press it.
 - **Installer:** the "pin to taskbar" option only works on Windows 7/8; on Windows 10/11 pin it by hand with a right click.
+- **Installer – firewall:** the firewall rules need administrator approval, so the installer asks once (UAC). If you decline, the install continues and explains how to allow them by hand.
+- **Installer – auto-start:** startup entries of old versions are only disabled, not deleted; they can be switched back on in Task Manager > Startup apps.
 
 ## Known limitations
 - The spiral turn, the coverage based auto-skip and the offset based turn line have **not been through real field trials**, only the simulator. Please report your experience.
