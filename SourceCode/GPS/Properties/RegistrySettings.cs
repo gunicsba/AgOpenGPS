@@ -54,6 +54,9 @@ namespace AgOpenGPS
         // Number of old format profiles that were converted automatically during this startup
         public static int autoConvertedProfileCount = 0;
 
+        // Number of old (v5) fields whose AB/curve lines were converted to TrackLines.txt during this startup
+        public static int autoConvertedFieldCount = 0;
+
         public static void Load()
         {
             try
@@ -141,6 +144,7 @@ namespace AgOpenGPS
             Log.CheckLogSize(Path.Combine(logsDirectory, "AgOpenGPS_Events_Log.txt"));
 
             AutoConvertOldProfiles();
+            AutoConvertOldFields();
 
             // Load Environment settings
             Properties.Settings.Default.Load();
@@ -197,6 +201,21 @@ namespace AgOpenGPS
             catch (Exception ex)
             {
                 Log.EventWriter("Auto convert of old profiles failed: " + ex);
+            }
+        }
+
+        // Fields from v5 keep their lines in ABLines.txt/CurveLines.txt, which this version no longer reads.
+        // Cheap when there is nothing to do (one File.Exists per field), so it runs on every start and
+        // also picks up old fields copied in later. Already converted fields are skipped.
+        private static void AutoConvertOldFields()
+        {
+            try
+            {
+                autoConvertedFieldCount = IO.LegacyTrackFiles.ConvertAllFields(fieldsDirectory);
+            }
+            catch (Exception ex)
+            {
+                Log.EventWriter("Auto convert of old fields failed: " + ex);
             }
         }
 

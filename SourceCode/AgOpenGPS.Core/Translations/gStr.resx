@@ -261,6 +261,9 @@ The order you push them will be the order they appear on the menu from bottom up
   <data name="gsAuto" xml:space="preserve">
     <value>Auto</value>
   </data>
+  <data name="gsAutoConvertedFields" xml:space="preserve">
+    <value>AB and curve lines of {0} old field(s) were converted.</value>
+  </data>
   <data name="gsAutoConvertedProfiles" xml:space="preserve">
     <value>{0} old profile(s) were converted automatically.</value>
   </data>

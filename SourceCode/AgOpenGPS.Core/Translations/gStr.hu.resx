@@ -261,6 +261,9 @@ A választott sorrend alapján fognak megjelenni alulról felfelé.</value>
   <data name="gsAuto" xml:space="preserve">
     <value>Automata</value>
   </data>
+  <data name="gsAutoConvertedFields" xml:space="preserve">
+    <value>{0} régi tábla AB- és görbe vonalai átalakítva.</value>
+  </data>
   <data name="gsAutoConvertedProfiles" xml:space="preserve">
     <value>{0} régi profil automatikusan átalakítva.</value>
   </data>

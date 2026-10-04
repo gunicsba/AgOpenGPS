@@ -581,10 +581,14 @@ namespace AgOpenGPS
                     recovered + " profile was recovered from .last backup because the main file was unreadable.");
             }
 
-            if (RegistrySettings.autoConvertedProfileCount > 0)
+            if (RegistrySettings.autoConvertedProfileCount > 0 || RegistrySettings.autoConvertedFieldCount > 0)
             {
-                TimedMessageBox(4000, gStr.gsConversionComplete,
-                    string.Format(gStr.gsAutoConvertedProfiles, RegistrySettings.autoConvertedProfileCount));
+                var lines = new List<string>();
+                if (RegistrySettings.autoConvertedProfileCount > 0)
+                    lines.Add(string.Format(gStr.gsAutoConvertedProfiles, RegistrySettings.autoConvertedProfileCount));
+                if (RegistrySettings.autoConvertedFieldCount > 0)
+                    lines.Add(string.Format(gStr.gsAutoConvertedFields, RegistrySettings.autoConvertedFieldCount));
+                TimedMessageBox(4000, gStr.gsConversionComplete, string.Join("\r\n", lines));
             }
 
             // Check if any profile is missing (registry empty OR file doesn't exist)

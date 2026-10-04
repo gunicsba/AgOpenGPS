@@ -398,6 +398,15 @@ namespace AgOpenGPS.Core.Translations {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to AB and curve lines of {0} old field(s) were converted..
+        /// </summary>
+        public static string gsAutoConvertedFields {
+            get {
+                return ResourceManager.GetString("gsAutoConvertedFields", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to {0} old profile(s) were converted automatically..
         /// </summary>
         public static string gsAutoConvertedProfiles {

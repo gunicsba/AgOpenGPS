@@ -217,6 +217,12 @@ namespace AgOpenGPS
         {
             var dir = GetFieldDir();
 
+            // Old field copied in after startup: convert its AB/curve lines first
+            if (LegacyTrackFiles.NeedsConversion(dir))
+            {
+                TryLoad("ABLines.txt / CurveLines.txt", LoadCriticality.Optional, () => LegacyTrackFiles.Convert(dir), out _);
+            }
+
             List<CTrk> tracks;
             if (!TryLoad("TrackLines.txt", LoadCriticality.Optional, () => TrackFiles.Load(dir), out tracks))
             {
