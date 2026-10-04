@@ -1,11 +1,14 @@
-# AgOpenGPS – tracksForTC közösségi build
-
-**🇬🇧 English below ⬇** · [English version](#english)
+# AgOpenGPS – tracksForTC közösségi build / community build
 
 > [!WARNING]
-> **Ez egy NEM HIVATALOS, közösségi build.** Nem az AgOpenGPS csapat adta ki. A hivatalos 6.8.6 kiadásra, a `develop` ág még ki nem adott javításaira és a `tracksForTC` ág saját fejlesztéseire épül. Használat előtt olvasd el az alábbi listát, és először szimulátorban vagy biztonságos körülmények között próbáld ki. A hibákat a fork oldalán jelezd, **ne** a hivatalos AgOpenGPS csapatnak.
+> **NEM HIVATALOS közösségi build – UNOFFICIAL community build.** Nem az AgOpenGPS csapat adta ki, a hibákat itt jelezd. · Not released by the AgOpenGPS team, report problems on this fork.
 
----
+**Letöltés / Download:** lent az *Assets* alatt / below under *Assets* – `AgOpenGPS_<verzió>_Setup.exe` (telepítő / installer) vagy / or `AgOpenGPS_<verzió>.zip`.
+
+<details>
+<summary><b>🇭🇺 Magyar leírás – kattints a kinyitáshoz</b></summary>
+
+**Ez egy NEM HIVATALOS, közösségi build.** Nem az AgOpenGPS csapat adta ki. A hivatalos 6.8.6 kiadásra, a `develop` ág még ki nem adott javításaira és a `tracksForTC` ág saját fejlesztéseire épül. Használat előtt olvasd el az alábbi listát, és először szimulátorban vagy biztonságos körülmények között próbáld ki. A hibákat a fork oldalán jelezd, **ne** a hivatalos AgOpenGPS csapatnak.
 
 ## Újdonságok
 
@@ -68,14 +71,12 @@
 ## Köszönet
 Marek (#1221), aortner (#1219), Richard Klasens, valamint a Weblate fordítók és az AgOpenGPS közösség.
 
----
+</details>
 
-<a id="english"></a>
+<details>
+<summary><b>🇬🇧 English release notes – click to expand</b></summary>
 
-# AgOpenGPS – tracksForTC community build
-
-> [!WARNING]
-> **This is an UNOFFICIAL community build.** It is not released by the AgOpenGPS team. It is based on the official 6.8.6 release, the not-yet-released fixes on the `develop` branch, and the own work on the `tracksForTC` branch. Read the lists below before using it, and try it in the simulator or under safe conditions first. Report problems on this fork, **not** to the official AgOpenGPS team.
+**This is an UNOFFICIAL community build.** It is not released by the AgOpenGPS team. It is based on the official 6.8.6 release, the not-yet-released fixes on the `develop` branch, and the own work on the `tracksForTC` branch. Read the lists below before using it, and try it in the simulator or under safe conditions first. Report problems on this fork, **not** to the official AgOpenGPS team.
 
 ## What's new
 
@@ -124,3 +125,4 @@ Marek (#1221), aortner (#1219), Richard Klasens, valamint a Weblate fordítók �
 ## Credits
 Marek (#1221), aortner (#1219), Richard Klasens, plus the Weblate translators and the AgOpenGPS community.
 
+</details>
