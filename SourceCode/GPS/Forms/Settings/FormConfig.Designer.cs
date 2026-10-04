@@ -7943,6 +7943,7 @@ namespace AgOpenGPS
             this.tabDisplay.Padding = new System.Windows.Forms.Padding(3);
             this.tabDisplay.Size = new System.Drawing.Size(859, 584);
             this.tabDisplay.TabIndex = 25;
+            this.tabDisplay.Text = "fDisp";
             this.tabDisplay.Enter += new System.EventHandler(this.tabDisplay_Enter);
             this.tabDisplay.Leave += new System.EventHandler(this.tabDisplay_Leave);
             // 
