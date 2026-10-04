@@ -2429,7 +2429,8 @@ namespace AgOpenGPS
                 ScreenTextures.MenuShowHide.Draw(menuShowHideCoord, menuShowHideCoord + sizeDelta);
 
                 center += 50;
-                font.DrawText(center - 56, hite - 72, "x" + gridToolSpacing.ToString(), 1);
+                if (isDebugOn)
+                    font.DrawText(center - 56, hite - 72, "x" + gridToolSpacing.ToString(), 1);
             }
 
             center = oglMain.Width / -2 + 10;
