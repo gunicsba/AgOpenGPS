@@ -563,7 +563,76 @@ namespace AgOpenGPS.Forms.Field
                 }
             }
 
+            DrawExistingField(g);
             DrawVehicleMarker(g);
+            DrawSelectionTotal(g);
+        }
+
+        // Overlays the field's current boundaries and visible tracks, so the parcels can be compared against them.
+        private void DrawExistingField(Graphics g)
+        {
+            if (mf == null) return;
+
+            using (var bndPen = new Pen(Color.DarkGreen, 2.5f) { DashStyle = DashStyle.Dash })
+            {
+                foreach (var bnd in mf.bnd.bndList)
+                {
+                    if (bnd.fenceLine.Count < 3) continue;
+                    PointF[] points = bnd.fenceLine.Select(p => ToScreen(new vec2(p.easting, p.northing))).ToArray();
+                    g.DrawPolygon(bndPen, points);
+                }
+            }
+
+            using (var trkPen = new Pen(Color.Magenta, 2f))
+            {
+                foreach (var trk in mf.trk.gArr)
+                {
+                    if (!trk.isVisible) continue;
+
+                    if (trk.mode == TrackMode.AB)
+                    {
+                        // AB lines are infinite in the field; extend them well past A and B like the main view does.
+                        const double extend = 2000;
+                        var a = new vec2(trk.ptA.easting - Math.Sin(trk.heading) * extend, trk.ptA.northing - Math.Cos(trk.heading) * extend);
+                        var b = new vec2(trk.ptB.easting + Math.Sin(trk.heading) * extend, trk.ptB.northing + Math.Cos(trk.heading) * extend);
+                        g.DrawLine(trkPen, ToScreen(a), ToScreen(b));
+                    }
+                    else if (trk.curvePts != null && trk.curvePts.Count >= 2)
+                    {
+                        PointF[] points = trk.curvePts.Select(p => ToScreen(new vec2(p.easting, p.northing))).ToArray();
+                        g.DrawLines(trkPen, points);
+                    }
+                }
+            }
+        }
+
+        // Bottom-left box with the number and total area of the checked parcels.
+        private void DrawSelectionTotal(Graphics g)
+        {
+            int count = 0;
+            double totalHa = 0;
+            for (int i = 0; i < _parcels.Count && i < clbParcels.Items.Count; i++)
+            {
+                if (!clbParcels.GetItemChecked(i)) continue;
+                count++;
+                totalHa += _parcels[i].AreaHa;
+            }
+
+            if (count == 0) return;
+
+            string text = $"{gStr.gsSelected}: {count}   {gStr.gsTotal}: {totalHa:0.00} ha";
+            using (var font = new Font("Tahoma", 14F, FontStyle.Bold))
+            {
+                SizeF size = g.MeasureString(text, font);
+                var box = new RectangleF(10, pnlPreview.ClientSize.Height - size.Height - 18, size.Width + 16, size.Height + 8);
+                using (var bg = new SolidBrush(Color.FromArgb(220, Color.White)))
+                using (var border = new Pen(Color.OrangeRed, 2f))
+                {
+                    g.FillRectangle(bg, box);
+                    g.DrawRectangle(border, box.X, box.Y, box.Width, box.Height);
+                }
+                g.DrawString(text, font, Brushes.Black, box.X + 8, box.Y + 4);
+            }
         }
 
         // Draws the tractor's position + heading (as of the search) as a yellow arrow on top of the parcels.
