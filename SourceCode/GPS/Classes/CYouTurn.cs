@@ -112,21 +112,21 @@ namespace AgOpenGPS
         {
             mf = _f;
 
-            uturnDistanceFromBoundary = Properties.Settings.Default.set_youTurnDistanceFromBoundary;
+            uturnDistanceFromBoundary = Properties.ToolSettings.Default.set_youTurnDistanceFromBoundary;
 
             //how far before or after boundary line should turn happen
-            youTurnStartOffset = Properties.Settings.Default.set_youTurnExtensionLength;
+            youTurnStartOffset = Properties.ToolSettings.Default.set_youTurnExtensionLength;
 
-            rowSkipsWidth = Properties.Settings.Default.set_youSkipWidth;
+            rowSkipsWidth = Properties.ToolSettings.Default.set_youSkipWidth;
             Set_Alternate_skips();
 
             ytList.Capacity = 128;
 
-            youTurnRadius = Properties.Settings.Default.set_youTurnRadius;
+            youTurnRadius = Properties.ToolSettings.Default.set_youTurnRadius;
 
-            uTurnStyle = Properties.Settings.Default.set_uTurnStyle;
+            uTurnStyle = Properties.ToolSettings.Default.set_uTurnStyle;
 
-            uTurnSmoothing = (int)Properties.Settings.Default.setAS_uTurnSmoothing;
+            uTurnSmoothing = (int)Properties.ToolSettings.Default.setAS_uTurnSmoothing;
         }
 
         //the track we are on counts as worked when the sections are on
@@ -232,7 +232,7 @@ namespace AgOpenGPS
                 // Mark the current track as worked only if sections were actually on
                 MarkCurrentTrackWorked();
 
-                rowSkipsWidth = GetNextNotWorkedTrack(isTurnLeft, Properties.Settings.Default.set_youSkipWidth, false);
+                rowSkipsWidth = GetNextNotWorkedTrack(isTurnLeft, Properties.ToolSettings.Default.set_youSkipWidth, false);
                 if (isCoveragePending)
                 {
                     youTurnPhase = 0;
@@ -277,7 +277,7 @@ namespace AgOpenGPS
                 // Mark the current track as worked only if sections were actually on
                 MarkCurrentTrackWorked();
 
-                rowSkipsWidth = GetNextNotWorkedTrack(isTurnLeft, Properties.Settings.Default.set_youSkipWidth, true);
+                rowSkipsWidth = GetNextNotWorkedTrack(isTurnLeft, Properties.ToolSettings.Default.set_youSkipWidth, true);
                 if (isCoveragePending)
                 {
                     youTurnPhase = 0;
@@ -2587,7 +2587,7 @@ namespace AgOpenGPS
         /// <summary> Back to the skip width chosen by the user, the spiral starts over from it </summary>
         public void ResetSpiralSkips()
         {
-            rowSkipsWidth = Properties.Settings.Default.set_youSkipWidth;
+            rowSkipsWidth = Properties.ToolSettings.Default.set_youSkipWidth;
             Set_Alternate_skips();
             mf.UpdateSkipButton();
         }
@@ -2691,11 +2691,11 @@ namespace AgOpenGPS
             if (skipMode == SkipMode.IgnoreWorkedTracks && !IsSpiralTurn)
             {
                 MarkCurrentTrackWorked();
-                rowSkipsWidth = GetNextNotWorkedTrack(!isTurnRight, Properties.Settings.Default.set_youSkipWidth,
+                rowSkipsWidth = GetNextNotWorkedTrack(!isTurnRight, Properties.ToolSettings.Default.set_youSkipWidth,
                     mf.trk.gArr[mf.trk.idx].mode == TrackMode.AB);
 
                 //a button press can't wait for the coverage, use what is known
-                if (isCoveragePending) rowSkipsWidth = Properties.Settings.Default.set_youSkipWidth;
+                if (isCoveragePending) rowSkipsWidth = Properties.ToolSettings.Default.set_youSkipWidth;
             }
 
             //grab the vehicle widths and offsets
