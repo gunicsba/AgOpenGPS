@@ -54,6 +54,7 @@
 - **OENY ablak érintőképernyőn** – a keresési méret melletti fel/le nyilak, a „Keresés itt” és az alsó gombok kétszer akkorák lettek. A méret értékére koppintva számbillentyűzet nyílik. A találati lista és a többi szöveg másfélszer nagyobb.
 - **ISOBUS nyomok PGN U-kanyarnál** – bekapcsolt U-kanyarnál a PGN már a forduló indításakor a következő nyom számát küldte, miközben a munkaeszköz még az aktuális nyomon dolgozott. Most a forduló végéig az aktuális nyomot küldi, és csak utána vált a következőre. Megszakított fordulónál az eredeti nyom marad.
 - **Régi (v5) táblák AB- és görbe vonalai** – a v5 a vonalakat az `ABLines.txt` és `CurveLines.txt` fájlban tárolta. A 6.3/6.4 még átalakította ezeket, a későbbi verziók azonban nem, így egy v5-ös tábla vonalak nélkül nyílt meg. Indításkor (a profilok automatikus átalakítása után) a program most minden ilyen táblát átalakít `TrackLines.txt`-re, és a tábla megnyitásakor is. A régi fájlok megmaradnak.
+- **Forduló beállításai munkaeszközönként** – a 6.9-ben a forduló beállításai minden profilban közösek lettek, így ha az egyik profilban átírtad például a táblaszéltől való távolságot, az összes többiben is megváltozott. Most újra profilonként tárolódnak, a munkaeszköz-profilban: táblaszéltől való távolság, kihagyás, fordulási sugár, hosszabbítás, stílus, simítás és kompenzáció. Munkaeszköz váltásakor az új értékek azonnal érvényesek, a fordulóvonal újraépül.
 
 ## Frissítés előtt olvasd el
 - **Munkaeszköz-eltolás:** ha eddig kézzel adtad hozzá az eltolást a fordulótávolsághoz, hogy a kasza ne vigye ki a kerítést most ez kétszer számít. Állítsd újra a fordulótávolságot.
@@ -63,6 +64,7 @@
 - **Telepítő:** a „rögzítés a tálcán" opció csak Windows 7/8-on működik; Windows 10/11-en jobb gombbal rögzítsd kézzel.
 - **Telepítő – tűzfal:** a tűzfalszabályokhoz rendszergazdai jóváhagyás kell, ezért a telepítő egyszer rákérdez (UAC). Ha elutasítod, a telepítés folytatódik, és leírja, hogyan engedélyezd kézzel.
 - **Telepítő – automatikus indítás:** a régi verziók indítási bejegyzéseit csak kikapcsolja, nem törli; a Feladatkezelő > Indítási alkalmazások alatt visszakapcsolhatók.
+- **Forduló beállításai:** frissítés után minden munkaeszköz a mostani (közös) forduló-értékekkel indul, semmi sem változik. Utána munkaeszközönként külön állíthatók.
 
 ## Ismert korlátok
 - A spirál forduló, a lefedettség-alapú automatikus kihagyás és az eltolás-alapú fordulóvonal **még nem járt éles terepen**, csak szimulátorban lett kipróbálva. Kérjük, jelezd a tapasztalatokat.
@@ -109,6 +111,7 @@ Marek (#1221), aortner (#1219), Richard Klasens, valamint a Weblate fordítók �
 - **OENY window on touch screens** – the up/down arrows next to the search size, "Search Here" and the bottom buttons are now twice as big. Tapping the size value opens the number keypad. The result list and the other text are 1.5 times larger.
 - **ISOBUS Tracks PGN during U-turns** – with U-turn enabled, the PGN switched to the next track number as soon as the turn was triggered, while the implement was still working the current pass. It now keeps sending the current pass until the turn completes, then switches to the next one. A cancelled turn keeps the original pass.
 - **AB and curve lines of old (v5) fields** – v5 stored lines in `ABLines.txt` and `CurveLines.txt`. 6.3/6.4 still converted them, but later versions did not, so a v5 field opened without any lines. On startup (after the automatic profile conversion) every such field is now converted to `TrackLines.txt`, and also when the field is opened. The old files are kept.
+- **U-turn settings per implement** – 6.9 made the U-turn settings shared by all profiles, so changing e.g. the distance from the boundary in one profile changed it in every other one. They are stored per profile again, in the tool profile: distance from boundary, skip width, turn radius, extension length, style, smoothing and compensation. Switching the tool applies its values right away and rebuilds the turn line.
 
 ## Read before upgrading
 - **Implement offset:** if you used to add the offset to the U-turn distance by hand, it now counts twice. Reduce the turn distance.
@@ -118,6 +121,7 @@ Marek (#1221), aortner (#1219), Richard Klasens, valamint a Weblate fordítók �
 - **Installer:** the "pin to taskbar" option only works on Windows 7/8; on Windows 10/11 pin it by hand with a right click.
 - **Installer – firewall:** the firewall rules need administrator approval, so the installer asks once (UAC). If you decline, the install continues and explains how to allow them by hand.
 - **Installer – auto-start:** startup entries of old versions are only disabled, not deleted; they can be switched back on in Task Manager > Startup apps.
+- **U-turn settings:** after upgrading every tool starts with the current (shared) U-turn values, so nothing changes. After that they can be set per tool.
 
 ## Known limitations
 - The spiral turn, the coverage based auto-skip and the offset based turn line have **not been through real field trials**, only the simulator. Please report your experience.
