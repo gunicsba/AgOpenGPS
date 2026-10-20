@@ -38,8 +38,16 @@ Name: "hungarian"; MessagesFile: "compiler:Languages\Hungarian.isl"
 
 [CustomMessages]
 english.PinTaskbar=Pin {#MyAppName} to the taskbar (Windows 7/8 only)
-english.BackupData=Back up my existing Documents\AgOpenGPS folder (fields, settings) before installing
-english.BackupGroup=Backup:
+english.BackupGroup=Back up the Documents\AgOpenGPS folder before installing:
+english.BackupSettings=Settings (vehicle, tool and environment profiles, AgIO) - quick
+english.BackupFields=Fields (boundaries, tracks, worked area) - can take a while with many fields
+english.BackupCaption=Backing up your data
+english.BackupDescription=The installation continues when the backup is done.
+english.BackupSettingsStatus=Backing up the settings...
+english.BackupFieldsStatus=Backing up the fields. With many fields this can take a few minutes...
+english.BackupSettingsFailed=The backup of the settings could not be made.%n%nContinue the installation without it?
+english.BackupFieldsFailed=The backup of the fields could not be made.%n%nContinue the installation without it?
+english.BackupStopped=The installation was stopped because the backup could not be made. Nothing was changed.
 english.PinTaskbarNote=Note: Windows 10/11 no longer allows installers to pin apps to the taskbar automatically. After launching {#MyAppName}, right-click its taskbar icon and choose 'Pin to taskbar'.
 english.StartupGroup=Windows startup:
 english.AutoStart=Start {#MyAppName} automatically when Windows starts (older versions are removed from startup)
@@ -47,8 +55,16 @@ english.FirewallGroup=Network:
 english.Firewall=Allow AgIO and GPS_Out through Windows Firewall on private and public networks (asks for administrator approval)
 english.FirewallFailed=The Windows Firewall rules for AgIO and GPS_Out could not be added (administrator approval was declined or failed).%n%nIf AgIO does not receive data from the modules, allow AgIO.exe and GPS_Out.exe in Windows Security > Firewall > Allow an app through firewall, for both Private and Public networks.
 hungarian.PinTaskbar={#MyAppName} rögzítése a tálcán (csak Windows 7/8)
-hungarian.BackupData=A meglévő Dokumentumok\AgOpenGPS mappa (táblák, beállítások) biztonsági mentése telepítés előtt
-hungarian.BackupGroup=Biztonsági mentés:
+hungarian.BackupGroup=A Dokumentumok\AgOpenGPS mappa biztonsági mentése telepítés előtt:
+hungarian.BackupSettings=Beállítások (jármű-, eszköz- és környezeti profilok, AgIO) - gyors
+hungarian.BackupFields=Táblák (határok, nyomvonalak, megművelt terület) - sok táblánál tovább tarthat
+hungarian.BackupCaption=Biztonsági mentés
+hungarian.BackupDescription=A telepítés a mentés után folytatódik.
+hungarian.BackupSettingsStatus=A beállítások mentése...
+hungarian.BackupFieldsStatus=A táblák mentése. Sok táblánál ez néhány percig is eltarthat...
+hungarian.BackupSettingsFailed=A beállítások mentése nem sikerült.%n%nFolytatja a telepítést mentés nélkül?
+hungarian.BackupFieldsFailed=A táblák mentése nem sikerült.%n%nFolytatja a telepítést mentés nélkül?
+hungarian.BackupStopped=A telepítés leállt, mert a biztonsági mentés nem sikerült. Semmi sem változott.
 hungarian.PinTaskbarNote=Megjegyzés: a Windows 10/11 már nem engedi, hogy a telepítők automatikusan a tálcára rögzítsenek alkalmazásokat. Az {#MyAppName} elindítása után kattintson jobb gombbal a tálcán lévő ikonjára, és válassza a „Rögzítés a tálcán” lehetőséget.
 hungarian.StartupGroup=Windows indítás:
 hungarian.AutoStart=Az {#MyAppName} automatikus indítása a Windows indulásakor (a régebbi verziók kikerülnek az automatikus indításból)
@@ -59,12 +75,15 @@ hungarian.FirewallFailed=Az AgIO és a GPS_Out Windows tűzfalszabályait nem si
 [Tasks]
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: checkedonce
 Name: "pintaskbar"; Description: "{cm:PinTaskbar}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: checkedonce
-Name: "backupdata"; Description: "{cm:BackupData}"; GroupDescription: "{cm:BackupGroup}"; Flags: checkedonce
+Name: "backupsettings"; Description: "{cm:BackupSettings}"; GroupDescription: "{cm:BackupGroup}"; Flags: checkedonce
+Name: "backupfields"; Description: "{cm:BackupFields}"; GroupDescription: "{cm:BackupGroup}"; Flags: checkedonce
 Name: "autostart"; Description: "{cm:AutoStart}"; GroupDescription: "{cm:StartupGroup}"; Flags: checkedonce
 Name: "firewall"; Description: "{cm:Firewall}"; GroupDescription: "{cm:FirewallGroup}"
 
 [Files]
 Source: "{#MyPublishDir}\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
+; Only used by the backup before installing, extracted to {tmp} by the [Code] section.
+Source: "InstallerBackup.ps1"; Flags: dontcopy
 
 [Icons]
 Name: "{group}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"
@@ -83,20 +102,67 @@ begin
   Result := ExpandConstant('{userdocs}\AgOpenGPS');
 end;
 
-procedure BackupExistingData();
 var
-  DataDir, ZipPath, DateStr: String;
+  BackupPage: TOutputMarqueeProgressWizardPage;
+
+procedure InitializeWizard();
+begin
+  BackupPage := CreateOutputMarqueeProgressPage(CustomMessage('BackupCaption'), CustomMessage('BackupDescription'));
+end;
+
+// Zips part of the data folder into Documents with InstallerBackup.ps1. Filter is passed on to
+// the script (-Include Fields or -Exclude Fields). Returns False when the backup failed.
+// Exec keeps processing window messages while it waits, so the page stays drawn and the
+// marquee keeps moving during a long backup.
+function RunBackup(const Status, ZipName, Filter: String): Boolean;
+var
+  ZipPath: String;
   ErrCode: Integer;
 begin
-  DataDir := GetDataFolder();
-  if DirExists(DataDir) then
-  begin
-    DateStr := GetDateTimeString('yyyymmdd_hhnnss', #0, #0);
-    ZipPath := ExpandConstant('{userdocs}') + '\AgOpenGPS_backup_' + DateStr + '.zip';
-    Exec('powershell.exe',
-      '-NoProfile -ExecutionPolicy Bypass -Command "Compress-Archive -Path ''' + DataDir + '\*'' -DestinationPath ''' + ZipPath + ''' -Force"',
-      '', SW_HIDE, ewWaitUntilTerminated, ErrCode);
+  ZipPath := ExpandConstant('{userdocs}\') + ZipName;
+  BackupPage.SetText(Status, ZipPath);
+  BackupPage.Animate;
+  ErrCode := -1;
+  Result := Exec('powershell.exe',
+    '-NoProfile -ExecutionPolicy Bypass -File "' + ExpandConstant('{tmp}\InstallerBackup.ps1') + '"' +
+    ' -Source "' + GetDataFolder() + '" -ZipPath "' + ZipPath + '" ' + Filter,
+    '', SW_HIDE, ewWaitUntilTerminated, ErrCode) and (ErrCode = 0);
+  Log('Backup ' + ZipPath + ' finished, code ' + IntToStr(ErrCode));
+end;
+
+// The backup runs here and not at ssInstall, so a failed backup can still stop the installation
+// before anything is changed. Settings and fields are separate zips and separate tasks: the
+// settings are small and quick, the fields can be large.
+function PrepareToInstall(var NeedsRestart: Boolean): String;
+var
+  DateStr: String;
+  DoSettings, DoFields, StopInstall: Boolean;
+begin
+  Result := '';
+  DoSettings := IsTaskSelected('backupsettings') and DirExists(GetDataFolder());
+  DoFields := IsTaskSelected('backupfields') and DirExists(GetDataFolder() + '\Fields');
+  if not (DoSettings or DoFields) then
+    Exit;
+
+  DateStr := GetDateTimeString('yyyymmdd_hhnnss', #0, #0);
+  ExtractTemporaryFile('InstallerBackup.ps1');
+  StopInstall := False;
+
+  BackupPage.Show;
+  try
+    if DoSettings then
+      if not RunBackup(CustomMessage('BackupSettingsStatus'), 'AgOpenGPS_backup_settings_' + DateStr + '.zip', '-Exclude Fields') then
+        StopInstall := (SuppressibleMsgBox(CustomMessage('BackupSettingsFailed'), mbError, MB_YESNO, IDYES) = IDNO);
+
+    if DoFields and (not StopInstall) then
+      if not RunBackup(CustomMessage('BackupFieldsStatus'), 'AgOpenGPS_backup_fields_' + DateStr + '.zip', '-Include Fields') then
+        StopInstall := (SuppressibleMsgBox(CustomMessage('BackupFieldsFailed'), mbError, MB_YESNO, IDYES) = IDNO);
+  finally
+    BackupPage.Hide;
   end;
+
+  if StopInstall then
+    Result := CustomMessage('BackupStopped');
 end;
 
 // Windows 10 (1607+) and 11 removed the ability for installers to pin apps to the
@@ -259,8 +325,6 @@ end;
 
 procedure CurStepChanged(CurStep: TSetupStep);
 begin
-  if (CurStep = ssInstall) and IsTaskSelected('backupdata') then
-    BackupExistingData();
   if (CurStep = ssPostInstall) and IsTaskSelected('pintaskbar') then
     TryPinToTaskbar(ExpandConstant('{app}\{#MyAppExeName}'));
   if CurStep = ssPostInstall then
