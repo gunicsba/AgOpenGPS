@@ -9,7 +9,7 @@ namespace AgOpenGPS.Classes.Oeny
 {
     // Fetches cadastral parcels from the geoshop.hu web map's coverage preview endpoint.
     // For a query polygon (EOV) it returns every intersecting parcel with its HRSZ, town and outline.
-    // The outlines are generalized (rounded to 0.1 m), and the query area is limited to 1.5 km².
+    // The outlines are generalized (rounded to 0.1 m), and the query area is limited per product.
     public class GeoshopClient
     {
         private const string CoverageUrl = "https://map.geoshop.hu/api/coverage/polygon";
@@ -17,11 +17,12 @@ namespace AgOpenGPS.Classes.Oeny
         private const string RefererUrl = "https://geoshop.hu/";
         // Public key the geoshop.hu web map sends with every request.
         private const string ApiKey = "riNqFyhQiaNal4CuXgrxm202dnI3qX";
-        // "Földrészlet" product: parcels with buildings, sub-parcels and quality classes.
-        private const int ProductId = 63;
+        // "Földrészlet" products, both queried in one request: 62 = belterület (inner town, max 1.0 km²),
+        // 63 = külterület (outer area, max 1.5 km²).
+        private static readonly int[] ProductIds = { 62, 63 };
 
-        // Largest search square (km) whose area stays under the endpoint's 1.5 km² limit.
-        public const decimal MaxSearchSizeKm = 1.2M;
+        // Largest search square (km) whose area stays within the smallest limit (belterület, 1.0 km²).
+        public const decimal MaxSearchSizeKm = 1.0M;
 
         private static readonly HttpClient _client = new HttpClient { Timeout = TimeSpan.FromSeconds(30) };
 
@@ -35,10 +36,24 @@ namespace AgOpenGPS.Classes.Oeny
                 new JArray(minEasting, maxNorthing),
                 new JArray(minEasting, minNorthing));
 
+            var addFeeParams = new JArray();
+            var productChoices = new JArray();
+            foreach (int productId in ProductIds)
+            {
+                addFeeParams.Add(new JObject { ["productID"] = productId, ["addFeeUsers"] = 0, ["addFeeYears"] = 0 });
+                productChoices.Add(new JObject
+                {
+                    ["productID"] = productId,
+                    ["choices"] = new JArray(
+                        Choice("csomag", "földrészlet és épület+alrészlet+minőségi osztály"),
+                        Choice("fileformat", "dxf"))
+                });
+            }
+
             var body = new JObject
             {
-                ["addFeeParams"] = new JArray(new JObject { ["productID"] = ProductId, ["addFeeUsers"] = 0, ["addFeeYears"] = 0 }),
-                ["productIDs"] = new JArray(ProductId),
+                ["addFeeParams"] = addFeeParams,
+                ["productIDs"] = JArray.FromObject(ProductIds),
                 ["detailLevel"] = 1,
                 ["queryPolygon"] = new JObject
                 {
@@ -47,13 +62,7 @@ namespace AgOpenGPS.Classes.Oeny
                     // new JArray(someJArray) is the copy constructor and would not add a nesting level.
                     ["coordinates"] = new JArray { new JArray { ring } }
                 },
-                ["productChoices"] = new JArray(new JObject
-                {
-                    ["productID"] = ProductId,
-                    ["choices"] = new JArray(
-                        Choice("csomag", "földrészlet és épület+alrészlet+minőségi osztály"),
-                        Choice("fileformat", "dxf"))
-                })
+                ["productChoices"] = productChoices
             };
 
             using (var request = new HttpRequestMessage(HttpMethod.Post, CoverageUrl))
@@ -88,10 +97,13 @@ namespace AgOpenGPS.Classes.Oeny
 
             foreach (JToken product in JArray.Parse(json))
             {
-                // productStatus 0 = ok, 1 = area over the 1.5 km² limit, others (e.g. no coverage) just have no parcels.
+                // productStatus 0 = ok, 1 = area over the product's limit, others (e.g. no coverage) just have no parcels.
                 int status = product.Value<int?>("productStatus") ?? 0;
                 if (status == 1)
-                    throw new InvalidOperationException("GeoShop refused the query: the search area is over 1.5 km². Use a smaller search size.");
+                {
+                    double maxArea = product.Value<double?>("maximumQueryableArea") ?? 0;
+                    throw new InvalidOperationException($"GeoShop refused the query: the search area is over {maxArea:0.0} km². Use a smaller search size.");
+                }
 
                 if (!(product["discreteProducts"] is JArray items)) continue;
 
