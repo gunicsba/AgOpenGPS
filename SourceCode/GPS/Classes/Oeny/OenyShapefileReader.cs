@@ -16,6 +16,8 @@ namespace AgOpenGPS.Classes.Oeny
         {
             public string Hrsz;
             public string KshKod;
+            // Set directly by sources that return the town name (GeoShop); otherwise looked up from KshKod.
+            public string TownName;
             // Rings in raw EOV meters: (Easting, Northing) per point, first ring is the outer boundary.
             public List<List<(double Easting, double Northing)>> Rings = new List<List<(double Easting, double Northing)>>();
         }

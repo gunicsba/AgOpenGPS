@@ -435,7 +435,17 @@ namespace AgOpenGPS
 
         private void btnOenyImport_Click(object sender, EventArgs e)
         {
-            using (var form = new FormOenyImport(mf))
+            ShowParcelImport(FormOenyImport.ParcelSource.Oeny);
+        }
+
+        private void btnGeoshopImport_Click(object sender, EventArgs e)
+        {
+            ShowParcelImport(FormOenyImport.ParcelSource.Geoshop);
+        }
+
+        private void ShowParcelImport(FormOenyImport.ParcelSource source)
+        {
+            using (var form = new FormOenyImport(mf, source))
             {
                 form.ShowDialog(this);
             }

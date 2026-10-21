@@ -46,6 +46,7 @@
             this.btnLoadMultiBoundaryFromGE = new System.Windows.Forms.Button();
             this.btnBingMaps = new System.Windows.Forms.Button();
             this.btnOenyImport = new System.Windows.Forms.Button();
+            this.btnGeoshopImport = new System.Windows.Forms.Button();
             this.btnAdd = new System.Windows.Forms.Button();
             this.btnCancel = new System.Windows.Forms.Button();
             this.btnOpenGoogleEarth = new System.Windows.Forms.Button();
@@ -141,6 +142,7 @@
             this.panelChoose.Controls.Add(this.btnGetKML);
             this.panelChoose.Controls.Add(this.btnDriveOrExt);
             this.panelChoose.Controls.Add(this.btnOenyImport);
+            this.panelChoose.Controls.Add(this.btnGeoshopImport);
             this.panelChoose.Location = new System.Drawing.Point(619, 6);
             this.panelChoose.Name = "panelChoose";
             this.panelChoose.Size = new System.Drawing.Size(217, 298);
@@ -262,6 +264,21 @@
             this.btnOenyImport.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.btnOenyImport.UseVisualStyleBackColor = true;
             this.btnOenyImport.Click += new System.EventHandler(this.btnOenyImport_Click);
+            //
+            // btnGeoshopImport
+            //
+            this.btnGeoshopImport.FlatAppearance.BorderColor = System.Drawing.Color.Silver;
+            this.btnGeoshopImport.FlatAppearance.BorderSize = 0;
+            this.btnGeoshopImport.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnGeoshopImport.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnGeoshopImport.Location = new System.Drawing.Point(130, 139);
+            this.btnGeoshopImport.Name = "btnGeoshopImport";
+            this.btnGeoshopImport.Size = new System.Drawing.Size(75, 78);
+            this.btnGeoshopImport.TabIndex = 215;
+            this.btnGeoshopImport.Text = "HRSZ (GeoShop)";
+            this.btnGeoshopImport.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.btnGeoshopImport.UseVisualStyleBackColor = true;
+            this.btnGeoshopImport.Click += new System.EventHandler(this.btnGeoshopImport_Click);
             // 
             // btnLoadBoundaryFromGE
             // 
@@ -419,6 +436,7 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Button btnBingMaps;
         private System.Windows.Forms.Button btnOenyImport;
+        private System.Windows.Forms.Button btnGeoshopImport;
         private System.Windows.Forms.FlowLayoutPanel flp1;
         private System.Windows.Forms.Button btnBuildBoundaryFromTracks;
     }

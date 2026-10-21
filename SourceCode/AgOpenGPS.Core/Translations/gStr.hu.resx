@@ -639,6 +639,9 @@ A választott sorrend alapján fognak megjelenni alulról felfelé.</value>
   <data name="gsGetSelected" xml:space="preserve">
     <value>Kiválasztott letöltése</value>
   </data>
+  <data name="gsGeoshopImportTitle" xml:space="preserve">
+    <value>Határ importálása a GeoShopból (HRSZ)</value>
+  </data>
   <data name="gsGpsStep" xml:space="preserve">
     <value>Minimum GPS távolság</value>
   </data>

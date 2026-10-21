@@ -636,6 +636,9 @@ The order you push them will be the order they appear on the menu from bottom up
   <data name="gsGetSelected" xml:space="preserve">
     <value>Get Selected</value>
   </data>
+  <data name="gsGeoshopImportTitle" xml:space="preserve">
+    <value>Import Boundary from GeoShop (HRSZ)</value>
+  </data>
   <data name="gsGpsStep" xml:space="preserve">
     <value>Minimum GPS Step</value>
   </data>

@@ -1856,7 +1856,16 @@ namespace AgOpenGPS.Core.Translations {
                 return ResourceManager.GetString("gsGetSelected", resourceCulture);
             }
         }
-        
+
+        /// <summary>
+        ///   Looks up a localized string similar to Import Boundary from GeoShop (HRSZ).
+        /// </summary>
+        public static string gsGeoshopImportTitle {
+            get {
+                return ResourceManager.GetString("gsGeoshopImportTitle", resourceCulture);
+            }
+        }
+
         /// <summary>
         ///   Looks up a localized string similar to Minimum GPS Step.
         /// </summary>

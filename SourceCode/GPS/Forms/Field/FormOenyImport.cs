@@ -17,6 +17,13 @@ namespace AgOpenGPS.Forms.Field
     // preview them on a pan/zoomable map, and pick one or more to use as the field boundary.
     public class FormOenyImport : Form
     {
+        // Where the parcel outlines come from; the rest of the import flow is the same.
+        public enum ParcelSource
+        {
+            Oeny,
+            Geoshop
+        }
+
         private class ParcelEntry
         {
             public string Hrsz;
@@ -50,7 +57,9 @@ namespace AgOpenGPS.Forms.Field
         }
 
         private readonly FormGPS mf;
+        private readonly ParcelSource _source;
         private readonly OenyClient _oenyClient = new OenyClient();
+        private readonly GeoshopClient _geoshopClient = new GeoshopClient();
         private readonly EhtTransformationClient _ehtClient = new EhtTransformationClient();
 
         private List<ParcelEntry> _parcels = new List<ParcelEntry>();
@@ -86,15 +95,16 @@ namespace AgOpenGPS.Forms.Field
         private Button btnZoomIn, btnZoomOut;
         private Button btnPanUp, btnPanDown, btnPanLeft, btnPanRight;
 
-        public FormOenyImport(Form callingForm)
+        public FormOenyImport(Form callingForm, ParcelSource source = ParcelSource.Oeny)
         {
             mf = callingForm as FormGPS;
+            _source = source;
             BuildUi();
         }
 
         private void BuildUi()
         {
-            Text = gStr.gsOenyImportTitle;
+            Text = _source == ParcelSource.Geoshop ? gStr.gsGeoshopImportTitle : gStr.gsOenyImportTitle;
             FormBorderStyle = FormBorderStyle.Sizable;
             MaximizeBox = true;
             MinimizeBox = false;
@@ -120,7 +130,7 @@ namespace AgOpenGPS.Forms.Field
                 Font = new Font("Tahoma", 18F, FontStyle.Bold),
                 Width = 90,
                 Minimum = 0.1M,
-                Maximum = 10M,
+                Maximum = _source == ParcelSource.Geoshop ? GeoshopClient.MaxSearchSizeKm : 10M,
                 DecimalPlaces = 1,
                 Increment = 0.1M,
                 Value = 0.3M,
@@ -294,11 +304,20 @@ namespace AgOpenGPS.Forms.Field
 
                 double halfSizeM = (double)nudRadiusKm.Value * 1000.0 / 2.0;
 
-                byte[] zip = await _oenyClient.DownloadShapeZipAsync(
-                    centerEasting - halfSizeM, centerNorthing - halfSizeM,
-                    centerEasting + halfSizeM, centerNorthing + halfSizeM);
-
-                List<OenyShapefileReader.RawParcel> rawParcels = OenyShapefileReader.ParseShapeZip(zip);
+                List<OenyShapefileReader.RawParcel> rawParcels;
+                if (_source == ParcelSource.Geoshop)
+                {
+                    rawParcels = await _geoshopClient.GetParcelsAsync(
+                        centerEasting - halfSizeM, centerNorthing - halfSizeM,
+                        centerEasting + halfSizeM, centerNorthing + halfSizeM);
+                }
+                else
+                {
+                    byte[] zip = await _oenyClient.DownloadShapeZipAsync(
+                        centerEasting - halfSizeM, centerNorthing - halfSizeM,
+                        centerEasting + halfSizeM, centerNorthing + halfSizeM);
+                    rawParcels = OenyShapefileReader.ParseShapeZip(zip);
+                }
 
                 if (rawParcels.Count == 0)
                 {
@@ -344,7 +363,7 @@ namespace AgOpenGPS.Forms.Field
                     newParcels.Add(new ParcelEntry
                     {
                         Hrsz = rawParcels[i].Hrsz,
-                        TownName = KshLookupClient.GetTownName(rawParcels[i].KshKod),
+                        TownName = rawParcels[i].TownName ?? KshLookupClient.GetTownName(rawParcels[i].KshKod),
                         LocalRings = localRings,
                         AreaHa = CalculatePolygonAreaHa(localRings.FirstOrDefault())
                     });
@@ -371,7 +390,7 @@ namespace AgOpenGPS.Forms.Field
             {
                 Log.EventWriter("OENY import error: " + ex);
                 lblStatus.Text = gStr.gsError + ": " + ex.Message;
-                FormDialog.Show(gStr.gsOenyImport, string.Format(gStr.gsOenyFetchFailed, ex.Message), DialogSeverity.Error);
+                FormDialog.Show(Text, string.Format(gStr.gsOenyFetchFailed, ex.Message), DialogSeverity.Error);
             }
             finally
             {
@@ -711,7 +730,7 @@ namespace AgOpenGPS.Forms.Field
             mf.bnd.BuildTurnLines();
             mf.btnABDraw.Visible = true;
 
-            Log.EventWriter($"OENY Import: added {selectedIndices.Count} parcel(s), merged into {mergedRings.Count} boundary/boundaries");
+            Log.EventWriter($"{_source} Import: added {selectedIndices.Count} parcel(s), merged into {mergedRings.Count} boundary/boundaries");
 
             Close();
         }
