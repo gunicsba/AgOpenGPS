@@ -252,32 +252,38 @@
             // 
             // btnOenyImport
             // 
-            this.btnOenyImport.FlatAppearance.BorderColor = System.Drawing.Color.Silver;
-            this.btnOenyImport.FlatAppearance.BorderSize = 0;
+            this.btnOenyImport.BackColor = System.Drawing.Color.White;
+            this.btnOenyImport.FlatAppearance.BorderColor = System.Drawing.Color.DimGray;
+            this.btnOenyImport.FlatAppearance.BorderSize = 2;
+            this.btnOenyImport.FlatAppearance.MouseDownBackColor = System.Drawing.Color.LightSteelBlue;
+            this.btnOenyImport.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Gainsboro;
             this.btnOenyImport.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnOenyImport.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnOenyImport.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnOenyImport.Location = new System.Drawing.Point(130, 16);
             this.btnOenyImport.Name = "btnOenyImport";
             this.btnOenyImport.Size = new System.Drawing.Size(75, 78);
             this.btnOenyImport.TabIndex = 214;
             this.btnOenyImport.Text = "HRSZ (OENY)";
-            this.btnOenyImport.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.btnOenyImport.UseVisualStyleBackColor = true;
+            this.btnOenyImport.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.btnOenyImport.UseVisualStyleBackColor = false;
             this.btnOenyImport.Click += new System.EventHandler(this.btnOenyImport_Click);
             //
             // btnGeoshopImport
             //
-            this.btnGeoshopImport.FlatAppearance.BorderColor = System.Drawing.Color.Silver;
-            this.btnGeoshopImport.FlatAppearance.BorderSize = 0;
+            this.btnGeoshopImport.BackColor = System.Drawing.Color.White;
+            this.btnGeoshopImport.FlatAppearance.BorderColor = System.Drawing.Color.DimGray;
+            this.btnGeoshopImport.FlatAppearance.BorderSize = 2;
+            this.btnGeoshopImport.FlatAppearance.MouseDownBackColor = System.Drawing.Color.LightSteelBlue;
+            this.btnGeoshopImport.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Gainsboro;
             this.btnGeoshopImport.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnGeoshopImport.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnGeoshopImport.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnGeoshopImport.Location = new System.Drawing.Point(130, 139);
             this.btnGeoshopImport.Name = "btnGeoshopImport";
             this.btnGeoshopImport.Size = new System.Drawing.Size(75, 78);
             this.btnGeoshopImport.TabIndex = 215;
             this.btnGeoshopImport.Text = "HRSZ (GeoShop)";
-            this.btnGeoshopImport.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.btnGeoshopImport.UseVisualStyleBackColor = true;
+            this.btnGeoshopImport.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.btnGeoshopImport.UseVisualStyleBackColor = false;
             this.btnGeoshopImport.Click += new System.EventHandler(this.btnGeoshopImport_Click);
             // 
             // btnLoadBoundaryFromGE
