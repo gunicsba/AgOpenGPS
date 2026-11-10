@@ -36,6 +36,7 @@
 - **Windows telepítő** – első ízben van telepítő (`AgOpenGPS_<verzió>_Setup.exe`), magyar és angol nyelvvel. Felhasználónként telepít, választható az asztali ikon és a `Dokumentumok\AgOpenGPS` mappa (táblák, beállítások) telepítés előtti mentése.
 - **Telepítő – automatikus indítás és tűzfal** – új opció: az AgOpenGPS a Windows-zal együtt indul (az AgIO-t ő maga indítja). A régebbi AgOpenGPS / AgIO / GPS_Out verziók automatikus indítását kikapcsolja, hogy ne induljon el egy régi példány is. Egy másik opció az AgIO-t és a GPS_Out-ot engedélyezi a Windows tűzfalon magán- és nyilvános hálózatokon is.
 - **Kormányzás varázsló** – az „Alapértékek betöltése” most gombos (Button) kormányzás-engedélyezést, bekapcsolt áramérzékelős (Current Turn Sensor) automatikus megszakítást 40%-on és 15-ös proporcionális erősítést állít be. A varázsló összes felirata, gombja és üzenete lefordítható, magyarul már elérhető.
+- **Osztott képernyő** – új gomb a navigációs panel alján (a nappali/éjszakai mód és a fényerő gombok mellett). Bekapcsolva a térkép a traktorral és az összes vezetési kijelzéssel (sorvezető, U-kanyar gombok, nagyítás) a képernyő bal felére kerül, a jobb fél üres marad, például a webkamera ablaknak. A szakaszgombok is a bal fél alá rendeződnek. A beállítást megjegyzi.
 - **Magyar fordítások** – az Easy Drive szövegei, az új beállítások, a kormányzás varázsló és a telepítő magyarul is elérhető.
 
 ## Javítások
@@ -91,6 +92,7 @@ Marek (#1221), aortner (#1219), Richard Klasens, valamint a Weblate fordítók �
 - **Windows installer** – first time there is an installer (`AgOpenGPS_<version>_Setup.exe`), in English and Hungarian. It installs per user, with optional desktop icon and an optional backup of `Documents\AgOpenGPS` (fields, settings) before installing.
 - **Installer – auto-start and firewall** – a new option starts AgOpenGPS with Windows (it starts AgIO itself). Startup entries of older AgOpenGPS / AgIO / GPS_Out versions are disabled, so an old copy does not start as well. Another option allows AgIO and GPS_Out through Windows Firewall on both private and public networks.
 - **Steer Wizard** – "Load Defaults" now selects the Button steer enable mode, turns on the Current Turn Sensor automatic cancelling at 40% and starts the proportional gain at 15. Every label, button and message of the wizard can now be translated; Hungarian is included.
+- **Split screen** – a new button at the bottom of the navigation panel (next to day/night and brightness). When on, the map with the tractor and every guidance overlay (lightbar, U-turn buttons, zoom) moves to the left half of the screen and the right half stays free, e.g. for the webcam window. The section buttons line up under the left half too. The setting is remembered.
 - **Hungarian translations** – the Easy Drive texts, the new settings, the Steer Wizard and the installer.
 
 ## Fixes

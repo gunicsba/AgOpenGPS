@@ -2363,6 +2363,97 @@ namespace AgOpenGPS
             SwapDayNightMode();
             navPanelCounter = 0;
         }
+        private void btnSplitScreen_Click(object sender, EventArgs e)
+        {
+            isSplitScreen = !isSplitScreen;
+            Settings.Default.setDisplay_isSplitScreen = isSplitScreen;
+            Settings.Default.Save();
+
+            UpdateSplitScreenButton();
+
+            //redo viewport, projection and the section buttons for the new navigation width
+            oglMain_Resize(oglMain, EventArgs.Empty);
+            SetZoom();
+            PanelsAndOGLSize();
+            oglMain.Refresh();
+
+            navPanelCounter = 0;
+        }
+
+        private Bitmap splitScreenIcon, fullScreenIcon;
+
+        public void UpdateSplitScreenButton()
+        {
+            if (splitScreenIcon == null)
+            {
+                splitScreenIcon = DrawScreenLayoutIcon(true);
+                fullScreenIcon = DrawScreenLayoutIcon(false);
+            }
+
+            //like the day/night button, the icon shows the layout you switch TO
+            btnSplitScreen.Text = "";
+            btnSplitScreen.Image = isSplitScreen ? fullScreenIcon : splitScreenIcon;
+        }
+
+        /// <summary>
+        /// Draws a small monitor icon: either one full map, or map left + camera panel right.
+        /// </summary>
+        private static Bitmap DrawScreenLayoutIcon(bool split)
+        {
+            const int w = 60, h = 52;
+            Bitmap bmp = new Bitmap(w, h);
+            using (Graphics g = Graphics.FromImage(bmp))
+            using (Pen frame = new Pen(Color.FromArgb(40, 40, 40), 3))
+            using (Brush map = new SolidBrush(Color.FromArgb(70, 150, 70)))
+            using (Brush panel = new SolidBrush(Color.FromArgb(60, 60, 65)))
+            using (Brush tractor = new SolidBrush(Color.Gold))
+            using (Brush stand = new SolidBrush(Color.FromArgb(40, 40, 40)))
+            {
+                g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+                g.Clear(Color.Transparent);
+
+                //screen area and stand
+                Rectangle screen = new Rectangle(3, 3, w - 7, h - 15);
+                g.FillRectangle(map, screen);
+                g.FillRectangle(stand, w / 2 - 4, screen.Bottom, 8, 6);
+                g.FillRectangle(stand, w / 2 - 12, h - 5, 24, 4);
+
+                int navCenter;
+                if (split)
+                {
+                    int mid = screen.Left + screen.Width / 2;
+                    g.FillRectangle(panel, mid, screen.Top, screen.Right - mid, screen.Height);
+
+                    //webcam pane in the bottom right corner
+                    using (Brush cam = new SolidBrush(Color.FromArgb(120, 170, 220)))
+                        g.FillRectangle(cam, mid + 3, screen.Top + screen.Height / 2, screen.Right - mid - 6, screen.Height / 2 - 3);
+
+                    using (Pen divider = new Pen(Color.FromArgb(40, 40, 40), 2))
+                        g.DrawLine(divider, mid, screen.Top, mid, screen.Bottom);
+
+                    navCenter = screen.Left + screen.Width / 4;
+                }
+                else
+                {
+                    navCenter = screen.Left + screen.Width / 2;
+                }
+
+                //guidance line and tractor arrow in the middle of the navigation area
+                using (Pen line = new Pen(Color.White, 2))
+                    g.DrawLine(line, navCenter, screen.Top + 2, navCenter, screen.Bottom - 2);
+
+                int cy = screen.Top + screen.Height / 2 + 4;
+                g.FillPolygon(tractor, new[]
+                {
+                    new Point(navCenter, cy - 9),
+                    new Point(navCenter - 6, cy + 6),
+                    new Point(navCenter + 6, cy + 6)
+                });
+
+                g.DrawRectangle(frame, screen);
+            }
+            return bmp;
+        }
 
         #endregion
 

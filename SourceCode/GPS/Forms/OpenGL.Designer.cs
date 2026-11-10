@@ -46,6 +46,15 @@ namespace AgOpenGPS
         vec2 right = new vec2();
         vec2 ptTip = new vec2();
 
+        //split screen: left half is the navigation / autosteer view, right half is free for webcam etc.
+        public bool isSplitScreen;
+
+        /// <summary>
+        /// Width in pixels of the navigation (autosteer) area inside oglMain.
+        /// Full width normally, left half when split screen is on.
+        /// </summary>
+        public int NavWidth => isSplitScreen ? Math.Max(1, oglMain.Width / 2) : oglMain.Width;
+
         private void oglMain_Load(object sender, EventArgs e)
         {
             oglMain.MakeCurrent();
@@ -64,8 +73,8 @@ namespace AgOpenGPS
             oglMain.MakeCurrent();
             GL.MatrixMode(MatrixMode.Projection);
             GL.LoadIdentity();
-            GL.Viewport(0, 0, oglMain.Width, oglMain.Height);
-            Matrix4 mat = Matrix4.CreatePerspectiveFieldOfView((float)fovy, (float)oglMain.Width / (float)oglMain.Height,
+            GL.Viewport(0, 0, NavWidth, oglMain.Height);
+            Matrix4 mat = Matrix4.CreatePerspectiveFieldOfView((float)fovy, (float)NavWidth / (float)oglMain.Height,
                 1.0f, (float)(camDistanceFactor * camera.camSetDistance));
             GL.LoadMatrix(ref mat);
             GL.MatrixMode(MatrixMode.Modelview);
@@ -87,11 +96,24 @@ namespace AgOpenGPS
                     }
                     isInit = true;
 
-                    //  Clear the color and depth buffer.
-                    GL.Clear(ClearBufferMask.DepthBufferBit | ClearBufferMask.ColorBufferBit);
+                    if (isSplitScreen)
+                    {
+                        //right half is the side panel (webcam etc.) - neutral dark background
+                        GL.ClearColor(0.12f, 0.12f, 0.13f, 1.0f);
+                        GL.Clear(ClearBufferMask.ColorBufferBit);
+
+                        //restrict the following clear to the navigation half
+                        GL.Enable(EnableCap.ScissorTest);
+                        GL.Scissor(0, 0, NavWidth, oglMain.Height);
+                    }
 
                     if (isDay) GL.ClearColor(0.27f, 0.4f, 0.7f, 1.0f);
                     else GL.ClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+
+                    //  Clear the color and depth buffer.
+                    GL.Clear(ClearBufferMask.DepthBufferBit | ClearBufferMask.ColorBufferBit);
+
+                    if (isSplitScreen) GL.Disable(EnableCap.ScissorTest);
 
                     GL.LoadIdentity();
 
@@ -465,7 +487,7 @@ namespace AgOpenGPS
                     GL.LoadIdentity();
 
                     //negative and positive on width, 0 at top to bottom ortho view
-                    GL.Ortho(-(double)oglMain.Width / 2, (double)oglMain.Width / 2, (double)oglMain.Height, 0, -1, 1);
+                    GL.Ortho(-(double)NavWidth / 2, (double)NavWidth / 2, (double)oglMain.Height, 0, -1, 1);
 
                     //  Create the appropriate modelview matrix.
                     GL.MatrixMode(MatrixMode.Modelview);
@@ -605,7 +627,7 @@ namespace AgOpenGPS
                     GL.MatrixMode(MatrixMode.Projection);
                     GL.PushMatrix();
                     GL.LoadIdentity();
-                    GL.Ortho(-(double)oglMain.Width / 2, (double)oglMain.Width / 2, (double)oglMain.Height, 0, -1, 1);
+                    GL.Ortho(-(double)NavWidth / 2, (double)NavWidth / 2, (double)oglMain.Height, 0, -1, 1);
 
                     GL.MatrixMode(MatrixMode.Modelview);
                     GL.PushMatrix();
@@ -639,10 +661,10 @@ namespace AgOpenGPS
                     }
 
                     GL.Begin(PrimitiveType.LineLoop);
-                    GL.Vertex3(-oglMain.Width / 2, 0, 0);
-                    GL.Vertex3(oglMain.Width / 2, 0, 0);
-                    GL.Vertex3(oglMain.Width / 2, oglMain.Height, 0);
-                    GL.Vertex3(-oglMain.Width / 2, oglMain.Height, 0);
+                    GL.Vertex3(-NavWidth / 2, 0, 0);
+                    GL.Vertex3(NavWidth / 2, 0, 0);
+                    GL.Vertex3(NavWidth / 2, oglMain.Height, 0);
+                    GL.Vertex3(-NavWidth / 2, oglMain.Height, 0);
                     GL.End();
 
                     GL.PopMatrix();
@@ -691,7 +713,7 @@ namespace AgOpenGPS
                 GL.LoadIdentity();
 
                 //negative and positive on width, 0 at top to bottom ortho view
-                GL.Ortho(-(double)oglMain.Width / 2, (double)oglMain.Width / 2, (double)oglMain.Height, 0, -1, 1);
+                GL.Ortho(-(double)NavWidth / 2, (double)NavWidth / 2, (double)oglMain.Height, 0, -1, 1);
 
                 //  Create the appropriate modelview matrix.
                 GL.MatrixMode(MatrixMode.Modelview);
@@ -700,7 +722,7 @@ namespace AgOpenGPS
 
                 GL.Color3(0.98f, 0.98f, 0.70f);
 
-                int edge = -oglMain.Width / 2 + 10;
+                int edge = -NavWidth / 2 + 10;
 
                 font.DrawText(edge, oglMain.Height - 80, "<-- AgIO ?");
 
@@ -1748,7 +1770,7 @@ namespace AgOpenGPS
         private void DrawManUTurnBtn()
         {
             int bottomSide = 90;
-            int two3 = -oglMain.Width / 4;
+            int two3 = -NavWidth / 4;
 
             if (!isStanleyUsed && isUTurnOn)
             {
@@ -1791,7 +1813,7 @@ namespace AgOpenGPS
 
             Texture2D turnTexture = !yt.isYouTurnTriggered ? ScreenTextures.Turn : ScreenTextures.TurnCancel;
             //int bottom = 90;
-            int two3 = oglMain.Width / 5;
+            int two3 = NavWidth / 5;
             XyCoord turnTextureCenter = new XyCoord(two3, 120);
             turnTexture.DrawCentered(turnTextureCenter, !yt.isTurnLeft ? new XyDelta(62, 30) : new XyDelta(-62, 30));
 
@@ -1834,8 +1856,8 @@ namespace AgOpenGPS
 
         private void DrawSteerCircle()
         {
-            int sizer = oglMain.Width / 15;
-            int center = oglMain.Width / 2 - sizer;
+            int sizer = NavWidth / 15;
+            int center = NavWidth / 2 - sizer;
             int bottomSide = oglMain.Height - sizer / 2;
             XyDelta textureDelta = new XyDelta(sizer, sizer);
 
@@ -2132,11 +2154,11 @@ namespace AgOpenGPS
 
                 // Keep geometry identical to SteerBarText
                 double textSize = (100.0 + (oglMain.Height - 600.0)) * 0.0012;
-                int wide = (int)(oglMain.Width / 18.0);
+                int wide = (int)(NavWidth / 18.0);
                 if (wide < 64) wide = 64;
 
                 // Draw the dot-rail LightBar using the same sizing
-                if (isLightbarOn) DrawLightBar(oglMain.Width, oglMain.Height, avgPivotDistance);
+                if (isLightbarOn) DrawLightBar(NavWidth, oglMain.Height, avgPivotDistance);
 
                 // Clamp display range for the main label
                 if (avgPivotDistance > 999) avgPivotDistance = 999;
@@ -2205,7 +2227,7 @@ namespace AgOpenGPS
             if (ct.isContourBtnOn || trk.idx > -1 || recPath.isDrivingRecordedPath)
             {
                 GL.Disable(EnableCap.DepthTest);
-                int spacing = oglMain.Width / 50;
+                int spacing = NavWidth / 50;
                 if (spacing < 28) spacing = 28;
                 int offset = (int)((double)oglMain.Height / 40);
                 int line = 12;
@@ -2323,7 +2345,7 @@ namespace AgOpenGPS
                     center = (int)(-40 * (1 + textSize));
                 }
 
-                int wide = (int)((double)oglMain.Width / 18);
+                int wide = (int)((double)NavWidth / 18);
                 if (wide < 64) wide = 64;
 
                 double green = Math.Abs(avgPivDistance);
@@ -2405,7 +2427,7 @@ namespace AgOpenGPS
         {
             GL.Color3(0.90f, 0.90f, 0.93f);
 
-            int center = oglMain.Width / 2 - 60;
+            int center = NavWidth / 2 - 60;
 
             XyCoord zoomInCoord = new XyCoord(center, 50);
             XyCoord zoomOutCoord = new XyCoord(center, 200);
@@ -2417,7 +2439,7 @@ namespace AgOpenGPS
             //Pan
             if (isJobStarted)
             {
-                center = oglMain.Width / -2 + 30;
+                center = NavWidth / -2 + 30;
                 if (!isPanFormVisible)
                 {
                     XyCoord panCoord = new XyCoord(center, 50);
@@ -2433,14 +2455,14 @@ namespace AgOpenGPS
                 font.DrawText(center - 56, hite - 72, "x" + gridToolSpacing.ToString(), 1);
             }
 
-            center = oglMain.Width / -2 + 10;
+            center = NavWidth / -2 + 10;
             double deg = glm.toDegrees(fixHeading);
             if (deg > 359.9) deg = 359.9;
             string strHeading = (deg).ToString("N1");
             int lenth = 18 * strHeading.Length;
 
             GL.Color3(0.9852f, 0.982f, 0.983f);
-            font.DrawText(oglMain.Width / 2 - lenth, 10, strHeading, 1);
+            font.DrawText(NavWidth / 2 - lenth, 10, strHeading, 1);
 
             //GPS Step
             if (distanceCurrentStepFixDisplay < 0.03 * 100)
@@ -2457,7 +2479,7 @@ namespace AgOpenGPS
         private void DrawCompass()
         {
             //Heading text
-            int center = oglMain.Width / 2 - 55;
+            int center = NavWidth / 2 - 55;
             font.DrawText(center - 8, 40, "^", 0.8);
 
             GL.PushMatrix();
@@ -2482,7 +2504,7 @@ namespace AgOpenGPS
 
                 ScreenTextures.Lift.Bind();
 
-                GL.Translate(-oglMain.Width / 12, oglMain.Height / 2 - 20, 0);
+                GL.Translate(-NavWidth / 12, oglMain.Height / 2 - 20, 0);
                 GL.Rotate(180, 0, 0, 1);
 
                 GL.Begin(PrimitiveType.Quads);              // Build Quad From A Triangle Strip
@@ -2513,7 +2535,7 @@ namespace AgOpenGPS
 
                 ScreenTextures.Lift.Bind();
 
-                GL.Translate(-oglMain.Width / 12, oglMain.Height / 2 - 20, 0);
+                GL.Translate(-NavWidth / 12, oglMain.Height / 2 - 20, 0);
 
                 if (isChangingDirection) GL.Rotate(90, 0, 0, 1);
                 else GL.Rotate(180, 0, 0, 1);
@@ -2536,7 +2558,7 @@ namespace AgOpenGPS
         {
             GL.PushMatrix();
 
-            GL.Translate(oglMain.Width / 2 - 35, oglMain.Height / 2, 0);
+            GL.Translate(NavWidth / 2 - 35, oglMain.Height / 2, 0);
 
             if (p_239.pgn[p_239.hydLift] == 2)
             {
@@ -2558,7 +2580,7 @@ namespace AgOpenGPS
 
             GL.Color4(0.952f, 0.980f, 0.98f, 0.99);
 
-            GL.Translate(oglMain.Width / 2 - 130, 65, 0);
+            GL.Translate(NavWidth / 2 - 130, 65, 0);
 
             ScreenTextures.Speedo.DrawCenteredAroundOrigin(new XyDelta(58, 58));
 
@@ -2579,19 +2601,19 @@ namespace AgOpenGPS
         private void DrawLostRTK()
         {
             GL.Color3(0.9752f, 0.752f, 0.40f);
-            font.DrawText(-oglMain.Width / 3, oglMain.Height / 3, "RTK Fix Lost", 2);
+            font.DrawText(-NavWidth / 3, oglMain.Height / 3, "RTK Fix Lost", 2);
         }
 
         private void DrawVersion(string version)
         {
             GL.Color3(1f, 1f, 1f);
-            font.DrawText(-oglMain.Width / 2.1, oglMain.Height / 1.2, version, 0.8);
+            font.DrawText(-NavWidth / 2.1, oglMain.Height / 1.2, version, 0.8);
         }
 
         private void DrawAge()
         {
             GL.Color3(0.9752f, 0.52f, 0.0f);
-            font.DrawText(oglMain.Width / 4, 60, "Age:" + pn.age.ToString("N1"), 1.5);
+            font.DrawText(NavWidth / 4, 60, "Age:" + pn.age.ToString("N1"), 1.5);
         }
 
         private void DrawGuidanceLineText()
@@ -2855,7 +2877,7 @@ namespace AgOpenGPS
             // OpenGL's ReadPixels origin is bottom-left; convert from top-origin coordinates
             int readX = Math.Max(0, centerX - sampleSize / 2);
             int readY = Math.Max(0, oglMain.Height - centerY_TopOrigin - sampleSize / 2);
-            int maxW = Math.Min(sampleSize, oglMain.Width - readX);
+            int maxW = Math.Min(sampleSize, NavWidth - readX);
             int maxH = Math.Min(sampleSize, oglMain.Height - readY);
             if (maxW <= 0 || maxH <= 0) return false; // fallback: assume light background → use dark icon
 

@@ -195,7 +195,7 @@ namespace AgOpenGPS
             }
             HideZones();
 
-            int oglCenter = isPanelBottomHidden ? oglCenter = oglMain.Width / 2 + 30 : statusStripLeft.Width + oglMain.Width / 2;
+            int oglCenter = isPanelBottomHidden ? oglCenter = NavWidth / 2 + 30 : statusStripLeft.Width + NavWidth / 2;
 
             int top = 140;
 
@@ -224,7 +224,7 @@ namespace AgOpenGPS
             {
                 //if (!isJobStarted) top = Height - 40;
 
-                int oglButtonWidth = oglMain.Width * 3 / 4;
+                int oglButtonWidth = NavWidth * 3 / 4;
 
                 int buttonWidth = Math.Min(oglButtonWidth / tool.numOfSections, buttonMaxWidth);
 
@@ -286,7 +286,7 @@ namespace AgOpenGPS
                 return;
             }
 
-            int oglCenter = isPanelBottomHidden ? oglCenter = oglMain.Width / 2 + 30 : statusStripLeft.Width + oglMain.Width / 2;
+            int oglCenter = isPanelBottomHidden ? oglCenter = NavWidth / 2 + 30 : statusStripLeft.Width + NavWidth / 2;
 
             int top = 130;
 
@@ -313,7 +313,7 @@ namespace AgOpenGPS
             }
 
             //if (tool.zones == 0) return;
-            int oglButtonWidth = oglMain.Width * 3 / 4;
+            int oglButtonWidth = NavWidth * 3 / 4;
             int buttonWidth = Math.Min(oglButtonWidth / tool.zones, buttonMaxWidth);
             Size size = new System.Drawing.Size(buttonWidth, buttonHeight);
 

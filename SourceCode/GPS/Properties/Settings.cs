@@ -51,6 +51,7 @@ namespace AgOpenGPS.Properties
         public bool setDisplay_isVehicleImage = true;
         public bool setDisplay_isTextureOn = true;
         public bool setDisplay_isBrightnessOn = false;
+        public bool setDisplay_isSplitScreen = false;
         public bool setDisplay_isLogElevation = false;
         public bool setDisplay_isSvennArrowOn = false;
         public bool setDisplay_isSectionLinesOn = true;

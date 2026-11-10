@@ -109,6 +109,7 @@ namespace AgOpenGPS
             this.btnTiltUp = new System.Windows.Forms.Button();
             this.btnBrightnessDn = new System.Windows.Forms.Button();
             this.btnBrightnessUp = new System.Windows.Forms.Button();
+            this.btnSplitScreen = new System.Windows.Forms.Button();
             this.btnDayNightMode = new System.Windows.Forms.Button();
             this.btn3D = new System.Windows.Forms.Button();
             this.btn2D = new System.Windows.Forms.Button();
@@ -1216,15 +1217,17 @@ namespace AgOpenGPS
             this.panelNavigation.Controls.Add(this.btn2D, 0, 1);
             this.panelNavigation.Controls.Add(this.btnGrid, 1, 2);
             this.panelNavigation.Controls.Add(this.btnN2D, 0, 2);
+            this.panelNavigation.Controls.Add(this.btnSplitScreen, 0, 5);
             this.panelNavigation.Location = new System.Drawing.Point(505, 63);
             this.panelNavigation.Name = "panelNavigation";
-            this.panelNavigation.RowCount = 5;
-            this.panelNavigation.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
-            this.panelNavigation.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
-            this.panelNavigation.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
-            this.panelNavigation.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
-            this.panelNavigation.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
-            this.panelNavigation.Size = new System.Drawing.Size(179, 460);
+            this.panelNavigation.RowCount = 6;
+            this.panelNavigation.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 16.66667F));
+            this.panelNavigation.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 16.66667F));
+            this.panelNavigation.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 16.66667F));
+            this.panelNavigation.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 16.66667F));
+            this.panelNavigation.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 16.66667F));
+            this.panelNavigation.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 16.66667F));
+            this.panelNavigation.Size = new System.Drawing.Size(179, 552);
             this.panelNavigation.TabIndex = 468;
             this.panelNavigation.Visible = false;
             // 
@@ -1310,6 +1313,24 @@ namespace AgOpenGPS
             this.btnBrightnessUp.TabIndex = 473;
             this.btnBrightnessUp.UseVisualStyleBackColor = false;
             this.btnBrightnessUp.Click += new System.EventHandler(this.btnBrightnessUp_Click);
+            // 
+            // btnSplitScreen
+            // 
+            this.btnSplitScreen.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.btnSplitScreen.BackColor = System.Drawing.Color.Transparent;
+            this.btnSplitScreen.FlatAppearance.BorderSize = 0;
+            this.btnSplitScreen.FlatAppearance.CheckedBackColor = System.Drawing.Color.Transparent;
+            this.btnSplitScreen.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
+            this.btnSplitScreen.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
+            this.btnSplitScreen.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnSplitScreen.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnSplitScreen.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+            this.btnSplitScreen.Location = new System.Drawing.Point(8, 470);
+            this.btnSplitScreen.Name = "btnSplitScreen";
+            this.btnSplitScreen.Size = new System.Drawing.Size(72, 64);
+            this.btnSplitScreen.TabIndex = 544;
+                        this.btnSplitScreen.UseVisualStyleBackColor = false;
+            this.btnSplitScreen.Click += new System.EventHandler(this.btnSplitScreen_Click);
             // 
             // btnDayNightMode
             // 
@@ -3044,6 +3065,7 @@ namespace AgOpenGPS
         private System.Windows.Forms.ToolStripMenuItem steerWizardMenuItem;
         public System.Windows.Forms.Button btnBrightnessDn;
         public System.Windows.Forms.Button btnBrightnessUp;
+        public System.Windows.Forms.Button btnSplitScreen;
         private System.Windows.Forms.Button btnZone1;
         private System.Windows.Forms.Button btnZone2;
         private System.Windows.Forms.Button btnZone3;

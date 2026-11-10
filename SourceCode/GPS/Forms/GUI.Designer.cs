@@ -544,6 +544,8 @@ namespace AgOpenGPS
 
             isGridOn = Settings.Default.setMenu_isGridOn;
             isBrightnessOn = Settings.Default.setDisplay_isBrightnessOn;
+            isSplitScreen = Settings.Default.setDisplay_isSplitScreen;
+            UpdateSplitScreenButton();
 
             isSpeedoOn = Settings.Default.setMenu_isSpeedoOn;
             isSideGuideLines = Settings.Default.setMenu_isSideGuideLines;
@@ -1224,11 +1226,14 @@ namespace AgOpenGPS
 
             if (e.Button == MouseButtons.Left)
             {
-                int centerX = oglMain.Width / 2;
+                int centerX = NavWidth / 2;
                 int centerY = oglMain.Height / 2;
 
                 //0 at bottom for opengl, 0 at top for windows, so invert Y value
                 Point point = oglMain.PointToClient(Cursor.Position);
+
+                //split screen: right half has no map controls
+                if (point.X >= NavWidth) return;
 
                 if (isJobStarted)
                 {
@@ -1238,7 +1243,7 @@ namespace AgOpenGPS
                         if (point.Y < 150 && point.Y > 90 && (trk.idx > -1))
                         {
 
-                            int middle = oglMain.Width / 2 + oglMain.Width / 5;
+                            int middle = NavWidth / 2 + NavWidth / 5;
                             if (point.X > middle - 80 && point.X < middle + 80)
                             {
                                 SwapDirection();
@@ -1265,7 +1270,7 @@ namespace AgOpenGPS
                             if (!isStanleyUsed)
                             {
                                 //manual uturn triggering
-                                middle = oglMain.Width / 2 - oglMain.Width / 4;
+                                middle = NavWidth / 2 - NavWidth / 4;
                                 if (point.X > middle - 100 && point.X < middle && isUTurnOn)
                                 {
                                     if (yt.isYouTurnTriggered)
@@ -1314,7 +1319,7 @@ namespace AgOpenGPS
                         //lateral
                         if (point.Y < 240 && point.Y > 170 && (trk.idx > -1))
                         {
-                            int middle = oglMain.Width / 2 - oglMain.Width / 4;
+                            int middle = NavWidth / 2 - NavWidth / 4;
                             if (point.X > middle - 100 && point.X < middle && isLateralOn)
                             {
                                 if (vehicle.functionSpeedLimit > avgSpeed)
@@ -1398,7 +1403,7 @@ namespace AgOpenGPS
                 }
 
                 //zoom buttons
-                if (point.X > oglMain.Width - 80)
+                if (point.X > NavWidth - 80)
                 {
                     // --
                     if (point.Y < 260 && point.Y > 170)
