@@ -1283,6 +1283,7 @@ namespace AgOpenGPS
             menustripLanguage.Enabled = true;
 
             AppModel.Fields.CloseField();
+            AgShareApiMenuItem.Enabled = true;
 
 
             //fix ManualOffOnAuto buttons
@@ -1479,6 +1480,10 @@ namespace AgOpenGPS
             tramLinesMenuField.Enabled = isOn;
             tramsMultiMenuField.Enabled = isOn;
             recordedPathStripMenu.Enabled = isOn;
+
+            // The AgShare server/API key must not change while a field is open: the field is tied to the
+            // server it was loaded from and uploads to the new one would fail or go to the wrong place.
+            AgShareApiMenuItem.Enabled = !isJobStarted;
             loadVehicleToolToolStripMenuItem.Enabled = true;
 
             // In Easy Drive mode, disable boundary/headland/tram/profiles and most settings
