@@ -188,6 +188,7 @@ namespace AgOpenGPS
             this.lblNumCu = new System.Windows.Forms.Label();
             this.panelControlBox = new System.Windows.Forms.Panel();
             this.btnChargeStatus = new System.Windows.Forms.Button();
+            this.btnVirtualTerminal = new System.Windows.Forms.Button();
             this.btnGPSData = new System.Windows.Forms.Button();
             this.btnShutdown = new System.Windows.Forms.Button();
             this.btnMaximizeMainForm = new System.Windows.Forms.Button();
@@ -1447,7 +1448,7 @@ namespace AgOpenGPS
             this.lblSpeed.Font = new System.Drawing.Font("Arial", 21.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblSpeed.ForeColor = System.Drawing.Color.Black;
             this.lblSpeed.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.lblSpeed.Location = new System.Drawing.Point(193, 7);
+            this.lblSpeed.Location = new System.Drawing.Point(239, 7);
             this.lblSpeed.Margin = new System.Windows.Forms.Padding(0);
             this.lblSpeed.Name = "lblSpeed";
             this.lblSpeed.Size = new System.Drawing.Size(87, 35);
@@ -2715,6 +2716,7 @@ namespace AgOpenGPS
             // 
             this.panelControlBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.panelControlBox.BackColor = System.Drawing.Color.Transparent;
+            this.panelControlBox.Controls.Add(this.btnVirtualTerminal);
             this.panelControlBox.Controls.Add(this.btnChargeStatus);
             this.panelControlBox.Controls.Add(this.btnGPSData);
             this.panelControlBox.Controls.Add(this.lblSpeed);
@@ -2722,9 +2724,9 @@ namespace AgOpenGPS
             this.panelControlBox.Controls.Add(this.btnMaximizeMainForm);
             this.panelControlBox.Controls.Add(this.btnMinimizeMainForm);
             this.panelControlBox.Controls.Add(this.btnFieldStats);
-            this.panelControlBox.Location = new System.Drawing.Point(532, 4);
+            this.panelControlBox.Location = new System.Drawing.Point(486, 4);
             this.panelControlBox.Name = "panelControlBox";
-            this.panelControlBox.Size = new System.Drawing.Size(489, 43);
+            this.panelControlBox.Size = new System.Drawing.Size(535, 43);
             this.panelControlBox.TabIndex = 542;
             // 
             // btnChargeStatus
@@ -2739,11 +2741,30 @@ namespace AgOpenGPS
             this.btnChargeStatus.Font = new System.Drawing.Font("Tahoma", 20.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnChargeStatus.Image = global::AgOpenGPS.Properties.Resources.ChargeIndicator;
             this.btnChargeStatus.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.btnChargeStatus.Location = new System.Drawing.Point(86, 5);
+            this.btnChargeStatus.Location = new System.Drawing.Point(132, 5);
             this.btnChargeStatus.Name = "btnChargeStatus";
             this.btnChargeStatus.Size = new System.Drawing.Size(25, 32);
             this.btnChargeStatus.TabIndex = 537;
             this.btnChargeStatus.UseVisualStyleBackColor = false;
+            //
+            // btnVirtualTerminal
+            //
+            this.btnVirtualTerminal.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnVirtualTerminal.BackColor = System.Drawing.Color.Transparent;
+            this.btnVirtualTerminal.FlatAppearance.BorderColor = System.Drawing.Color.Gray;
+            this.btnVirtualTerminal.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
+            this.btnVirtualTerminal.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
+            this.btnVirtualTerminal.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnVirtualTerminal.Font = new System.Drawing.Font("Tahoma", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnVirtualTerminal.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+            this.btnVirtualTerminal.Location = new System.Drawing.Point(80, 2);
+            this.btnVirtualTerminal.Margin = new System.Windows.Forms.Padding(0);
+            this.btnVirtualTerminal.Name = "btnVirtualTerminal";
+            this.btnVirtualTerminal.Size = new System.Drawing.Size(46, 38);
+            this.btnVirtualTerminal.TabIndex = 544;
+            this.btnVirtualTerminal.Text = "VT";
+            this.btnVirtualTerminal.UseVisualStyleBackColor = false;
+            this.btnVirtualTerminal.Click += new System.EventHandler(this.btnVirtualTerminal_Click);
             // 
             // btnGPSData
             // 
@@ -2757,7 +2778,7 @@ namespace AgOpenGPS
             this.btnGPSData.Font = new System.Drawing.Font("Tahoma", 20.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnGPSData.Image = global::AgOpenGPS.Properties.Resources.GPSQuality;
             this.btnGPSData.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.btnGPSData.Location = new System.Drawing.Point(124, 2);
+            this.btnGPSData.Location = new System.Drawing.Point(170, 2);
             this.btnGPSData.Name = "btnGPSData";
             this.btnGPSData.Size = new System.Drawing.Size(52, 38);
             this.btnGPSData.TabIndex = 536;
@@ -2775,7 +2796,7 @@ namespace AgOpenGPS
             this.btnShutdown.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
             this.btnShutdown.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnShutdown.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.btnShutdown.Location = new System.Drawing.Point(434, 3);
+            this.btnShutdown.Location = new System.Drawing.Point(480, 3);
             this.btnShutdown.Name = "btnShutdown";
             this.btnShutdown.Size = new System.Drawing.Size(52, 38);
             this.btnShutdown.TabIndex = 447;
@@ -2795,7 +2816,7 @@ namespace AgOpenGPS
             this.btnMaximizeMainForm.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnMaximizeMainForm.Font = new System.Drawing.Font("Tahoma", 20.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnMaximizeMainForm.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.btnMaximizeMainForm.Location = new System.Drawing.Point(361, 3);
+            this.btnMaximizeMainForm.Location = new System.Drawing.Point(407, 3);
             this.btnMaximizeMainForm.Name = "btnMaximizeMainForm";
             this.btnMaximizeMainForm.Size = new System.Drawing.Size(52, 38);
             this.btnMaximizeMainForm.TabIndex = 482;
@@ -2815,7 +2836,7 @@ namespace AgOpenGPS
             this.btnMinimizeMainForm.Font = new System.Drawing.Font("Tahoma", 20.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnMinimizeMainForm.ForeColor = System.Drawing.Color.DimGray;
             this.btnMinimizeMainForm.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.btnMinimizeMainForm.Location = new System.Drawing.Point(290, 3);
+            this.btnMinimizeMainForm.Location = new System.Drawing.Point(336, 3);
             this.btnMinimizeMainForm.Name = "btnMinimizeMainForm";
             this.btnMinimizeMainForm.Size = new System.Drawing.Size(52, 38);
             this.btnMinimizeMainForm.TabIndex = 481;
@@ -3130,6 +3151,7 @@ namespace AgOpenGPS
         private System.Windows.Forms.ToolStripMenuItem toolStripSectionColors;
         private System.Windows.Forms.ToolStripMenuItem toolStripHotkeys;
         private System.Windows.Forms.Button btnChargeStatus;
+        private System.Windows.Forms.Button btnVirtualTerminal;
         private System.Windows.Forms.Label lblHardwareMessage;
         private System.Windows.Forms.ToolStripMenuItem eventViewerToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem tramsMultiMenuField;

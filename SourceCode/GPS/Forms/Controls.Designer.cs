@@ -1234,6 +1234,106 @@ namespace AgOpenGPS
                 SetForegroundWindow(processName[0].MainWindowHandle);
             }
         }
+        #region AgISO Virtual Terminal button
+
+        [System.Runtime.InteropServices.DllImport("User32.dll")]
+        private static extern bool IsIconic(IntPtr hWnd);
+
+        [System.Runtime.InteropServices.DllImport("User32.dll")]
+        private static extern IntPtr GetForegroundWindow();
+
+        [System.Runtime.InteropServices.DllImport("User32.dll")]
+        private static extern IntPtr GetAncestor(IntPtr hWnd, uint gaFlags);
+
+        //window that was active right before AgOpenGPS got activated (set in WndProc)
+        private IntPtr vtLastDeactivatedHwnd = IntPtr.Zero;
+        private int vtLastActivatedTick = 0;
+
+        private const string vtProcessName = "AgISOVirtualTerminal";
+
+        private static string FindVirtualTerminalExe()
+        {
+            string[] candidates =
+            {
+                Path.Combine(Application.StartupPath, vtProcessName + ".exe"),
+                Path.Combine(Application.StartupPath, "AgISOVirtualTerminal", vtProcessName + ".exe"),
+                Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles), "AgISOVirtualTerminal", "bin", vtProcessName + ".exe"),
+                Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles), "AgISOVirtualTerminal", vtProcessName + ".exe"),
+            };
+
+            foreach (string path in candidates)
+            {
+                if (File.Exists(path)) return path;
+            }
+            return null;
+        }
+
+        private static bool IsSameTopWindow(IntPtr a, IntPtr b)
+        {
+            if (a == IntPtr.Zero || b == IntPtr.Zero) return false;
+            const uint GA_ROOT = 2;
+            return GetAncestor(a, GA_ROOT) == GetAncestor(b, GA_ROOT);
+        }
+
+        private void btnVirtualTerminal_Click(object sender, EventArgs e)
+        {
+            Process[] procs = Process.GetProcessesByName(vtProcessName);
+            Process vt = procs.FirstOrDefault(p => p.MainWindowHandle != IntPtr.Zero);
+
+            if (procs.Length == 0)
+            {
+                string exe = FindVirtualTerminalExe();
+                if (exe == null)
+                {
+                    TimedMessageBox(2000, "No File Found", "Can't Find " + vtProcessName + ".exe");
+                    Log.EventWriter("AgISO VT Not Found");
+                    return;
+                }
+
+                try
+                {
+                    Log.EventWriter("AgISO VT Started: " + exe);
+                    Process.Start(new ProcessStartInfo
+                    {
+                        FileName = exe,
+                        WorkingDirectory = Path.GetDirectoryName(exe)
+                    });
+                }
+                catch (Exception ex)
+                {
+                    TimedMessageBox(2000, "Error", "Can't start AgISO VT");
+                    Log.EventWriter("AgISO VT start failed: " + ex.Message);
+                }
+                return;
+            }
+
+            //running, but no main window yet (still starting up)
+            if (vt == null) return;
+
+            IntPtr hwnd = vt.MainWindowHandle;
+
+            //Tapping our button activates AgOpenGPS first, so check whether the VT was
+            //the window in front right before that (or is still in front).
+            bool vtWasInFront = !IsIconic(hwnd) &&
+                (IsSameTopWindow(GetForegroundWindow(), hwnd) ||
+                 (IsSameTopWindow(vtLastDeactivatedHwnd, hwnd) &&
+                  unchecked(Environment.TickCount - vtLastActivatedTick) < 2000));
+
+            if (vtWasInFront)
+            {
+                ShowWindow(hwnd, 6); //SW_MINIMIZE
+                vtLastDeactivatedHwnd = IntPtr.Zero;
+            }
+            else
+            {
+                //SW_RESTORE only when minimized, otherwise a maximized VT would be un-maximized
+                ShowWindow(hwnd, IsIconic(hwnd) ? 9 : 5); //SW_RESTORE : SW_SHOW
+                SetForegroundWindow(hwnd);
+            }
+        }
+
+        #endregion
+
         private void btnAutoSteerConfig_Click(object sender, EventArgs e)
         {
             //check if window already exists

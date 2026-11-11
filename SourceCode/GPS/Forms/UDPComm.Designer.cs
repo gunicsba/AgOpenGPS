@@ -422,6 +422,13 @@ namespace AgOpenGPS
         {
             const int RESIZE_HANDLE_SIZE = 7;
 
+            //remember which window lost focus to us, used by the VT toggle button
+            if (m.Msg == 0x0006/*WM_ACTIVATE*/ && ((int)m.WParam.ToInt64() & 0xFFFF) != 0)
+            {
+                vtLastDeactivatedHwnd = m.LParam;
+                vtLastActivatedTick = Environment.TickCount;
+            }
+
             switch (m.Msg)
             {
                 case 0x0084/*NCHITTEST*/ :
