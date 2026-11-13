@@ -1955,4 +1955,43 @@ Ne feledje: a CPD, a minimális PWM és az előretekintés kritikus beállítás
   <data name="gsOpenProfiles" xml:space="preserve">
     <value>Profilok megnyitása</value>
   </data>
+  <data name="gsTreePlanting" xml:space="preserve">
+    <value>Faültetés</value>
+  </data>
+  <data name="gsTreePlantRefLine" xml:space="preserve">
+    <value>Referencia AB vonal</value>
+  </data>
+  <data name="gsTreePlantSettings" xml:space="preserve">
+    <value>Beállítások</value>
+  </data>
+  <data name="gsTreePlantGridSpacing" xml:space="preserve">
+    <value>Rácstávolság (m)</value>
+  </data>
+  <data name="gsTreePlantLinesPerSide" xml:space="preserve">
+    <value>Vonalak oldalanként</value>
+  </data>
+  <data name="gsTreePlantBuildLines" xml:space="preserve">
+    <value>Vonalak építése</value>
+  </data>
+  <data name="gsTreePlantAngleOutput" xml:space="preserve">
+    <value>Szögkimenet</value>
+  </data>
+  <data name="gsTreePlantShift" xml:space="preserve">
+    <value>Előre / hátra tolás</value>
+  </data>
+  <data name="gsTreePlantLinesBuilt" xml:space="preserve">
+    <value>{0} párhuzamos vonal elkészült</value>
+  </data>
+  <data name="gsTreePlantNoRefLine" xml:space="preserve">
+    <value>Nincs kiválasztott referencia vonal</value>
+  </data>
+  <data name="gsTreePlantOnlyAB" xml:space="preserve">
+    <value>Csak AB vonal használható</value>
+  </data>
+  <data name="gsTreePlantBuildFirst" xml:space="preserve">
+    <value>Előbb építsd fel a vonalakat</value>
+  </data>
+  <data name="gsTreePlantEnableFirst" xml:space="preserve">
+    <value>Előbb kapcsold be a faültetést</value>
+  </data>
 </root>

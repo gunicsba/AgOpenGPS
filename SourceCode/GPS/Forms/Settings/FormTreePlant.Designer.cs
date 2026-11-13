@@ -30,6 +30,13 @@ namespace AgOpenGPS
             this.btnToggle = new System.Windows.Forms.Button();
             this.btnAngleOutput = new System.Windows.Forms.Button();
             this.bntOK = new System.Windows.Forms.Button();
+            this.groupBoxShift = new System.Windows.Forms.GroupBox();
+            this.btnShiftFwd = new System.Windows.Forms.Button();
+            this.btnShiftBack = new System.Windows.Forms.Button();
+            this.lblShift = new System.Windows.Forms.Label();
+            this.btnShiftSnap = new System.Windows.Forms.Button();
+            this.btnShiftZero = new System.Windows.Forms.Button();
+            this.groupBoxShift.SuspendLayout();
             this.groupBoxRefLine.SuspendLayout();
             this.groupBoxSettings.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudGridSpacing)).BeginInit();
@@ -152,18 +159,90 @@ namespace AgOpenGPS
             this.btnBuild.UseVisualStyleBackColor = true;
             this.btnBuild.Click += new System.EventHandler(this.btnBuild_Click);
             //
+            // groupBoxShift
+            //
+            this.groupBoxShift.Controls.Add(this.btnShiftFwd);
+            this.groupBoxShift.Controls.Add(this.btnShiftBack);
+            this.groupBoxShift.Controls.Add(this.lblShift);
+            this.groupBoxShift.Controls.Add(this.btnShiftSnap);
+            this.groupBoxShift.Controls.Add(this.btnShiftZero);
+            this.groupBoxShift.Font = new System.Drawing.Font("Tahoma", 11F, System.Drawing.FontStyle.Bold);
+            this.groupBoxShift.Location = new System.Drawing.Point(12, 255);
+            this.groupBoxShift.Name = "groupBoxShift";
+            this.groupBoxShift.Size = new System.Drawing.Size(430, 110);
+            this.groupBoxShift.TabIndex = 5;
+            this.groupBoxShift.TabStop = false;
+            this.groupBoxShift.Text = "Forward / Back Shift";
+            //
+            // btnShiftFwd
+            //
+            this.btnShiftFwd.BackColor = System.Drawing.Color.Transparent;
+            this.btnShiftFwd.FlatAppearance.BorderColor = System.Drawing.Color.DimGray;
+            this.btnShiftFwd.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnShiftFwd.Location = new System.Drawing.Point(10, 26);
+            this.btnShiftFwd.Name = "btnShiftFwd";
+            this.btnShiftFwd.Size = new System.Drawing.Size(76, 74);
+            this.btnShiftFwd.TabIndex = 0;
+            this.btnShiftFwd.UseVisualStyleBackColor = false;
+            this.btnShiftFwd.Click += new System.EventHandler(this.btnShiftFwd_Click);
+            //
+            // btnShiftBack
+            //
+            this.btnShiftBack.BackColor = System.Drawing.Color.Transparent;
+            this.btnShiftBack.FlatAppearance.BorderColor = System.Drawing.Color.DimGray;
+            this.btnShiftBack.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnShiftBack.Location = new System.Drawing.Point(92, 26);
+            this.btnShiftBack.Name = "btnShiftBack";
+            this.btnShiftBack.Size = new System.Drawing.Size(76, 74);
+            this.btnShiftBack.TabIndex = 1;
+            this.btnShiftBack.UseVisualStyleBackColor = false;
+            this.btnShiftBack.Click += new System.EventHandler(this.btnShiftBack_Click);
+            //
+            // lblShift
+            //
+            this.lblShift.Font = new System.Drawing.Font("Tahoma", 14F, System.Drawing.FontStyle.Bold);
+            this.lblShift.Location = new System.Drawing.Point(172, 26);
+            this.lblShift.Name = "lblShift";
+            this.lblShift.Size = new System.Drawing.Size(84, 74);
+            this.lblShift.Text = "0";
+            this.lblShift.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            //
+            // btnShiftSnap
+            //
+            this.btnShiftSnap.BackColor = System.Drawing.Color.Transparent;
+            this.btnShiftSnap.FlatAppearance.BorderColor = System.Drawing.Color.DimGray;
+            this.btnShiftSnap.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnShiftSnap.Location = new System.Drawing.Point(262, 26);
+            this.btnShiftSnap.Name = "btnShiftSnap";
+            this.btnShiftSnap.Size = new System.Drawing.Size(76, 74);
+            this.btnShiftSnap.TabIndex = 2;
+            this.btnShiftSnap.UseVisualStyleBackColor = false;
+            this.btnShiftSnap.Click += new System.EventHandler(this.btnShiftSnap_Click);
+            //
+            // btnShiftZero
+            //
+            this.btnShiftZero.BackColor = System.Drawing.Color.Transparent;
+            this.btnShiftZero.FlatAppearance.BorderColor = System.Drawing.Color.DimGray;
+            this.btnShiftZero.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnShiftZero.Image = global::AgOpenGPS.Properties.Resources.SteerZero;
+            this.btnShiftZero.Location = new System.Drawing.Point(344, 26);
+            this.btnShiftZero.Name = "btnShiftZero";
+            this.btnShiftZero.Size = new System.Drawing.Size(76, 74);
+            this.btnShiftZero.TabIndex = 3;
+            this.btnShiftZero.UseVisualStyleBackColor = false;
+            this.btnShiftZero.Click += new System.EventHandler(this.btnShiftZero_Click);
+            //
             // btnToggle
             //
             this.btnToggle.BackColor = System.Drawing.Color.WhiteSmoke;
             this.btnToggle.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnToggle.Font = new System.Drawing.Font("Tahoma", 11F, System.Drawing.FontStyle.Bold);
             this.btnToggle.ForeColor = System.Drawing.Color.Black;
-            this.btnToggle.Location = new System.Drawing.Point(12, 260);
+            this.btnToggle.Image = global::AgOpenGPS.Properties.Resources.TracksInvisible;
+            this.btnToggle.Location = new System.Drawing.Point(12, 375);
             this.btnToggle.Name = "btnToggle";
             this.btnToggle.Size = new System.Drawing.Size(100, 80);
             this.btnToggle.TabIndex = 2;
-            this.btnToggle.Text = "Tree Plant\r\nOFF";
-            this.btnToggle.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.btnToggle.UseVisualStyleBackColor = false;
             this.btnToggle.Click += new System.EventHandler(this.btnToggle_Click);
             //
@@ -172,7 +251,7 @@ namespace AgOpenGPS
             this.btnAngleOutput.BackColor = System.Drawing.Color.LightGray;
             this.btnAngleOutput.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnAngleOutput.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Bold);
-            this.btnAngleOutput.Location = new System.Drawing.Point(120, 260);
+            this.btnAngleOutput.Location = new System.Drawing.Point(120, 375);
             this.btnAngleOutput.Name = "btnAngleOutput";
             this.btnAngleOutput.Size = new System.Drawing.Size(160, 80);
             this.btnAngleOutput.TabIndex = 3;
@@ -187,7 +266,7 @@ namespace AgOpenGPS
             this.bntOK.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.bntOK.Font = new System.Drawing.Font("Tahoma", 14.25F);
             this.bntOK.Image = global::AgOpenGPS.Properties.Resources.OK64;
-            this.bntOK.Location = new System.Drawing.Point(340, 260);
+            this.bntOK.Location = new System.Drawing.Point(340, 375);
             this.bntOK.Name = "bntOK";
             this.bntOK.Size = new System.Drawing.Size(100, 80);
             this.bntOK.TabIndex = 4;
@@ -200,11 +279,12 @@ namespace AgOpenGPS
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Gainsboro;
-            this.ClientSize = new System.Drawing.Size(454, 352);
+            this.ClientSize = new System.Drawing.Size(454, 467);
             this.ControlBox = false;
             this.Controls.Add(this.bntOK);
             this.Controls.Add(this.btnAngleOutput);
             this.Controls.Add(this.btnToggle);
+            this.Controls.Add(this.groupBoxShift);
             this.Controls.Add(this.groupBoxSettings);
             this.Controls.Add(this.groupBoxRefLine);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
@@ -215,6 +295,7 @@ namespace AgOpenGPS
             this.Load += new System.EventHandler(this.FormTreePlant_Load);
             this.groupBoxRefLine.ResumeLayout(false);
             this.groupBoxSettings.ResumeLayout(false);
+            this.groupBoxShift.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.nudGridSpacing)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudNumLines)).EndInit();
             this.ResumeLayout(false);
@@ -235,5 +316,11 @@ namespace AgOpenGPS
         private System.Windows.Forms.Button btnToggle;
         private System.Windows.Forms.Button btnAngleOutput;
         private System.Windows.Forms.Button bntOK;
+        private System.Windows.Forms.GroupBox groupBoxShift;
+        private System.Windows.Forms.Button btnShiftFwd;
+        private System.Windows.Forms.Button btnShiftBack;
+        private System.Windows.Forms.Label lblShift;
+        private System.Windows.Forms.Button btnShiftSnap;
+        private System.Windows.Forms.Button btnShiftZero;
     }
 }

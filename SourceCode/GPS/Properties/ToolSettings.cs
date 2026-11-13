@@ -40,6 +40,7 @@ namespace AgOpenGPS.Properties
         public bool setTool_treePlantAngleOutput = false; // send distance as steer angle via PGN
         public int setTool_treePlantTramRefIndex = -1; // which track in gArr was the reference
         public int setTool_treePlantNumLines = 100; // number of parallel lines per side
+        public double setTool_treePlantShift = 0; // forward/back shift of the grid in meters
 
         // Sections
         public int setVehicle_numSections = 3;

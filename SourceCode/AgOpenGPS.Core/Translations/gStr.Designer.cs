@@ -5391,5 +5391,122 @@ namespace AgOpenGPS.Core.Translations {
                 return ResourceManager.GetString("gsOpenProfiles", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tree Planting.
+        /// </summary>
+        public static string gsTreePlanting {
+            get {
+                return ResourceManager.GetString("gsTreePlanting", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Reference AB Line.
+        /// </summary>
+        public static string gsTreePlantRefLine {
+            get {
+                return ResourceManager.GetString("gsTreePlantRefLine", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Settings.
+        /// </summary>
+        public static string gsTreePlantSettings {
+            get {
+                return ResourceManager.GetString("gsTreePlantSettings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Grid Spacing (m).
+        /// </summary>
+        public static string gsTreePlantGridSpacing {
+            get {
+                return ResourceManager.GetString("gsTreePlantGridSpacing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Lines / Side.
+        /// </summary>
+        public static string gsTreePlantLinesPerSide {
+            get {
+                return ResourceManager.GetString("gsTreePlantLinesPerSide", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Build Lines.
+        /// </summary>
+        public static string gsTreePlantBuildLines {
+            get {
+                return ResourceManager.GetString("gsTreePlantBuildLines", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Angle Output.
+        /// </summary>
+        public static string gsTreePlantAngleOutput {
+            get {
+                return ResourceManager.GetString("gsTreePlantAngleOutput", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Forward / Back Shift.
+        /// </summary>
+        public static string gsTreePlantShift {
+            get {
+                return ResourceManager.GetString("gsTreePlantShift", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} parallel lines built.
+        /// </summary>
+        public static string gsTreePlantLinesBuilt {
+            get {
+                return ResourceManager.GetString("gsTreePlantLinesBuilt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No reference line selected.
+        /// </summary>
+        public static string gsTreePlantNoRefLine {
+            get {
+                return ResourceManager.GetString("gsTreePlantNoRefLine", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Only AB lines are supported.
+        /// </summary>
+        public static string gsTreePlantOnlyAB {
+            get {
+                return ResourceManager.GetString("gsTreePlantOnlyAB", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Build the lines first.
+        /// </summary>
+        public static string gsTreePlantBuildFirst {
+            get {
+                return ResourceManager.GetString("gsTreePlantBuildFirst", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Turn on tree planting first.
+        /// </summary>
+        public static string gsTreePlantEnableFirst {
+            get {
+                return ResourceManager.GetString("gsTreePlantEnableFirst", resourceCulture);
+            }
+        }
     }
 }

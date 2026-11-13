@@ -81,6 +81,15 @@ namespace AgOpenGPS
         public int treePlantRefIndex = -1;
         // Reference heading at build time (for distance sign calculation)
         public double treePlantRefHeading = 0;
+        // Tree planting: distance to the nearest line along the travel direction,
+        // positive = line is ahead of the implement, negative = already passed
+        public double treePlantAheadDistance;
+        // Smoothed ahead distance for the vertical lightbar
+        public double avgTreePlantAheadDistance;
+        // Copy of the reference track and grid parameters, so the lines can be rebuilt after a shift
+        private CTrk treePlantRefTrack = null;
+        private double treePlantGridSpacing = 0;
+        private int treePlantNumLines = 0;
         // Angle scale constant for steer angle output (degrees per meter)
         private const double treePlantAngleScaleConst = 20.0;
 
@@ -599,6 +608,83 @@ namespace AgOpenGPS
             CTrk track = gTemp[refIndex];
             if (track.mode != TrackMode.AB) return;
 
+            treePlantRefTrack = new CTrk(track);
+            treePlantGridSpacing = gridSpacing;
+            treePlantNumLines = numLines;
+
+            BuildTreePlantLinesFromRef();
+
+            // Find the actual gArr index for this track (for persistence)
+            treePlantRefIndex = -1;
+            for (int i = 0; i < mf.trk.gArr.Count; i++)
+            {
+                if (mf.trk.gArr[i].name == track.name && mf.trk.gArr[i].mode == track.mode)
+                {
+                    treePlantRefIndex = i;
+                    break;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Current forward/back shift of the grid in meters (along the AB perpendicular), kept within half a spacing.
+        /// </summary>
+        public double TreePlantShift => Properties.ToolSettings.Default.setTool_treePlantShift;
+
+        /// <summary>
+        /// Shift the grid forward (positive) or back (negative) relative to the implement's travel direction.
+        /// </summary>
+        public void ShiftTreePlantLines(double meters)
+        {
+            if (treePlantRefTrack == null) return;
+
+            // perpendicular of the reference line is (cos h, -sin h), travel direction is (sin th, cos th)
+            double dot = Math.Sin(mf.toolPos.heading - treePlantRefTrack.heading);
+            double dirSign = dot >= 0 ? 1.0 : -1.0;
+
+            SetTreePlantShift(TreePlantShift + meters * dirSign);
+        }
+
+        /// <summary>
+        /// Move the grid so the nearest line runs exactly through the implement.
+        /// </summary>
+        public void SnapTreePlantToTool()
+        {
+            if (treePlantRefTrack == null) return;
+
+            CalculateTreePlantDistance();
+            SetTreePlantShift(TreePlantShift + treePlantDistance);
+        }
+
+        public void ResetTreePlantShift()
+        {
+            if (treePlantRefTrack == null) return;
+            SetTreePlantShift(0);
+        }
+
+        private void SetTreePlantShift(double shift)
+        {
+            // the grid repeats every spacing, so keep the shift within +- half a spacing
+            if (treePlantGridSpacing > 0)
+                shift -= treePlantGridSpacing * Math.Round(shift / treePlantGridSpacing);
+
+            Properties.ToolSettings.Default.setTool_treePlantShift = shift;
+            Properties.ToolSettings.Default.Save();
+
+            BuildTreePlantLinesFromRef();
+            CalculateTreePlantDistance();
+        }
+
+        private void BuildTreePlantLinesFromRef()
+        {
+            treePlantLines.Clear();
+            CTrk track = treePlantRefTrack;
+            if (track == null) return;
+
+            double gridSpacing = treePlantGridSpacing;
+            int numLines = treePlantNumLines;
+            double shift = TreePlantShift;
+
             double abHeading = track.heading;
             double hsin = Math.Sin(abHeading);
             double hcos = Math.Cos(abHeading);
@@ -636,7 +722,7 @@ namespace AgOpenGPS
                 int start = (side == 0) ? 0 : 1;
                 for (int i = start; i <= numLines; i++)
                 {
-                    double offset = i * gridSpacing * side;
+                    double offset = i * gridSpacing * side + shift;
 
                     List<vec2> line = new List<vec2>(tramRef.Count);
 
@@ -659,16 +745,6 @@ namespace AgOpenGPS
                 }
             }
 
-            // Find the actual gArr index for this track (for persistence)
-            treePlantRefIndex = -1;
-            for (int i = 0; i < mf.trk.gArr.Count; i++)
-            {
-                if (mf.trk.gArr[i].name == track.name && mf.trk.gArr[i].mode == track.mode)
-                {
-                    treePlantRefIndex = i;
-                    break;
-                }
-            }
             treePlantRefHeading = abHeading;
         }
 
@@ -742,6 +818,10 @@ namespace AgOpenGPS
             double signedDist = px * refHcos - py * refHsin;
 
             treePlantDistance = signedDist;
+
+            // Same distance seen from the implement: positive when the line is still ahead
+            double dirSign = Math.Sin(mf.toolPos.heading - treePlantRefHeading) >= 0 ? 1.0 : -1.0;
+            treePlantAheadDistance = -signedDist * dirSign;
         }
 
         public void DrawTreePlant()

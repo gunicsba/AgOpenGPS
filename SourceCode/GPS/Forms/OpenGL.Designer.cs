@@ -2390,65 +2390,109 @@ namespace AgOpenGPS
             if (!isTreePlantModeOn || ABLine.treePlantLines.Count == 0)
                 return;
 
-            double textSize = (100 + (double)(oglMain.Height - 600)) * 0.0012;
-            int wide = (int)((double)oglMain.Width / 18);
-            if (wide < 64) wide = 64;
+            // Vertical lightbar on the left side: shows how far the next tree line is
+            // along the travel direction. Up = line still ahead, down = line already passed.
+            const double ledStep = 0.05; // 5 cm per LED
+            const int dotsPerSide = 8;
+            const double spacing = 26.0;
+            const double arrowFill = 10.0;
+            const double arrowHalo = 16.0;
+
+            GL.Disable(EnableCap.DepthTest);
 
             // Smoothing - same pattern as cross-track
-            ABLine.avgTreePlantDistance = ABLine.avgTreePlantDistance * 0.8 + ABLine.treePlantDistance * 0.2;
+            ABLine.avgTreePlantAheadDistance = ABLine.avgTreePlantAheadDistance * 0.6 + ABLine.treePlantAheadDistance * 0.4;
+            double dist = ABLine.avgTreePlantAheadDistance;
+            double absDist = Math.Abs(dist);
 
-            // Convert meters to cm or inches
-            double distDisplay = ABLine.avgTreePlantDistance * m2InchOrCm;
+            double cx = -(double)NavWidth / 2 + 44;
+            double cy = oglMain.Height * 0.5;
+
+            // Background rail (small dark points)
+            GL.PointSize(8.0f);
+            GL.Color3(0.0, 0.0, 0.0);
+            GL.Begin(PrimitiveType.Points);
+            for (int i = 1; i <= dotsPerSide; i++)
+            {
+                GL.Vertex2(cx, cy - i * spacing);
+                GL.Vertex2(cx, cy + i * spacing);
+            }
+            GL.End();
+
+            // Center LED: green when within one step of the line
+            bool onLine = absDist < ledStep;
+            GL.PointSize(onLine ? 22.0f : 14.0f);
+            GL.Color3(0.0, 0.0, 0.0);
+            GL.Begin(PrimitiveType.Points);
+            GL.Vertex2(cx, cy);
+            GL.End();
+            GL.PointSize(onLine ? 16.0f : 8.0f);
+            if (onLine) GL.Color3(0.0f, 0.98f, 0.0f);
+            else GL.Color3(0.35f, 0.35f, 0.35f);
+            GL.Begin(PrimitiveType.Points);
+            GL.Vertex2(cx, cy);
+            GL.End();
+
+            int lit = (int)(absDist / ledStep);
+            if (lit > dotsPerSide) lit = dotsPerSide;
+            bool isAhead = dist > 0;
+
+            // halo first, then fill
+            for (int pass = 0; pass < 2; pass++)
+            {
+                if (pass == 0) GL.Color3(0.0f, 0.0f, 0.0f);
+                else if (isAhead) GL.Color3(0.0f, 0.98f, 0.0f);
+                else GL.Color3(0.98f, 0.30f, 0.0f);
+
+                double size = pass == 0 ? arrowHalo : arrowFill;
+                for (int i = 1; i <= lit; i++)
+                {
+                    double y = isAhead ? cy - i * spacing : cy + i * spacing;
+                    DrawVerticalArrowTriangle(cx, y, size, isAhead);
+                }
+            }
+
+            // Distance text above the bar - always shown, also at zero
+            double distDisplay = dist * m2InchOrCm;
             if (distDisplay > 999) distDisplay = 999;
             if (distDisplay < -999) distDisplay = -999;
+            string hede = Math.Abs(distDisplay).ToString("N0") + unitsInCmNS;
 
-            // Color based on absolute distance in meters
-            double absDistM = Math.Abs(ABLine.avgTreePlantDistance);
-            double green, red;
-            if (absDistM < 0.05)
-            {
-                green = 0.98;
-                red = 0.0;
-            }
-            else if (absDistM < 0.25)
-            {
-                green = 0.98;
-                red = 0.9;
-            }
-            else
-            {
-                green = 0.2;
-                red = 0.95;
-            }
+            double textSize = (100 + (double)(oglMain.Height - 600)) * 0.0012;
+            double scale = 0.8 + textSize * 0.5;
+            int textWidth = (int)(hede.Length * 18 * scale);
+            int boxLeft = (int)(cx - 36);
+            int boxRight = Math.Max(boxLeft + textWidth + 14, (int)(cx + 36));
+            int boxBottom = (int)(cy - (dotsPerSide + 1) * spacing);
+            int boxTop = boxBottom - (int)(32 * scale) - 6;
 
-            // Position below the cross-track bar
-            int topY = (int)(35 * (1 + textSize)) + 4;
-            int botY = topY + (int)(32 * (1 + textSize));
-
-            GL.Color4(red, green, 0.3, 1.0);
-            XyCoord u0v0 = new XyCoord(-wide, botY);
-            XyCoord u1v1 = new XyCoord(wide, topY);
-            ScreenTextures.CrossTrackBackground.Draw(u0v0, u1v1);
-
-            // Build display text with direction
-            string hede;
-            if (Math.Abs(distDisplay) < 0.5)
-            {
-                hede = "Tram == 0 ==";
-            }
-            else if (distDisplay > 0)
-            {
-                hede = "Tram << " + (Math.Abs(distDisplay)).ToString("N0") + " " + unitsInCmNS;
-            }
-            else
-            {
-                hede = "Tram " + (Math.Abs(distDisplay)).ToString("N0") + " " + unitsInCmNS + " >>";
-            }
-
-            int center = -(int)(((double)(hede.Length) * 0.5) * (18 * (1.0 + textSize)));
+            if (onLine) GL.Color4(0.0, 0.98, 0.3, 1.0);
+            else if (absDist < 0.25) GL.Color4(0.9, 0.98, 0.3, 1.0);
+            else GL.Color4(0.95, 0.2, 0.3, 1.0);
+            ScreenTextures.CrossTrackBackground.Draw(new XyCoord(boxLeft, boxBottom), new XyCoord(boxRight, boxTop));
 
             GL.Color4(0.12f, 0.12770f, 0.120f, 1);
-            font.DrawText(center, topY + 2, hede, 1.0 + textSize);
+            font.DrawText(boxLeft + 7, boxTop + 2, hede, scale);
+        }
+
+        private void DrawVerticalArrowTriangle(double cx, double cy, double size, bool isUp)
+        {
+            double half = size * 0.7;
+            double w = size * 0.9;
+            GL.Begin(PrimitiveType.Triangles);
+            if (isUp)
+            {
+                GL.Vertex2(cx, cy - half);
+                GL.Vertex2(cx - w, cy + half);
+                GL.Vertex2(cx + w, cy + half);
+            }
+            else
+            {
+                GL.Vertex2(cx, cy + half);
+                GL.Vertex2(cx + w, cy - half);
+                GL.Vertex2(cx - w, cy - half);
+            }
+            GL.End();
         }
 
         private void DrawTrackInfo()

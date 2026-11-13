@@ -417,6 +417,7 @@ namespace AgOpenGPS
             tramLinesMenuField.Text = gStr.gsTramLines;
             tramsMultiMenuField.Text = gStr.gsTramLines + " Builder";
             recordedPathStripMenu.Text = gStr.gsRecordedPathMenu;
+            treePlantingToolStripMenuItem.Text = gStr.gsTreePlanting;
             flagByLatLonToolStripMenuItem.Text = gStr.gsFlagByLatLon;
             boundaryToolToolStripMenu.Text = gStr.gsBoundary + " Tool";
 

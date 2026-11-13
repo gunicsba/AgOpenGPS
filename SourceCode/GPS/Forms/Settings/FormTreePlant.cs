@@ -1,4 +1,5 @@
 using AgOpenGPS.Controls;
+using AgOpenGPS.Core.Translations;
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
@@ -20,6 +21,27 @@ namespace AgOpenGPS
 
             nudGridSpacing.Controls[0].Enabled = false;
             nudNumLines.Controls[0].Enabled = false;
+
+            // Translations
+            Text = gStr.gsTreePlanting;
+            groupBoxRefLine.Text = gStr.gsTreePlantRefLine;
+            groupBoxSettings.Text = gStr.gsTreePlantSettings;
+            lblGridSpacing.Text = gStr.gsTreePlantGridSpacing;
+            lblNumLines.Text = gStr.gsTreePlantLinesPerSide;
+            btnBuild.Text = gStr.gsTreePlantBuildLines;
+            groupBoxShift.Text = gStr.gsTreePlantShift;
+
+            // Same pictures as the side shift (nudge) buttons, turned by 90 degrees
+            btnShiftFwd.Image = RotatedImage(Properties.Resources.SnapLeft);
+            btnShiftBack.Image = RotatedImage(Properties.Resources.SnapRight);
+            btnShiftSnap.Image = RotatedImage(Properties.Resources.SnapToPivot);
+        }
+
+        private static System.Drawing.Image RotatedImage(System.Drawing.Image source)
+        {
+            var bmp = new System.Drawing.Bitmap(source);
+            bmp.RotateFlip(System.Drawing.RotateFlipType.Rotate90FlipNone);
+            return bmp;
         }
 
         private void FormTreePlant_Load(object sender, EventArgs e)
@@ -71,6 +93,50 @@ namespace AgOpenGPS
 
             UpdateTrackLabel();
             UpdateToggleButtons();
+            UpdateShiftLabel();
+        }
+
+        // Shift step is the same as the side shift (nudge) step, stored in cm
+        private double ShiftStep => Properties.ToolSettings.Default.setAS_snapDistance * 0.01;
+
+        private void btnShiftFwd_Click(object sender, EventArgs e)
+        {
+            if (!CheckLinesBuilt()) return;
+            mf.ABLine.ShiftTreePlantLines(ShiftStep);
+            UpdateShiftLabel();
+        }
+
+        private void btnShiftBack_Click(object sender, EventArgs e)
+        {
+            if (!CheckLinesBuilt()) return;
+            mf.ABLine.ShiftTreePlantLines(-ShiftStep);
+            UpdateShiftLabel();
+        }
+
+        private void btnShiftSnap_Click(object sender, EventArgs e)
+        {
+            if (!CheckLinesBuilt()) return;
+            mf.ABLine.SnapTreePlantToTool();
+            UpdateShiftLabel();
+        }
+
+        private void btnShiftZero_Click(object sender, EventArgs e)
+        {
+            if (!CheckLinesBuilt()) return;
+            mf.ABLine.ResetTreePlantShift();
+            UpdateShiftLabel();
+        }
+
+        private bool CheckLinesBuilt()
+        {
+            if (mf.ABLine.treePlantLines.Count > 0) return true;
+            mf.TimedMessageBox(2000, gStr.gsTreePlanting, gStr.gsTreePlantBuildFirst);
+            return false;
+        }
+
+        private void UpdateShiftLabel()
+        {
+            lblShift.Text = ((int)Math.Round(mf.ABLine.TreePlantShift * mf.m2InchOrCm)).ToString() + mf.unitsInCm;
         }
 
         private void btnSelectCurve_Click(object sender, EventArgs e)
@@ -93,13 +159,13 @@ namespace AgOpenGPS
         {
             if (indx < 0 || indx >= gTemp.Count)
             {
-                mf.TimedMessageBox(2000, "Build Lines", "No reference line selected");
+                mf.TimedMessageBox(2000, gStr.gsTreePlantBuildLines, gStr.gsTreePlantNoRefLine);
                 return;
             }
 
             if (gTemp[indx].mode != TrackMode.AB)
             {
-                mf.TimedMessageBox(2000, "Build Lines", "Only AB lines are supported");
+                mf.TimedMessageBox(2000, gStr.gsTreePlantBuildLines, gStr.gsTreePlantOnlyAB);
                 return;
             }
 
@@ -114,7 +180,8 @@ namespace AgOpenGPS
             Properties.ToolSettings.Default.Save();
 
             int lineCount = mf.ABLine.treePlantLines.Count;
-            mf.TimedMessageBox(1500, "Build Lines", lineCount + " parallel lines built");
+            mf.TimedMessageBox(1500, gStr.gsTreePlantBuildLines, string.Format(gStr.gsTreePlantLinesBuilt, lineCount));
+            UpdateShiftLabel();
         }
 
         private void btnToggle_Click(object sender, EventArgs e)
@@ -128,7 +195,7 @@ namespace AgOpenGPS
             {
                 if (mf.ABLine.treePlantLines.Count == 0)
                 {
-                    mf.TimedMessageBox(2000, "Tree Planting", "Build lines first");
+                    mf.TimedMessageBox(2000, gStr.gsTreePlanting, gStr.gsTreePlantBuildFirst);
                     return;
                 }
                 mf.isTreePlantModeOn = true;
@@ -145,7 +212,7 @@ namespace AgOpenGPS
         {
             if (!mf.isTreePlantModeOn)
             {
-                mf.TimedMessageBox(2000, "Angle Output", "Enable Tree Plant first");
+                mf.TimedMessageBox(2000, gStr.gsTreePlantAngleOutput, gStr.gsTreePlantEnableFirst);
                 return;
             }
 
@@ -159,28 +226,20 @@ namespace AgOpenGPS
 
         private void UpdateToggleButtons()
         {
-            if (mf.isTreePlantModeOn)
-            {
-                btnToggle.BackColor = System.Drawing.Color.DarkGreen;
-                btnToggle.ForeColor = System.Drawing.Color.White;
-                btnToggle.Text = "Tree Plant\r\nON";
-            }
-            else
-            {
-                btnToggle.BackColor = System.Drawing.Color.WhiteSmoke;
-                btnToggle.ForeColor = System.Drawing.Color.Black;
-                btnToggle.Text = "Tree Plant\r\nOFF";
-            }
+            // Eye = tree planting shown, crossed out eye = hidden
+            btnToggle.Image = mf.isTreePlantModeOn
+                ? Properties.Resources.TrackVisible
+                : Properties.Resources.TracksInvisible;
 
             if (mf.isTreePlantAngleOutputOn)
             {
                 btnAngleOutput.BackColor = System.Drawing.Color.LightGreen;
-                btnAngleOutput.Text = "Angle Output ON";
+                btnAngleOutput.Text = gStr.gsTreePlantAngleOutput + " " + gStr.gsOn;
             }
             else
             {
                 btnAngleOutput.BackColor = System.Drawing.Color.LightGray;
-                btnAngleOutput.Text = "Angle Output OFF";
+                btnAngleOutput.Text = gStr.gsTreePlantAngleOutput + " " + gStr.gsOff;
             }
         }
 

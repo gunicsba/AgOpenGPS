@@ -1953,4 +1953,43 @@ Remember: CPD, Min PWM, and Look Ahead are critical settings. </value>
   <data name="gsOpenProfiles" xml:space="preserve">
     <value>Open Profiles</value>
   </data>
+  <data name="gsTreePlanting" xml:space="preserve">
+    <value>Tree Planting</value>
+  </data>
+  <data name="gsTreePlantRefLine" xml:space="preserve">
+    <value>Reference AB Line</value>
+  </data>
+  <data name="gsTreePlantSettings" xml:space="preserve">
+    <value>Settings</value>
+  </data>
+  <data name="gsTreePlantGridSpacing" xml:space="preserve">
+    <value>Grid Spacing (m)</value>
+  </data>
+  <data name="gsTreePlantLinesPerSide" xml:space="preserve">
+    <value>Lines / Side</value>
+  </data>
+  <data name="gsTreePlantBuildLines" xml:space="preserve">
+    <value>Build Lines</value>
+  </data>
+  <data name="gsTreePlantAngleOutput" xml:space="preserve">
+    <value>Angle Output</value>
+  </data>
+  <data name="gsTreePlantShift" xml:space="preserve">
+    <value>Forward / Back Shift</value>
+  </data>
+  <data name="gsTreePlantLinesBuilt" xml:space="preserve">
+    <value>{0} parallel lines built</value>
+  </data>
+  <data name="gsTreePlantNoRefLine" xml:space="preserve">
+    <value>No reference line selected</value>
+  </data>
+  <data name="gsTreePlantOnlyAB" xml:space="preserve">
+    <value>Only AB lines are supported</value>
+  </data>
+  <data name="gsTreePlantBuildFirst" xml:space="preserve">
+    <value>Build the lines first</value>
+  </data>
+  <data name="gsTreePlantEnableFirst" xml:space="preserve">
+    <value>Turn on tree planting first</value>
+  </data>
 </root>
