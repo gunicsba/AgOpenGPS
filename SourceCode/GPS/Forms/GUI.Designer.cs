@@ -559,6 +559,7 @@ namespace AgOpenGPS
             isDirectionMarkers = Properties.ToolSettings.Default.setTool_isDirectionMarkers;
 
             isHeadlandDistanceOn = Settings.Default.isHeadlandDistanceOn;
+            isPassNumbersOn = Settings.Default.setDisplay_isPassNumbersOn;
 
             panelNavigation.Location = new System.Drawing.Point(90, 100);
             panelDrag.Location = new System.Drawing.Point(87, 268);
@@ -1421,6 +1422,9 @@ namespace AgOpenGPS
                         return;
                     }
                 }
+
+                //tap on a pass number sets the U-turn skip
+                if (TryPickPassNumber(point.X, point.Y)) return;
 
                 //vehicle direcvtion reset
                 if (point.X > centerX - 40 && point.X < centerX + 40

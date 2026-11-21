@@ -313,6 +313,7 @@ namespace AgOpenGPS
             AddRow(right, "AutoSwitch Speed", esDefault.setAutoSwitchDualFixSpeed, es.setAutoSwitchDualFixSpeed);
             AddRow(right, "Draw Pivot", esDefault.setBnd_isDrawPivot, es.setBnd_isDrawPivot);
             AddRow(right, "Headland Dist On", esDefault.isHeadlandDistanceOn, es.isHeadlandDistanceOn);
+            AddRow(right, "Pass Numbers On", esDefault.setDisplay_isPassNumbersOn, es.setDisplay_isPassNumbersOn);
             AddRow(right, "Bnd Tool Spacing", esDefault.bndToolSpacing, es.bndToolSpacing);
             AddRow(right, "Bnd Tool Smooth", esDefault.bndToolSmooth, es.bndToolSmooth);
 

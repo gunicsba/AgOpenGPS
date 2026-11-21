@@ -1,7 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace AgOpenGPS
 {
+    public enum ProximityLine { None, Headland, TurnLine, Fence }
+
     public partial class CBoundary
     {
         public bool isHeadlandOn;
@@ -112,9 +115,41 @@ namespace AgOpenGPS
             }
             return false;
         }
+        /// <summary>
+        /// Which line HeadlandDistance is measured to. Headland when a headland is built and on,
+        /// otherwise the U-turn line (U-turn on) or the outer fence (U-turn off).
+        /// </summary>
+        public ProximityLine HeadlandDistanceLine { get; private set; } = ProximityLine.None;
+
         public void CheckHeadlandProximity()
         {
-            if (!isHeadlandOn || bndList.Count == 0 || bndList[0].hdLine.Count < 2)
+            List<vec3> line = null;
+            ProximityLine lineType = ProximityLine.None;
+
+            if (bndList.Count > 0)
+            {
+                if (isHeadlandOn && bndList[0].hdLine.Count > 2)
+                {
+                    line = bndList[0].hdLine;
+                    lineType = ProximityLine.Headland;
+                }
+                else if (mf.yt.isYouTurnBtnOn && bndList[0].turnLine.Count > 2)
+                {
+                    //no headland: measure to where the U-turn triggers
+                    line = bndList[0].turnLine;
+                    lineType = ProximityLine.TurnLine;
+                }
+                else if (bndList[0].fenceLine.Count > 2)
+                {
+                    //no headland, no U-turn: measure to the field edge
+                    line = bndList[0].fenceLine;
+                    lineType = ProximityLine.Fence;
+                }
+            }
+
+            HeadlandDistanceLine = lineType;
+
+            if (line == null)
             {
                 HeadlandNearestPoint = null;
                 HeadlandDistance = null;
@@ -123,7 +158,7 @@ namespace AgOpenGPS
 
             vec3 vehiclePos = mf.toolPivotPos;
 
-            vec2? nearest = glm.RaycastToPolygon(vehiclePos, bndList[0].hdLine);
+            vec2? nearest = glm.RaycastToPolygon(vehiclePos, line);
             if (!nearest.HasValue)
             {
                 HeadlandNearestPoint = null;
@@ -137,7 +172,7 @@ namespace AgOpenGPS
             HeadlandNearestPoint = nearestVal;
             HeadlandDistance = distance;
 
-            bool isInside = bndList[0].hdLine.IsPointInPolygon(vehiclePos.ToVec2());
+            bool isInside = line.IsPointInPolygon(vehiclePos.ToVec2());
 
             double dx = nearestVal.easting - vehiclePos.easting;
             double dy = nearestVal.northing - vehiclePos.northing;

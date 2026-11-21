@@ -423,6 +423,9 @@ namespace AgOpenGPS
                     recPath.DrawRecordedLine();
                     recPath.DrawDubins();
 
+                    //clickable 0-9 skip numbers on the neighbouring passes
+                    DrawPassNumbers();
+
                     #endregion
 
                     #region Flags
@@ -597,7 +600,7 @@ namespace AgOpenGPS
                         DrawVersion("Beta Testing v" + Program.SemVer);
                     }
 
-                    if (bnd.isHeadlandOn && isHeadlandDistanceOn)
+                    if (IsHeadlandDistanceShown)
                     {
                         DrawHeadlandDistance();
                     }
@@ -2528,7 +2531,7 @@ namespace AgOpenGPS
 
             int start = -(int)(((double)(dire.Length) * 0.45) * (22 * (1.0)));
             int down = 0;
-            int baseDown = (bnd.isHeadlandOn && isHeadlandDistanceOn) ? 175 : 70;
+            int baseDown = IsHeadlandDistanceShown ? 175 : 70;
             int offset = (int)((oglMain.Height - 600) / 12.0);
             down = baseDown + offset;
 
@@ -2745,6 +2748,13 @@ namespace AgOpenGPS
             }
         }
 
+        /// <summary>
+        /// The distance box is drawn with a headland, or without one when a boundary
+        /// gives a fence / turn line to measure to.
+        /// </summary>
+        private bool IsHeadlandDistanceShown =>
+            isHeadlandDistanceOn && bnd.HeadlandDistanceLine != ProximityLine.None;
+
         private void DrawHeadlandDistance()
         {
             // --- Query GL viewport (pixels) ---
@@ -2802,6 +2812,10 @@ namespace AgOpenGPS
 
                 // Show feet (2 decimals) or meters (1 decimal)
                 label = Distance.MediumBigDistanceString(isMetric, meters, 0, 1);
+
+                //without a headland tell the user which line is measured to
+                if (bnd.HeadlandDistanceLine == ProximityLine.Fence) label = "Edge: " + label;
+                else if (bnd.HeadlandDistanceLine == ProximityLine.TurnLine) label = "Turn: " + label;
             }
             else
             {

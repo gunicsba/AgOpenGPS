@@ -112,6 +112,7 @@ namespace AgOpenGPS.Properties
         public double setAutoSwitchDualFixSpeed = 2.0;
         public bool setBnd_isDrawPivot = true;
         public bool isHeadlandDistanceOn = false;
+        public bool setDisplay_isPassNumbersOn = false;
         public int bndToolSpacing = 1;
         public int bndToolSmooth = 1;
 

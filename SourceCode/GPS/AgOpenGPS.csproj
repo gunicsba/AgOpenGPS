@@ -83,6 +83,9 @@
     <Compile Update="Forms\OpenGL.Designer.cs">
       <DependentUpon>FormGPS.cs</DependentUpon>
     </Compile>
+    <Compile Update="Forms\PassNumbers.Designer.cs">
+      <DependentUpon>FormGPS.cs</DependentUpon>
+    </Compile>
     <Compile Update="Forms\PGN.Designer.cs">
       <DependentUpon>FormGPS.cs</DependentUpon>
     </Compile>

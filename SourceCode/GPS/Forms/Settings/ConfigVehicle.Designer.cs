@@ -37,6 +37,7 @@ namespace AgOpenGPS
             mf.isSectionlinesOn = chkSectionLines.Checked;
             mf.isLineSmooth = chkLineSmooth.Checked;
             mf.isHeadlandDistanceOn = chkboxHeadlandDist.Checked;
+            mf.isPassNumbersOn = chkboxPassNumbers.Checked;
 
             //mf.timeToShowMenus = (int)nudMenusOnTime.Value;
 
@@ -64,6 +65,7 @@ namespace AgOpenGPS
             Properties.Settings.Default.setDisplay_isSectionLinesOn = mf.isSectionlinesOn;
             Properties.Settings.Default.setDisplay_isLineSmooth = mf.isLineSmooth;
             Properties.Settings.Default.isHeadlandDistanceOn = mf.isHeadlandDistanceOn;
+            Properties.Settings.Default.setDisplay_isPassNumbersOn = mf.isPassNumbersOn;
 
             Properties.VehicleSettings.Default.Save();
             Properties.ToolSettings.Default.Save();

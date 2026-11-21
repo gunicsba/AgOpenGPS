@@ -448,6 +448,8 @@ namespace AgOpenGPS
             this.tabDisplay = new System.Windows.Forms.TabPage();
             this.lblHeadlandDist = new System.Windows.Forms.Label();
             this.chkboxHeadlandDist = new System.Windows.Forms.CheckBox();
+            this.chkboxPassNumbers = new System.Windows.Forms.CheckBox();
+            this.lblPassNumbers = new System.Windows.Forms.Label();
             this.labelLineSmoothOnOff = new System.Windows.Forms.Label();
             this.labelSectionLinesOnOff = new System.Windows.Forms.Label();
             this.labelDirectionMarkOnOff = new System.Windows.Forms.Label();
@@ -7947,6 +7949,8 @@ namespace AgOpenGPS
             this.tabDisplay.BackColor = System.Drawing.Color.WhiteSmoke;
             this.tabDisplay.Controls.Add(this.lblHeadlandDist);
             this.tabDisplay.Controls.Add(this.chkboxHeadlandDist);
+            this.tabDisplay.Controls.Add(this.lblPassNumbers);
+            this.tabDisplay.Controls.Add(this.chkboxPassNumbers);
             this.tabDisplay.Controls.Add(this.labelLineSmoothOnOff);
             this.tabDisplay.Controls.Add(this.labelSectionLinesOnOff);
             this.tabDisplay.Controls.Add(this.labelDirectionMarkOnOff);
@@ -7995,6 +7999,37 @@ namespace AgOpenGPS
             this.lblHeadlandDist.TabIndex = 541;
             this.lblHeadlandDist.Text = "Headland Dist.";
             this.lblHeadlandDist.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            // 
+            // lblPassNumbers
+            // 
+            this.lblPassNumbers.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.lblPassNumbers.BackColor = System.Drawing.Color.Transparent;
+            this.lblPassNumbers.ForeColor = System.Drawing.Color.Black;
+            this.lblPassNumbers.Location = new System.Drawing.Point(735, 108);
+            this.lblPassNumbers.Name = "lblPassNumbers";
+            this.lblPassNumbers.Size = new System.Drawing.Size(100, 16);
+            this.lblPassNumbers.TabIndex = 543;
+            this.lblPassNumbers.Text = "Pass Numbers";
+            this.lblPassNumbers.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            // 
+            // chkboxPassNumbers
+            // 
+            this.chkboxPassNumbers.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.chkboxPassNumbers.Appearance = System.Windows.Forms.Appearance.Button;
+            this.chkboxPassNumbers.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.chkboxPassNumbers.FlatAppearance.BorderColor = System.Drawing.Color.Black;
+            this.chkboxPassNumbers.FlatAppearance.BorderSize = 2;
+            this.chkboxPassNumbers.FlatAppearance.CheckedBackColor = System.Drawing.Color.LightGreen;
+            this.chkboxPassNumbers.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.chkboxPassNumbers.Font = new System.Drawing.Font("Tahoma", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.chkboxPassNumbers.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.chkboxPassNumbers.Location = new System.Drawing.Point(735, 36);
+            this.chkboxPassNumbers.Name = "chkboxPassNumbers";
+            this.chkboxPassNumbers.Size = new System.Drawing.Size(100, 69);
+            this.chkboxPassNumbers.TabIndex = 542;
+            this.chkboxPassNumbers.Text = "0 1 2";
+            this.chkboxPassNumbers.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.chkboxPassNumbers.UseVisualStyleBackColor = false;
             // 
             // chkboxHeadlandDist
             // 
@@ -9261,6 +9296,8 @@ namespace AgOpenGPS
         private System.Windows.Forms.PictureBox HitchLengthBlindBox;
         private System.Windows.Forms.Label lblHeadlandDist;
         private System.Windows.Forms.CheckBox chkboxHeadlandDist;
+        private System.Windows.Forms.CheckBox chkboxPassNumbers;
+        private System.Windows.Forms.Label lblPassNumbers;
         private Forms.Config.ConfigSummaryControl configSummaryControl;
         private Forms.Config.ConfigVehicleControl configVehicleControl;
     }
